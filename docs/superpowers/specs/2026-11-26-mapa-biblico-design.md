@@ -8,6 +8,30 @@ En palabras de Mateo: **"un mapa para estudiar y entender eventos y geografía b
 
 El globo 3D actual no sirve para eso. Israel ocupa un punto en una esfera, las "historias" son listas de lugares sin recorrido ni época, la línea de tiempo vive aparte y la textura de la Tierra se descarga de unpkg, así que sin conexión el globo se ve vacío.
 
+Mateo lo definió como **la parte más importante de Ophir, su principal atractivo**. Tiene que quedar excelente, no apenas correcto.
+
+### 1.1 Punto de partida: el prototipo «Atlas Bíblico»
+Mateo ya venía trabajando el mapa en un artifact de Claude (canvas «Atlas Bíblico», 26 nov 2026). Es un prototipo completo en SVG, y **este diseño lo toma como base de datos y de experiencia**: no se empieza de cero. Trae:
+
+- **Datos (4 archivos JSON):**
+  - **Base de lugares:** 1.342 lugares de OpenBible.info (CC BY 4.0), con candidatos de identificación, polígonos y líneas, tipo y certeza.
+  - **Fichas de estudio:** 227 fichas en español, con nombre, variantes, nombre moderno, región, períodos, referencias, personajes, eventos, contexto, descripción, certeza, fuentes, importancia y nombres según el período. También 456 traducciones de nombres.
+  - **Historia:** 12 períodos, asignación de capítulos a períodos, 61 territorios esquemáticos y 17 recorridos parada por parada. Cada parada tiene su referencia, una nota y el tipo de tramo: `texto`, `aprox` o `hipotetico`.
+  - **Mapa base:** Natural Earth y OpenBible, ya proyectado a SVG.
+- **Experiencia:**
+  - Búsqueda por lugar, por pasaje («Hch 16») y por personaje.
+  - Panel con pestañas Explorar / Capas / Rutas / Estudio.
+  - Filtros por testamento, libro y período.
+  - Ficha completa del lugar: identificación, nombres por período, contexto, acontecimientos, personajes, referencias, recorridos que pasan por ahí, lugares cercanos y fuentes.
+  - Favoritos, pendientes de estudio, notas e historial; exportación.
+  - Tema claro y oscuro.
+  - Leyenda de tipos y de certeza.
+
+El nuevo módulo de Ophir **porta todo eso a React dentro de la app, sin perder nada**. Además:
+- cambia el motor de dibujo a MapLibre (zoom fluido, relieve, clusters);
+- suma lo pedido en esta conversación: caminos antiguos con su contexto, orientación y conexión con el Lector y la Línea de tiempo;
+- reemplaza los 143 lugares actuales de `locations.json`. Los ids viejos se mapean a los nuevos para no romper los enlaces.
+
 ## 2. Objetivos
 
 1. **Escala correcta.** El mapa abre centrado en el Levante, con el Cercano Oriente y el Mediterráneo oriental a un zoom de distancia.
@@ -55,11 +79,13 @@ Mateo eligió **A**.
 
 ### 6.1 Motor y mapa base
 - **MapLibre GL JS** (open source, sin API key) en lugar de Three.js. Three.js sale del bundle si ningún otro módulo lo usa.
-- **Geografía base local:** `tools/build-basemap.mjs` descarga Natural Earth (dominio público, escala 10m), lo recorta al área de lon −12…65 y lat 10…48, simplifica geometrías y genera `packages/data/atlas/basemap/*.geojson`: tierra, costas, ríos, lagos. Esos archivos se versionan en el repo.
+- **Geografía base local:** el mapa base del prototipo viene pre-proyectado a coordenadas SVG, y MapLibre necesita longitud y latitud. Por eso `tools/build-basemap.mjs` toma Natural Earth (dominio público, escala 10m, vía el paquete `world-atlas` u otra fuente equivalente), suma los lagos de OpenBible que usa el prototipo (Mar Muerto, mar de Galilea, lagos Amargos), lo recorta al área de lon −12…65 y lat 10…48, simplifica geometrías y genera `packages/data/atlas/basemap/*.geojson`: tierra, costas, ríos, lagos. Esos archivos se versionan en el repo.
 - **Estilo propio de Ophir:** tierra en tonos arena o pergamino oscuro, agua en azul petróleo profundo y tipografía Playfair para los nombres antiguos, en armonía con `tokens.css`.
 - **Relieve:** hillshade a partir de un DEM raster público y gratuito, sin key, cuando hay conexión. Sin conexión, la capa se omite sin errores.
 
-### 6.2 Datos nuevos (en `packages/data/atlas/`)
+### 6.2 Datos (en `packages/data/atlas/`)
+- **Importados del prototipo**, sin cambios de contenido: `places.json` (base OpenBible), `fichas.json`, `historia.json` (períodos, capítulos, territorios, rutas). Los recorridos y territorios del prototipo reemplazan a los `routes.json` y `eras-borders.json` que se describen abajo. Lo que sigue es lo que se **agrega**.
+- Los períodos del mapa son los 12 del prototipo. `timeline.json` se enlaza a ellos sumando a cada era el campo `periodo`.
 - `labels.json`: mares, regiones y accidentes con su nombre bíblico, el nombre moderno y las eras en que aplica.
 - `routes.json`: rutas con `id`, `title`, `era`, `color`, `disputed`, `note` y `legs[]`. Cada tramo tiene `from`, `to` (ids de `locations.json`), `ref` (formato canónico de Ophir) y `summary`. Set inicial:
   - Abraham (Ur → Harán → Canaán → Egipto → Canaán)
