@@ -1,0 +1,242 @@
+.herm-root {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px 28px 60px;
+}
+
+/* ---------- Hero ---------- */
+
+.hr-hero {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.hr-hero h1 {
+  font-size: clamp(30px, 5vw, 42px);
+  margin: 8px 0 14px;
+}
+
+.hr-lede {
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--text-1);
+  line-height: 1.7;
+}
+
+/* ---------- Principios comunes ---------- */
+
+.hr-shared h2,
+.hr-authors h2,
+.hr-parallel h2 {
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.hr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.hr-card {
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-md);
+  background: var(--bg-2);
+  padding: 16px;
+}
+
+.hr-card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+/* ---------- Autores ---------- */
+
+.hr-authors {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 18px;
+  margin-top: 44px;
+}
+
+.hr-author {
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-lg, 14px);
+  background: var(--bg-2);
+  padding: 22px;
+}
+
+.hr-author header h2 {
+  margin-bottom: 2px;
+}
+
+.hr-work {
+  color: var(--text-2);
+  font-size: 13.5px;
+}
+
+.hr-tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.tag-sproul {
+  background: rgba(198, 166, 100, 0.14);
+  color: var(--gold-strong);
+  border: 1px solid var(--gold);
+}
+
+.tag-vidal {
+  background: rgba(90, 130, 190, 0.14);
+  color: #9dbdf2;
+  border: 1px solid #4a6da7;
+}
+
+.hr-rules {
+  list-style: none;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hr-rules li {
+  display: flex;
+  gap: 12px;
+}
+
+.hr-rule-num {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  background: var(--bg-1, var(--bg-2));
+  border: 1px solid var(--border-1);
+  color: var(--text-1);
+}
+
+.hr-rules h3 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.hr-p {
+  font-size: 13.8px;
+  line-height: 1.65;
+  color: var(--text-1);
+}
+
+/* ---------- Referencias clicables ---------- */
+
+.hr-ref {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border-1);
+  background: var(--bg-1, transparent);
+  color: var(--gold-strong);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hr-ref:hover {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+}
+
+.hr-ref-raw {
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+
+/* ---------- Paralelismos ---------- */
+
+.hr-parallel {
+  margin-top: 48px;
+}
+
+.hr-parallel header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.hr-par-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hr-type {
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-lg, 14px);
+  overflow: hidden;
+}
+
+.type-sinonimo { border-left: 4px solid #6a9955; }
+.type-antitetico { border-left: 4px solid #c96a5a; }
+.type-sintetico { border-left: 4px solid #b08d57; }
+.type-escalonado { border-left: 4px solid #7f9cc9; }
+.type-quiasmo { border-left: 4px solid #a97fc9; }
+
+.hr-type h3 {
+  padding: 14px 18px 0;
+  font-size: 17px;
+}
+
+.hr-desc {
+  padding: 4px 18px 12px;
+  color: var(--text-1);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.hr-example {
+  margin: 0;
+  padding: 14px 18px 14px 22px;
+  border-top: 1px dashed var(--border-1);
+  background: var(--bg-2);
+}
+
+.hr-line {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text-0);
+  padding-left: 14px;
+  border-left: 2px solid var(--border-1);
+}
+
+.hr-note {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+
+.hr-par-closing {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--text-2);
+  font-style: italic;
+}
+
+/* ---------- Footer ---------- */
+
+.hr-footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-1);
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.7;
+}

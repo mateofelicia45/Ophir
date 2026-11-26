@@ -1,0 +1,119 @@
+{
+  "title": "Variantes textuales principales",
+  "desc": "Pasajes cuya inclusión en el texto del Nuevo Testamento es debatida entre los críticos textuales, mostrados con honestidad académica (sin arbitraje doctrinal, §5). Las lecturas alternativas se presentan con sus manuscritos principales.",
+  "variants": [
+    {
+      "id": "longer-ending-mark",
+      "title": "El final largo de Marcos (Mc 16:9-20)",
+      "passage": [
+        { "bookId": "mrk", "chapter": 16, "verseStart": 9, "verseEnd": 20, "label": "Mc 16:9-20" }
+      ],
+      "shortNote": "Estos versículos no aparecen en los manuscritos más antiguos (Codex Sinaiticus, Codex Vaticanus, Armantinus I) ni en varios Padres de la Iglesia primitivos (Orígenes, Eusebio, Jerónimo en sus primeras ediciones). El códice de Alejandría los incluye con una nota marginal. El estilo y vocabulario difieren del resto de Marcos.",
+      "mainReadings": [
+        "Ausente en los MSS más antiguos: Sinaiticus (S), Vaticanus (B), 038.",
+        "Presente en Alejandría (A), Bezae (D), ErrorCode Texts y mayoría posterior.",
+        "Muchos estudiosos creen que Mc 16:8 era el final original.",
+        "Una versión más corta existe en algunos MSS (Codex Bobbiensis, k; de 12 versículos)."
+      ]
+    },
+    {
+      "id": "adulterous-woman",
+      "title": "La mujer adúltera (Jn 7:53–8:11)",
+      "passage": [
+        { "bookId": "jhn", "chapter": 7, "verseStart": 53, "label": "Jn 7:53" },
+        { "bookId": "jhn", "chapter": 8, "verseStart": 1, "verseEnd": 11, "label": "Jn 8:1-11" }
+      ],
+      "shortNote": "Este pasaje no se encuentra en los manuscritos más antiguos ni confiables del Evangelio de Juan (P66, P75, Sinaiticus, Vaticanus, Alexandrinus). Aparece después de Jn 7:36, 21:25 o en Lucas 21:38 en diferentes tradiciones manuscritas. Las pruebas internas (estilo y vocabulario) y externas apuntan a que no era parte original del cuarto evangelio.",
+      "mainReadings": [
+        "Ausente en P66, P75, Sinaiticus (S), Vaticanus (B), Alexandrinus (A).",
+        "Presente en Bezae (D), Corsmontianus (Θ), la mayoría de manuscritos cursivos.",
+        "Insertado en diferentes ubicaciones en las tradiciones manuscritas.",
+        "El estilo literario es consistente con la tradición sinóptica, no joánica."
+      ]
+    },
+    {
+      "id": "comma-johanneum",
+      "title": "La Coma Johanneum (1 Juan 5:7-8)",
+      "passage": [
+        { "bookId": "1jn", "chapter": 5, "verseStart": 7, "verseEnd": 8, "label": "1 Jn 5:7-8" }
+      ],
+      "shortNote": "La conocida fórmula trinitaria («Tres son los que dan testimonio en el cielo: el Padre, la Palabra y el Espíritu Santo; y estos tres son uno») no se encuentra en ningún manuscrito griego anterior al siglo XVI. Aparece solo en algunos códices latinos tardíos (Codex Montfortianus 61, siglo XVI; 14 palmiçados, etc.) y fue citada por primera vez en un concilio africano (Concilio de Hipona, 393) en latín, no en griego.",
+      "mainReadings": [
+        "Completamente ausente en todos los manuscritos griegos anteriores al siglo XVI.",
+        "Presente en la Vulgata Latina tardía (algunos códices, no la mayoría).",
+        "No la cita ningún Padre griego; Erasmo la incluyó bajo presión en su tercera edición (1522).",
+        "La mayoría de críticos textuales modernos la consideran una glosa interpolada."
+      ]
+    },
+    {
+      "id": "acts-837",
+      "title": "La confesión del eunuco (Hechos 8:37)",
+      "passage": [
+        { "bookId": "act", "chapter": 8, "verseStart": 36, "verseEnd": 40, "label": "Hch 8:36-40 (con versículo 37)" }
+      ],
+      "shortNote": "El versículo 37 («Le respondió Felipe: Si crees de todo corazón, puedes. Y respondiendo dijo: Creo en Jesucristo, Hijo de Dios») no aparece en los manuscritos griegos más antiguos ni en la mayoría de versiones modernas. Fue añadido a la tradición textual desde fuentes latinas. Aunque el contenido teológico es legítimo, no formaba parte del texto original de Hechos.",
+      "mainReadings": [
+        "Ausente en Sinaiticus (S), Vaticanus (B), Alexandrinus (A), P45, P74.",
+        "Presente en algunos códices latinos (Cyprius, Regius, sufficiently later MSS).",
+        "La RVR60 lo incluye entre llaves; la NVI, NLB y NHT lo omiten.",
+        "La traducción de卡西odoro incluye la lectura completa."
+      ]
+    },
+    {
+      "id": "luke-2334",
+      "title": "«Padre, perdónalos» (Lc 23:34)",
+      "passage": [
+        { "bookId": "luk", "chapter": 23, "verseStart": 34, "verseEnd": 34, "label": "Lc 23:34" }
+      ],
+      "shortNote": "Este versículo, uno de los siete dichos de Cristo en la cruz, está omitido en el Codex Vaticanus (B), el Codex Bezae (D) y algunos manuscritos antiguos de la versión siríaca. Su ausencia se explica tanto por tradición textual como por razones teológicas: los copistas pudieron omitirlo para evitar la interpretación de que Dios perdonaba a los romanos (y no a los judíos), o lo omitieron por analogía con Mt 27:49 (que no lo incluye en algunas lecturas). La mayoría de críticos textuales lo consideran auténtico.",
+      "mainReadings": [
+        "Ausente en el Codex Vaticanus (B), Codex Bezae (D), Codex Alexandrinus (parte).",
+        "Presente en la mayoría de manuscritos griegos y en la tradición textual mayor.",
+        "La UBS5 lo imprime entre llaves (dudoso).",
+        "Los argumentos externos son divisivos; los internos apoyan su autenticidad."
+      ]
+    },
+    {
+      "id": "acts-1534",
+      "title": "La omisión de Hch 15:34",
+      "passage": [
+        { "bookId": "act", "chapter": 15, "verseStart": 33, "verseEnd": 41, "label": "Hch 15:33-41 (versículo 34 omiso)" }
+      ],
+      "shortNote": "Hechos 15:34 («Pero Silas se determinó a quedarse allí») no se encuentra en Sinaiticus (S), Vaticanus (B), ni en la mayoría de manuscritos griegos antiguos. Sin este versículo, el relato parece contradictorio: Silas se queda (v.34) pero también se va (v.40). Muchos estudiosos creen que el versículo fue añadido como glosa para resolver la dificultad narrativa.",
+      "mainReadings": [
+        "Ausente en Sinaiticus (S), Vaticanus (B), Alexandrinus (A).",
+        "Presente en Bezae (D), algunos manuscritos cursivos y versiones.",
+        "La inclusión crea una contradicción aparente con el versículo 40.",
+        "La NVI lo imprime entre llaves; la NLB lo omite."
+      ]
+    },
+    {
+      "id": "1tim-316",
+      "title": "La gran piedad (1 Timoteo 3:16)",
+      "passage": [
+        { "bookId": "1ti", "chapter": 3, "verseStart": 16, "verseEnd": 16, "label": "1 Ti 3:16" }
+      ],
+      "shortNote": "El «quien» original (ὅς, hós, «quien») fue cambiado por «Dios» (θεός, theós) en la tradición manuscrita posterior. La diferencia es sutil en griego mayúsculo (ΟΣ → ΘΣ). El sentido original: «Y manifiestamente grande es el misterio de la piedad: quien (Cristo) fue manifestado en la carne, justificado en el espíritu…». Los críticos textuales modernos restauran «quien».",
+      "mainReadings": [
+        "Original griego: ὅς (quien) — Sinaiticus (S), Vaticanus (B), Alexandrinus (A).",
+        "Lectura posterior: θεός (Dios) — mayoría de manuscritos cursivos.",
+        "La diferencia entre ΟΣ y ΘΣ es una sola letra en unciales.",
+        "La RVR60 y la NVI imprimen «Dios» pero reconocen la variante; otros prefieren «quien»."
+      ]
+    },
+    {
+      "id": "rev-2214",
+      "title": "La «bendición» o las «vestiduras» (Ap 22:14)",
+      "passage": [
+        { "bookId": "rev", "chapter": 22, "verseStart": 14, "verseEnd": 14, "label": "Ap 22:14" }
+      ],
+      "shortNote": "Dos variantes principales: (A) «Bienaventurados los que lavan sus vestiduras» (μακάριοι οἱ πλύνοντες τὰς στολὰς αὐτῶν) — la lectura mayoritaria; y (B) «Bienaventurados los que guardan sus mandamientos» (οἱ τηροῦντες τὰς ἐντολὰς αὐτῶν) — Sinaiticus y varios antiguos. La diferencia refleja una posible armonización para hacer el texto más compatible con la teología de la gracia (lectura A) versus la obediencia (lectura B).",
+      "mainReadings": [
+        "Lectura A (τὰς στολὰς, vestiduras): Alejandría (A), Majority Text.",
+        "Lectura B (τὰς ἐντολὰς, mandamientos): Sinaiticus (S), P, Several early witnesses.",
+        "La diferencia apunta a una corrupción textual: de «quien guardan sus mandamientos» (τηροῦντες) a «quien lavan sus vestiduras» (πλύνοντες).",
+        "Ambas lecturas son teológicamente coherentes."
+      ]
+    }
+  ]
+}

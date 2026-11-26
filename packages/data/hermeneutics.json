@@ -1,0 +1,148 @@
+{
+  "lede": "La hermenéutica es el arte y la ciencia de interpretar los textos. Aplicada a la Biblia, busca que entendamos lo que Dios quiso decir —no lo que nos gustaría que dijera—. Esta página reúne, en síntesis adaptada, las reglas clásicas de R. C. Sproul y de César Vidal, y una guía visual de los paralelismos de la poesía hebrea.",
+  "shared": [
+    {
+      "t": "Exégesis, no eiségesis",
+      "d": "El objetivo es sacar (ex) el sentido del texto, no meterle (eis) ideas propias. Primero preguntar qué decía el texto a sus primeros lectores; recién después, cómo se aplica hoy."
+    },
+    {
+      "t": "Autoridad y unidad de la Escritura",
+      "d": "66 libros escritos por hombres en tres lenguas y mil quinientos años, con un solo Autor detrás. Por eso ningún pasaje puede contradecir al conjunto: la Escritura interpreta a la Escritura."
+    },
+    {
+      "t": "Interpretar antes de aplicar",
+      "d": "El orden importa: observación → interpretación → aplicación. Invertirlo produce devocionales subjetivos que usan la Biblia como excusa."
+    },
+    {
+      "t": "Dependencia del Espíritu",
+      "d": "El Autor divino ilumina al lector humilde ([[1 Corintios 2:12-14]]). La iluminación no reemplaza el método: la hace fructífera."
+    },
+    {
+      "t": "Solo Jesús es normativo",
+      "d": "Cristo es la medida final y la norma suprema de toda interpretación. Ninguna tradición, dogma o lectura humana tiene autoridad sobre su persona, su obra y su palabra. Él es el filtro final: todo lo que no se alinee con Jesús es descartado."
+    }
+  ],
+  "authors": [
+    {
+      "id": "sproul",
+      "name": "R. C. Sproul",
+      "work": "«Cómo interpretar la Biblia» (Knowing Scripture)",
+      "tag": "Reglas clásicas reformadas",
+      "rules": [
+        {
+          "t": "El sentido literal (sensus literalis)",
+          "d": "Interpretar según el sentido normal y obvio del lenguaje, que incluye figuras retóricas: cuando Jesús dice «Yo soy la puerta» ([[Juan 10:9]]), la figura es literalmente una figura. El sentido literal no es el sentido ingenuo ni el literalista."
+        },
+        {
+          "t": "La analogía de la fe (analogia fidei)",
+          "d": "Ninguna interpretación de un pasaje puede chocar con la enseñanza total de la Escritura. Lo que enseña la Biblia en todas partes fija los límites de lo que puede significar un texto en particular."
+        },
+        {
+          "t": "Un texto sin contexto es un pretexto",
+          "d": "Contexto inmediato (versículos vecinos), contexto del capítulo, contexto del libro entero y contexto de toda la revelación. Cuanto más amplio el panorama, menor el margen de malinterpretar."
+        },
+        {
+          "t": "Género literario e historia",
+          "d": "Ley, narrativa, poesía, sabiduría, profecía, evangelio, epístola y literatura apocalíptica tienen reglas propias. Ignorar el género lleva a leer poesía como geología o símbolos como periódico."
+        },
+        {
+          "t": "Lo claro explica lo oscuro",
+          "d": "Toda la Escritura es clara en lo esencial (perspicuidad). Los pasajes difíciles se interpretan a la luz de los claros, nunca al revés: construir doctrina sobre un texto oscuro es construir sobre arena."
+        },
+        {
+          "t": "Ley y Evangelio",
+          "d": "Distinguir lo que Dios exige (imperativo) de lo que Dios promete y hace (indicativo). Confundirlos convierte la gracia en moralismo o la ley en sugerencia."
+        }
+      ]
+    },
+    {
+      "id": "vidal",
+      "name": "César Vidal",
+      "work": "Método histórico-gramatical (cursos y obras de apologética)",
+      "tag": "Rigor histórico del exegeta",
+      "rules": [
+        {
+          "t": "El texto significa lo que su autor quiso decir",
+          "d": "La pregunta rectora es qué comunicaba el autor a sus destinatarios originales. Un texto no puede significar hoy lo que nunca significó entonces; la aplicación cambia, el significado no."
+        },
+        {
+          "t": "Contexto histórico-cultural",
+          "d": "Geografía, política, costumbres y religión del mundo hebreo y greco-romano. Interpretar «tomar la túnica y el manto» ([[Mateo 5:40]]) exige saber qué ropa era esa; proyectar categorías modernas sobre textos antiguos es anacronismo."
+        },
+        {
+          "t": "Atención a las lenguas originales",
+          "d": "Hebreo, arameo y griego tienen matices que ninguna traducción agota: el «amar» agápē de [[Juan 21:15-17]], los tiempos verbales griegos, los juegos de palabras hebreos. Donde no hay dominio del idioma, comparar traducciones serias."
+        },
+        {
+          "t": "Revelación progresiva",
+          "d": "Dios se reveló gradualmente: la semilla de [[Génesis 3:15]] florece en el Nuevo Testamento. Lo que estaba velado en Moisés está descubierto en Cristo ([[2 Corintios 3:14-16]]); el AT se lee esperando, el NT recordando cumplido."
+        },
+        {
+          "t": "La Biblia como biblioteca unificada",
+          "d": "Es una biblioteca de géneros diversos y a la vez un libro único. Cada texto aporta a la trama mayor: creación, caída, redención, consumación."
+        },
+        {
+          "t": "Cristo, centro de la Escritura",
+          "d": "Jesús mismo enseñó que Moisés, los profetas y los salmos hablaban de él ([[Lucas 24:27]], [[Lucas 24:44]]). Leer cualquier página sin ver hacia dónde apunta es perderse el hilo del libro."
+        }
+      ]
+    }
+  ],
+  "parallelism": {
+    "lede": "Gran parte del Antiguo Testamento es poesía hebrea, y su rasgo distintivo no es la rima de sonidos sino la rima de ideas: el paralelismo. La segunda línea dialoga con la primera —repitiéndola, contrastándola o completándola—. Reconocer el tipo ayuda a leer cada verso como su autor lo compuso.",
+    "types": [
+      {
+        "id": "sinonimo",
+        "name": "Paralelismo sinónimo",
+        "desc": "La segunda línea repite la idea de la primera con palabras distintas. Las dos dicen casi lo mismo desde ángulos diferentes.",
+        "example": {
+          "ref": "Salmos 19:1",
+          "lines": ["Los cielos cuentan la gloria de Dios,", "Y el firmamento anuncia la obra de sus manos."],
+          "note": "Cielos ≈ firmamento · cuentan ≈ anuncia · gloria de Dios ≈ obra de sus manos."
+        }
+      },
+      {
+        "id": "antitetico",
+        "name": "Paralelismo antitético",
+        "desc": "La segunda línea contrasta con la primera. Es el favorito de Proverbios: el justo frente al impío, la sabiduría frente a la necedad.",
+        "example": {
+          "ref": "Salmos 1:6",
+          "lines": ["Porque Jehová conoce el camino de los justos,", "Mas la senda de los impíos perecerá."],
+          "note": "Conoce ↔ perece · camino de los justos ↔ senda de los impíos."
+        }
+      },
+      {
+        "id": "sintetico",
+        "name": "Paralelismo sintético (completivo)",
+        "desc": "La segunda línea no repite ni contrasta: amplía y completa el pensamiento de la primera.",
+        "example": {
+          "ref": "Proverbios 11:25",
+          "lines": ["El alma generosa será prosperada;", "Y el que saciare, él también será saciado."],
+          "note": "Generosidad → prosperidad; saciar → ser saciado. El segundo verso desarrolla el primero."
+        }
+      },
+      {
+        "id": "escalonado",
+        "name": "Paralelismo escalonado (gradación)",
+        "desc": "Parte de la primera línea se repite y otra parte se añade, como una escalera que sube. El énfasis crece en cada escalón.",
+        "example": {
+          "ref": "Salmos 29:1-2",
+          "lines": ["Dad a Jehová, oh hijos de los poderosos,", "dad a Jehová la gloria y la fortaleza.", "Dad a Jehová la gloria debida a su nombre…"],
+          "note": "\"Dad a Jehová\" se repite como peldaño; lo que se le da se precisa cada vez más."
+        }
+      },
+      {
+        "id": "quiasmo",
+        "name": "Quiasmo (inversión ABBA)",
+        "desc": "Los elementos se cruzan en espejo: A-B-B'-A'. Estructura frecuente también en relatos extensos de la Escritura.",
+        "example": {
+          "ref": "Mateo 23:12",
+          "lines": ["porque el que se enaltecere, será humillado;", "y el que se humillare, será enaltecido."],
+          "note": "A: se enaltece · B: humillado · B': se humilla · A': enaltecido."
+        }
+      }
+    ],
+    "closing": "No todos los versos encajan en una sola casilla; muchos combinan tipos. Las categorías son herramientas de lectura, no camisas de fuerza."
+  },
+  "footer": "Síntesis adaptada con fines didácticos de las enseñanzas hermenéuticas de R. C. Sproul («Cómo interpretar la Biblia», Knowing Scripture) y de César Vidal (método histórico-gramatical). No son citas textuales. Tocá cualquier referencia para abrirla en el Lector."
+}

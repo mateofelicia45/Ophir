@@ -1,0 +1,42 @@
+:root {
+  --bg-0: #0d1117;
+  --bg-1: #131a24;
+  --bg-2: #1a2331;
+  --bg-3: #222e40;
+  --border-0: #26303f;
+  --border-1: #34435a;
+
+  --text-0: #e8e4d8;
+  --text-1: #b3b0a4;
+  --text-2: #7d7f85;
+
+  --gold: #c8a446;
+  --gold-soft: rgba(200, 164, 70, 0.14);
+  --gold-strong: #e0be62;
+
+  --blue: #4a90d9;
+  --red: #cd5c5c;
+  --green: #6b8e23;
+
+  --highlight-red: #e05252;
+  --highlight-sky: #6fb8e0;
+  --highlight-gold: #c8a446;
+  --highlight-orange: #e08b3a;
+  --highlight-pink: #e07ba0;
+  --highlight-yellow: #e0c94f;
+  --highlight-green: #6fae5f;
+  --highlight-violet: #9b6fd4;
+  --highlight-peach: #e8b48a;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-panel: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  --sidebar-w: 248px;
+  --sidebar-collapsed-w: 64px;
+}

@@ -1,0 +1,269 @@
+.timeline-root {
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tl-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.tl-title {
+  margin: 4px 0 6px;
+  font-family: var(--font-display);
+  font-size: 34px;
+  color: var(--text-0);
+}
+
+.tl-header .hint {
+  max-width: 560px;
+  margin: 0;
+}
+
+.tl-zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tl-zoom span {
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+.tl-zoom button {
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+}
+
+.tl-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-lg);
+  background: var(--bg-1);
+  box-shadow: var(--shadow-panel);
+  scrollbar-color: var(--border-1) var(--bg-1);
+}
+
+.tl-canvas {
+  position: relative;
+  height: 470px;
+}
+
+.tl-era {
+  position: absolute;
+  top: 26px;
+  bottom: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 1px dashed var(--border-0);
+}
+
+.tl-era.alt {
+  background: rgba(200, 164, 70, 0.04);
+}
+
+.tl-era span {
+  position: absolute;
+  top: -22px;
+  left: 8px;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.tl-axis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 230px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border-1) 4%, var(--border-1) 96%, transparent);
+}
+
+.tl-cov-line {
+  position: absolute;
+  top: 26px;
+  bottom: 12px;
+  width: 0;
+  border-left: 1px dashed rgba(224, 190, 98, 0.28);
+  pointer-events: none;
+}
+
+.tl-cov {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background: var(--bg-0);
+  border: 1.5px solid var(--gold);
+  rotate: 45deg;
+  border-radius: 6px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 10px rgba(224, 190, 98, 0.25);
+  z-index: 3;
+}
+
+.tl-cov:hover {
+  background: var(--bg-2);
+}
+
+.tl-cov.on {
+  background: var(--gold);
+  box-shadow: 0 0 16px rgba(224, 190, 98, 0.55);
+}
+
+.tl-cov-glyph {
+  rotate: -45deg;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--gold-strong);
+  user-select: none;
+}
+
+.tl-cov.on .tl-cov-glyph {
+  color: var(--bg-0);
+}
+
+.legend-cov {
+  border-radius: 4px !important;
+  border: 1.5px solid var(--gold);
+  rotate: 45deg;
+  scale: 0.9;
+}
+
+.tld-lane.cov {
+  color: var(--gold-strong);
+  border-color: var(--gold);
+}
+
+.tl-ev {
+  position: absolute;
+  width: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tl-dot {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-0);
+  box-shadow: 0 0 0 1.5px currentColor;
+}
+
+.tl-stem {
+  position: absolute;
+  left: -0.75px;
+  top: 0;
+  width: 1.5px;
+  opacity: 0.55;
+}
+
+.tl-lbl {
+  position: absolute;
+  left: 0;
+  padding: 3px 8px;
+  border-left: 2px solid;
+  background: var(--bg-2);
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 11.5px;
+  color: var(--text-1);
+  line-height: 1.35;
+}
+
+.tl-lbl b {
+  color: var(--text-0);
+  font-weight: 700;
+  margin-right: 5px;
+}
+
+.tl-ev:hover .tl-lbl,
+.tl-ev.on .tl-lbl {
+  color: var(--text-0);
+  background: var(--bg-3);
+}
+
+.tl-legend {
+  display: flex;
+  gap: 20px;
+  font-size: 12.5px;
+  color: var(--text-1);
+}
+
+.tl-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.tl-detail {
+  border: 1px solid var(--border-1);
+  border-left: 3px solid var(--gold);
+  background: var(--bg-2);
+  border-radius: var(--radius-md);
+  padding: 16px 22px;
+  max-width: 720px;
+}
+
+.tld-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.tld-lane {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.tld-head time {
+  color: var(--gold-strong);
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+.tl-detail h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 21px;
+  color: var(--text-0);
+}
+
+.tl-detail p {
+  margin: 0 0 12px;
+  color: var(--text-1);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.tld-ref {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}

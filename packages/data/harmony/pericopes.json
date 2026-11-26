@@ -1,0 +1,494 @@
+{
+  "title": "Armonía de los Evangelios",
+  "desc": "Perícopas principales con sus paralelos sinópticos (Mateo, Marcos, Lucas y Juan). Las columnas muestran los capítulos o versículos correspondientes en cada evangelio. Orden cronológico aproximado de la vida de Jesús.",
+  "pericopes": [
+    {
+      "id": "nativity",
+      "title": "Nacimiento de Jesús",
+      "order": 1,
+      "refs": [
+        { "bookId": "mat", "chapter": 1, "label": "Mt 1" },
+        { "bookId": "luk", "chapter": 2, "label": "Lc 2" },
+        { "bookId": "jhn", "chapter": 1, "label": "Jn 1 (prólogo)" }
+      ]
+    },
+    {
+      "id": "magi",
+      "title": "Los Magos del Oriente",
+      "order": 2,
+      "refs": [
+        { "bookId": "mat", "chapter": 2, "label": "Mt 2:1-12" }
+      ]
+    },
+    {
+      "id": "flight-egypt",
+      "title": "Huida a Egipto",
+      "order": 3,
+      "refs": [
+        { "bookId": "mat", "chapter": 2, "label": "Mt 2:13-23" }
+      ]
+    },
+    {
+      "id": "childhood-nazareth",
+      "title": "Infancia en Nazaret",
+      "order": 4,
+      "refs": [
+        { "bookId": "luk", "chapter": 2, "label": "Lc 2:39-52" }
+      ]
+    },
+    {
+      "id": "john-baptist",
+      "title": "Juan el Bautista",
+      "order": 5,
+      "refs": [
+        { "bookId": "mat", "chapter": 3, "label": "Mt 3:1-12" },
+        { "bookId": "mrk", "chapter": 1, "label": "Mc 1:2-8" },
+        { "bookId": "luk", "chapter": 3, "label": "Lc 3:1-20" },
+        { "bookId": "jhn", "chapter": 1, "label": "Jn 1:6-28" }
+      ]
+    },
+    {
+      "id": "baptism",
+      "title": "Bautismo de Jesús",
+      "order": 6,
+      "refs": [
+        { "bookId": "mat", "chapter": 3, "verseStart": 13, "verseEnd": 17, "label": "Mt 3:13-17" },
+        { "bookId": "mrk", "chapter": 1, "verseStart": 9, "verseEnd": 11, "label": "Mc 1:9-11" },
+        { "bookId": "luk", "chapter": 3, "verseStart": 21, "verseEnd": 22, "label": "Lc 3:21-22" }
+      ]
+    },
+    {
+      "id": "temptation",
+      "title": "Tentación en el desierto",
+      "order": 7,
+      "refs": [
+        { "bookId": "mat", "chapter": 4, "verseStart": 1, "verseEnd": 11, "label": "Mt 4:1-11" },
+        { "bookId": "mrk", "chapter": 1, "verseStart": 12, "verseEnd": 13, "label": "Mc 1:12-13" },
+        { "bookId": "luk", "chapter": 4, "verseStart": 1, "verseEnd": 13, "label": "Lc 4:1-13" }
+      ]
+    },
+    {
+      "id": "first-disciples",
+      "title": "Llamado de los primeros discípulos",
+      "order": 8,
+      "refs": [
+        { "bookId": "mat", "chapter": 4, "verseStart": 18, "verseEnd": 22, "label": "Mt 4:18-22" },
+        { "bookId": "mrk", "chapter": 1, "verseStart": 16, "verseEnd": 20, "label": "Mc 1:16-20" },
+        { "bookId": "luk", "chapter": 5, "verseStart": 1, "verseEnd": 11, "label": "Lc 5:1-11" },
+        { "bookId": "jhn", "chapter": 1, "label": "Jn 1:35-51" }
+      ]
+    },
+    {
+      "id": "cana-wedding",
+      "title": "Bodas de Caná",
+      "order": 9,
+      "refs": [
+        { "bookId": "jhn", "chapter": 2, "verseStart": 1, "verseEnd": 11, "label": "Jn 2:1-11" }
+      ]
+    },
+    {
+      "id": "first-temple-cleansing",
+      "title": "Primera purificación del Templo",
+      "order": 10,
+      "refs": [
+        { "bookId": "jhn", "chapter": 2, "verseStart": 13, "verseEnd": 22, "label": "Jn 2:13-22" }
+      ]
+    },
+    {
+      "id": "nicodemus",
+      "title": "Jesús y Nicodemo",
+      "order": 11,
+      "refs": [
+        { "bookId": "jhn", "chapter": 3, "label": "Jn 3" }
+      ]
+    },
+    {
+      "id": "sermon-mount",
+      "title": "El Sermón del Monte",
+      "order": 12,
+      "refs": [
+        { "bookId": "mat", "chapter": 5, "label": "Mt 5" },
+        { "bookId": "mat", "chapter": 6, "label": "Mt 6" },
+        { "bookId": "mat", "chapter": 7, "label": "Mt 7" },
+        { "bookId": "luk", "chapter": 6, "verseStart": 17, "verseEnd": 49, "label": "Lc 6:17-49" }
+      ]
+    },
+    {
+      "id": "lord-prayer",
+      "title": "El Padrenuestro",
+      "order": 13,
+      "refs": [
+        { "bookId": "mat", "chapter": 6, "verseStart": 5, "verseEnd": 15, "label": "Mt 6:5-15" },
+        { "bookId": "luk", "chapter": 11, "verseStart": 1, "verseEnd": 4, "label": "Lc 11:1-4" }
+      ]
+    },
+    {
+      "id": "healing-centurion",
+      "title": "El centurión de Cafarnaúm",
+      "order": 14,
+      "refs": [
+        { "bookId": "mat", "chapter": 8, "verseStart": 5, "verseEnd": 13, "label": "Mt 8:5-13" },
+        { "bookId": "luk", "chapter": 7, "verseStart": 1, "verseEnd": 10, "label": "Lc 7:1-10" }
+      ]
+    },
+    {
+      "id": "peter-mother-inlaw",
+      "title": "Sanidad de la suegra de Pedro",
+      "order": 15,
+      "refs": [
+        { "bookId": "mat", "chapter": 8, "verseStart": 14, "verseEnd": 15, "label": "Mt 8:14-15" },
+        { "bookId": "mrk", "chapter": 1, "verseStart": 29, "verseEnd": 31, "label": "Mc 1:29-31" },
+        { "bookId": "luk", "chapter": 4, "verseStart": 38, "verseEnd": 39, "label": "Lc 4:38-39" }
+      ]
+    },
+    {
+      "id": "calming-storm",
+      "title": "Jesús calma la tormenta",
+      "order": 16,
+      "refs": [
+        { "bookId": "mat", "chapter": 8, "verseStart": 23, "verseEnd": 27, "label": "Mt 8:23-27" },
+        { "bookId": "mrk", "chapter": 4, "verseStart": 35, "verseEnd": 41, "label": "Mc 4:35-41" },
+        { "bookId": "luk", "chapter": 8, "verseStart": 22, "verseEnd": 25, "label": "Lc 8:22-25" }
+      ]
+    },
+    {
+      "id": "gadarene-demoniac",
+      "title": "El endemoniado gadareno",
+      "order": 17,
+      "refs": [
+        { "bookId": "mat", "chapter": 8, "verseStart": 28, "verseEnd": 34, "label": "Mt 8:28-34" },
+        { "bookId": "mrk", "chapter": 5, "verseStart": 1, "verseEnd": 20, "label": "Mc 5:1-20" },
+        { "bookId": "luk", "chapter": 8, "verseStart": 26, "verseEnd": 39, "label": "Lc 8:26-39" }
+      ]
+    },
+    {
+      "id": "paralytic",
+      "title": "El paralítico descendido por el techo",
+      "order": 18,
+      "refs": [
+        { "bookId": "mat", "chapter": 9, "verseStart": 1, "verseEnd": 8, "label": "Mt 9:1-8" },
+        { "bookId": "mrk", "chapter": 2, "verseStart": 1, "verseEnd": 12, "label": "Mc 2:1-12" },
+        { "bookId": "luk", "chapter": 5, "verseStart": 17, "verseEnd": 26, "label": "Lc 5:17-26" }
+      ]
+    },
+    {
+      "id": "call-matthew",
+      "title": "Llamado de Mateo",
+      "order": 19,
+      "refs": [
+        { "bookId": "mat", "chapter": 9, "verseStart": 9, "verseEnd": 13, "label": "Mt 9:9-13" },
+        { "bookId": "mrk", "chapter": 2, "verseStart": 13, "verseEnd": 17, "label": "Mc 2:13-17" },
+        { "bookId": "luk", "chapter": 5, "verseStart": 27, "verseEnd": 32, "label": "Lc 5:27-32" }
+      ]
+    },
+    {
+      "id": "fasting-question",
+      "title": "Pregunta sobre el ayuno",
+      "order": 20,
+      "refs": [
+        { "bookId": "mat", "chapter": 9, "verseStart": 14, "verseEnd": 17, "label": "Mt 9:14-17" },
+        { "bookId": "mrk", "chapter": 2, "verseStart": 18, "verseEnd": 22, "label": "Mc 2:18-22" },
+        { "bookId": "luk", "chapter": 5, "verseStart": 33, "verseEnd": 39, "label": "Lc 5:33-39" }
+      ]
+    },
+    {
+      "id": "withered-hand",
+      "title": "Sanidad del hombre de la mano seca",
+      "order": 21,
+      "refs": [
+        { "bookId": "mat", "chapter": 12, "verseStart": 9, "verseEnd": 14, "label": "Mt 12:9-14" },
+        { "bookId": "mrk", "chapter": 3, "verseStart": 1, "verseEnd": 6, "label": "Mc 3:1-6" },
+        { "bookId": "luk", "chapter": 6, "verseStart": 6, "verseEnd": 11, "label": "Lc 6:6-11" }
+      ]
+    },
+    {
+      "id": "woe-pharisees",
+      "title": "Ayes contra los fariseos",
+      "order": 22,
+      "refs": [
+        { "bookId": "mat", "chapter": 23, "label": "Mt 23" },
+        { "bookId": "luk", "chapter": 11, "verseStart": 37, "verseEnd": 54, "label": "Lc 11:37-54" }
+      ]
+    },
+    {
+      "id": "sowing-seed",
+      "title": "Parábola del sembrador",
+      "order": 23,
+      "refs": [
+        { "bookId": "mat", "chapter": 13, "verseStart": 1, "verseEnd": 23, "label": "Mt 13:1-23" },
+        { "bookId": "mrk", "chapter": 4, "verseStart": 1, "verseEnd": 20, "label": "Mc 4:1-20" },
+        { "bookId": "luk", "chapter": 8, "verseStart": 4, "verseEnd": 15, "label": "Lc 8:4-15" }
+      ]
+    },
+    {
+      "id": "jairus-daughter",
+      "title": "Resurrección de la hija de Jairo",
+      "order": 24,
+      "refs": [
+        { "bookId": "mat", "chapter": 9, "verseStart": 18, "verseEnd": 26, "label": "Mt 9:18-26" },
+        { "bookId": "mrk", "chapter": 5, "verseStart": 21, "verseEnd": 43, "label": "Mc 5:21-43" },
+        { "bookId": "luk", "chapter": 8, "verseStart": 40, "verseEnd": 56, "label": "Lc 8:40-56" }
+      ]
+    },
+    {
+      "id": "sending-twelve",
+      "title": "Envío de los doce apóstoles",
+      "order": 25,
+      "refs": [
+        { "bookId": "mat", "chapter": 10, "label": "Mt 10" },
+        { "bookId": "mrk", "chapter": 6, "verseStart": 7, "verseEnd": 13, "label": "Mc 6:7-13" },
+        { "bookId": "luk", "chapter": 9, "verseStart": 1, "verseEnd": 6, "label": "Lc 9:1-6" }
+      ]
+    },
+    {
+      "id": "john-death",
+      "title": "La muerte de Juan el Bautista",
+      "order": 26,
+      "refs": [
+        { "bookId": "mat", "chapter": 14, "verseStart": 1, "verseEnd": 12, "label": "Mt 14:1-12" },
+        { "bookId": "mrk", "chapter": 6, "verseStart": 14, "verseEnd": 29, "label": "Mc 6:14-29" },
+        { "bookId": "luk", "chapter": 9, "verseStart": 1, "verseEnd": 9, "label": "Lc 9:1-9" }
+      ]
+    },
+    {
+      "id": "feeding-5000",
+      "title": "Alimentación de los 5.000",
+      "order": 27,
+      "refs": [
+        { "bookId": "mat", "chapter": 14, "verseStart": 13, "verseEnd": 21, "label": "Mt 14:13-21" },
+        { "bookId": "mrk", "chapter": 6, "verseStart": 30, "verseEnd": 44, "label": "Mc 6:30-44" },
+        { "bookId": "luk", "chapter": 9, "verseStart": 10, "verseEnd": 17, "label": "Lc 9:10-17" },
+        { "bookId": "jhn", "chapter": 6, "verseStart": 1, "verseEnd": 14, "label": "Jn 6:1-14" }
+      ]
+    },
+    {
+      "id": "walking-water",
+      "title": "Jesús camina sobre el agua",
+      "order": 28,
+      "refs": [
+        { "bookId": "mat", "chapter": 14, "verseStart": 22, "verseEnd": 33, "label": "Mt 14:22-33" },
+        { "bookId": "mrk", "chapter": 6, "verseStart": 45, "verseEnd": 52, "label": "Mc 6:45-52" },
+        { "bookId": "jhn", "chapter": 6, "verseStart": 15, "verseEnd": 21, "label": "Jn 6:15-21" }
+      ]
+    },
+    {
+      "id": "peter-confession",
+      "title": "Confesión de Pedro",
+      "order": 29,
+      "refs": [
+        { "bookId": "mat", "chapter": 16, "verseStart": 13, "verseEnd": 20, "label": "Mt 16:13-20" },
+        { "bookId": "mrk", "chapter": 8, "verseStart": 27, "verseEnd": 30, "label": "Mc 8:27-30" },
+        { "bookId": "luk", "chapter": 9, "verseStart": 18, "verseEnd": 21, "label": "Lc 9:18-21" }
+      ]
+    },
+    {
+      "id": "transfiguration",
+      "title": "La Transfiguración",
+      "order": 30,
+      "refs": [
+        { "bookId": "mat", "chapter": 17, "verseStart": 1, "verseEnd": 13, "label": "Mt 17:1-13" },
+        { "bookId": "mrk", "chapter": 9, "verseStart": 2, "verseEnd": 13, "label": "Mc 9:2-13" },
+        { "bookId": "luk", "chapter": 9, "verseStart": 28, "verseEnd": 36, "label": "Lc 9:28-36" }
+      ]
+    },
+    {
+      "id": "blind-bethsaida",
+      "title": "Sanidad del ciego de Betsaida",
+      "order": 31,
+      "refs": [
+        { "bookId": "mrk", "chapter": 8, "verseStart": 22, "verseEnd": 26, "label": "Mc 8:22-26" }
+      ]
+    },
+    {
+      "id": "leaven-warning",
+      "title": "Advertencia contra la levadura",
+      "order": 32,
+      "refs": [
+        { "bookId": "mat", "chapter": 16, "verseStart": 5, "verseEnd": 12, "label": "Mt 16:5-12" },
+        { "bookId": "mrk", "chapter": 8, "verseStart": 14, "verseEnd": 21, "label": "Mc 8:14-21" },
+        { "bookId": "luk", "chapter": 12, "verseStart": 1, "verseEnd": 12, "label": "Lc 12:1-12" }
+      ]
+    },
+    {
+      "id": "rich-young",
+      "title": "El joven rico",
+      "order": 33,
+      "refs": [
+        { "bookId": "mat", "chapter": 19, "verseStart": 16, "verseEnd": 30, "label": "Mt 19:16-30" },
+        { "bookId": "mrk", "chapter": 10, "verseStart": 17, "verseEnd": 31, "label": "Mc 10:17-31" },
+        { "bookId": "luk", "chapter": 18, "verseStart": 18, "verseEnd": 30, "label": "Lc 18:18-30" }
+      ]
+    },
+    {
+      "id": "deaf-mute",
+      "title": "Sanidad del sordomudo",
+      "order": 34,
+      "refs": [
+        { "bookId": "mrk", "chapter": 7, "verseStart": 31, "verseEnd": 37, "label": "Mc 7:31-37" }
+      ]
+    },
+    {
+      "id": "lazarus",
+      "title": "Resurrección de Lázaro",
+      "order": 35,
+      "refs": [
+        { "bookId": "jhn", "chapter": 11, "label": "Jn 11" }
+      ]
+    },
+    {
+      "id": "triumphal-entry",
+      "title": "Entrada triunfal en Jerusalén",
+      "order": 36,
+      "refs": [
+        { "bookId": "mat", "chapter": 21, "verseStart": 1, "verseEnd": 11, "label": "Mt 21:1-11" },
+        { "bookId": "mrk", "chapter": 11, "verseStart": 1, "verseEnd": 11, "label": "Mc 11:1-11" },
+        { "bookId": "luk", "chapter": 19, "verseStart": 28, "verseEnd": 40, "label": "Lc 19:28-40" },
+        { "bookId": "jhn", "chapter": 12, "verseStart": 12, "verseEnd": 19, "label": "Jn 12:12-19" }
+      ]
+    },
+    {
+      "id": "cleansing-temple",
+      "title": "La purificación del Templo",
+      "order": 37,
+      "refs": [
+        { "bookId": "mat", "chapter": 21, "verseStart": 12, "verseEnd": 17, "label": "Mt 21:12-17" },
+        { "bookId": "mrk", "chapter": 11, "verseStart": 15, "verseEnd": 19, "label": "Mc 11:15-19" },
+        { "bookId": "luk", "chapter": 19, "verseStart": 45, "verseEnd": 48, "label": "Lc 19:45-48" },
+        { "bookId": "jhn", "chapter": 2, "verseStart": 13, "verseEnd": 22, "label": "Jn 2:13-22" }
+      ]
+    },
+    {
+      "id": "parable-vineyard",
+      "title": "Parábola de los viñadores malvados",
+      "order": 38,
+      "refs": [
+        { "bookId": "mat", "chapter": 21, "verseStart": 33, "verseEnd": 46, "label": "Mt 21:33-46" },
+        { "bookId": "mrk", "chapter": 12, "verseStart": 1, "verseEnd": 12, "label": "Mc 12:1-12" },
+        { "bookId": "luk", "chapter": 20, "verseStart": 9, "verseEnd": 19, "label": "Lc 20:9-19" }
+      ]
+    },
+    {
+      "id": "tax-dispute",
+      "title": "Disputa sobre el tributo al César",
+      "order": 39,
+      "refs": [
+        { "bookId": "mat", "chapter": 22, "verseStart": 15, "verseEnd": 22, "label": "Mt 22:15-22" },
+        { "bookId": "mrk", "chapter": 12, "verseStart": 13, "verseEnd": 17, "label": "Mc 12:13-17" },
+        { "bookId": "luk", "chapter": 20, "verseStart": 20, "verseEnd": 26, "label": "Lc 20:20-26" }
+      ]
+    },
+    {
+      "id": "olivet-discourse",
+      "title": "Discurso en el Monte de los Olivos",
+      "order": 40,
+      "refs": [
+        { "bookId": "mat", "chapter": 24, "label": "Mt 24" },
+        { "bookId": "mrk", "chapter": 13, "label": "Mc 13" },
+        { "bookId": "luk", "chapter": 21, "label": "Lc 21" }
+      ]
+    },
+    {
+      "id": "last-supper",
+      "title": "La Última Cena",
+      "order": 41,
+      "refs": [
+        { "bookId": "mat", "chapter": 26, "verseStart": 17, "verseEnd": 30, "label": "Mt 26:17-30" },
+        { "bookId": "mrk", "chapter": 14, "verseStart": 12, "verseEnd": 26, "label": "Mc 14:12-26" },
+        { "bookId": "luk", "chapter": 22, "verseStart": 7, "verseEnd": 38, "label": "Lc 22:7-38" },
+        { "bookId": "jhn", "chapter": 13, "label": "Jn 13" }
+      ]
+    },
+    {
+      "id": "washing-feet",
+      "title": "Jesús lava los pies a los discípulos",
+      "order": 42,
+      "refs": [
+        { "bookId": "jhn", "chapter": 13, "verseStart": 1, "verseEnd": 20, "label": "Jn 13:1-20" }
+      ]
+    },
+    {
+      "id": "garden-gethsemane",
+      "title": "Getsemaní: oración y arresto",
+      "order": 43,
+      "refs": [
+        { "bookId": "mat", "chapter": 26, "verseStart": 36, "verseEnd": 56, "label": "Mt 26:36-56" },
+        { "bookId": "mrk", "chapter": 14, "verseStart": 32, "verseEnd": 52, "label": "Mc 14:32-52" },
+        { "bookId": "luk", "chapter": 22, "verseStart": 39, "verseEnd": 53, "label": "Lc 22:39-53" },
+        { "bookId": "jhn", "chapter": 18, "verseStart": 1, "verseEnd": 14, "label": "Jn 18:1-14" }
+      ]
+    },
+    {
+      "id": "trial-sanhedrin",
+      "title": "Juicio ante el Sanedrín",
+      "order": 44,
+      "refs": [
+        { "bookId": "mat", "chapter": 26, "verseStart": 57, "verseEnd": 68, "label": "Mt 26:57-68" },
+        { "bookId": "mrk", "chapter": 14, "verseStart": 61, "verseEnd": 72, "label": "Mc 14:61-72" },
+        { "bookId": "luk", "chapter": 22, "verseStart": 66, "verseEnd": 71, "label": "Lc 22:66-71" }
+      ]
+    },
+    {
+      "id": "trial-pilate",
+      "title": "Juicio ante Pilato",
+      "order": 45,
+      "refs": [
+        { "bookId": "mat", "chapter": 27, "verseStart": 1, "verseEnd": 31, "label": "Mt 27:1-31" },
+        { "bookId": "mrk", "chapter": 15, "verseStart": 1, "verseEnd": 20, "label": "Mc 15:1-20" },
+        { "bookId": "luk", "chapter": 23, "verseStart": 1, "verseEnd": 25, "label": "Lc 23:1-25" },
+        { "bookId": "jhn", "chapter": 18, "verseStart": 28, "verseEnd": 19, "label": "Jn 18:28-19:16" }
+      ]
+    },
+    {
+      "id": "crucifixion",
+      "title": "La Crucifixión",
+      "order": 46,
+      "refs": [
+        { "bookId": "mat", "chapter": 27, "verseStart": 35, "verseEnd": 56, "label": "Mt 27:35-56" },
+        { "bookId": "mrk", "chapter": 15, "verseStart": 22, "verseEnd": 41, "label": "Mc 15:22-41" },
+        { "bookId": "luk", "chapter": 23, "verseStart": 33, "verseEnd": 49, "label": "Lc 23:33-49" },
+        { "bookId": "jhn", "chapter": 19, "verseStart": 16, "verseEnd": 37, "label": "Jn 19:16-37" }
+      ]
+    },
+    {
+      "id": "burial",
+      "title": "El sepultamiento",
+      "order": 47,
+      "refs": [
+        { "bookId": "mat", "chapter": 27, "verseStart": 57, "verseEnd": 61, "label": "Mt 27:57-61" },
+        { "bookId": "mrk", "chapter": 15, "verseStart": 42, "verseEnd": 47, "label": "Mc 15:42-47" },
+        { "bookId": "luk", "chapter": 23, "verseStart": 50, "verseEnd": 56, "label": "Lc 23:50-56" },
+        { "bookId": "jhn", "chapter": 19, "verseStart": 38, "verseEnd": 42, "label": "Jn 19:38-42" }
+      ]
+    },
+    {
+      "id": "resurrection",
+      "title": "La Resurrección",
+      "order": 48,
+      "refs": [
+        { "bookId": "mat", "chapter": 28, "label": "Mt 28" },
+        { "bookId": "mrk", "chapter": 16, "verseStart": 1, "verseEnd": 8, "label": "Mc 16:1-8" },
+        { "bookId": "luk", "chapter": 24, "verseStart": 1, "verseEnd": 49, "label": "Lc 24:1-49" },
+        { "bookId": "jhn", "chapter": 20, "label": "Jn 20" }
+      ]
+    },
+    {
+      "id": "road-emmaus",
+      "title": "El camino a Emaús",
+      "order": 49,
+      "refs": [
+        { "bookId": "luk", "chapter": 24, "verseStart": 13, "verseEnd": 35, "label": "Lc 24:13-35" }
+      ]
+    },
+    {
+      "id": "great-commission",
+      "title": "La Gran Comisión",
+      "order": 50,
+      "refs": [
+        { "bookId": "mat", "chapter": 28, "verseStart": 16, "verseEnd": 20, "label": "Mt 28:16-20" },
+        { "bookId": "mrk", "chapter": 16, "verseStart": 14, "verseEnd": 18, "label": "Mc 16:14-18" },
+        { "bookId": "luk", "chapter": 24, "verseStart": 36, "verseEnd": 53, "label": "Lc 24:36-53" },
+        { "bookId": "jhn", "chapter": 21, "label": "Jn 21" }
+      ]
+    }
+  ]
+}

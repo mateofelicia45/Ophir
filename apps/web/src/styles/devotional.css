@@ -1,0 +1,160 @@
+.dev-root {
+  max-width: 780px;
+}
+
+.dev-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.dev-nav button {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--border-1);
+  background: var(--bg-2);
+  color: var(--text-1);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.dev-nav button:hover {
+  border-color: var(--gold);
+  color: var(--gold-strong);
+}
+
+.dev-nav .dev-today {
+  margin-left: auto;
+  width: auto;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+.dev-date {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-0);
+}
+
+.dev-slots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.dev-slot {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--border-1);
+  background: transparent;
+  color: var(--text-1);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dev-slot.on {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  color: var(--gold-strong);
+}
+
+.dev-card {
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-lg, 14px);
+  background: var(--bg-2);
+  padding: 24px 26px;
+}
+
+.dev-head {
+  margin-bottom: 16px;
+}
+
+.dev-slot-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
+  margin-bottom: 6px;
+}
+
+.dev-head h3 {
+  font-size: 19px;
+}
+
+.dev-head h3 small {
+  font-weight: 400;
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.dev-keyverse {
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--gold);
+  background: var(--bg-1);
+  border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16.5px;
+  line-height: 1.6;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  color: var(--text-0);
+}
+
+.dev-reflink {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-strong);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dev-reflink:hover {
+  background: var(--gold-soft);
+}
+
+.dev-body {
+  border-top: 1px dashed var(--border-1);
+  padding-top: 16px;
+}
+
+.dev-p {
+  line-height: 1.75;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+
+.dev-ref {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border-1);
+  background: var(--bg-1, transparent);
+  color: var(--gold-strong);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dev-ref:hover {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+}
+
+.dev-credit {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--text-2);
+  border-top: 1px dashed var(--border-1);
+  padding-top: 12px;
+}

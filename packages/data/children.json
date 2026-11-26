@@ -1,0 +1,107 @@
+{
+  "lede": "Un paseo por catorce historias grandes de la Biblia, contadas en dos minutos y con un versículo para memorizar cada una. Ideal para ministerio infantil, escuela dominical y familias.",
+  "groups": {
+    "antiguo": "Historias del Antiguo Testamento",
+    "nuevo": "Jesús y los primeros seguidores"
+  },
+  "stories": [
+    {
+      "g": "antiguo",
+      "n": 1,
+      "title": "Dios hace el mundo",
+      "text": "Al principio Dios habló, y con su palabra hizo la luz, el cielo, el mar, los animales y a las personas. Todo lo que hizo era bueno, y lo más especial: hizo a las personas para que fueran sus amigos. ([[Génesis 1:1]])",
+      "mem": { "text": "En el principio creó Dios los cielos y la tierra", "ref": "Génesis 1:1" }
+    },
+    {
+      "g": "antiguo",
+      "n": 2,
+      "title": "Noé y el arca",
+      "text": "El mundo estaba lleno de maldad, pero Noé amaba a Dios. Dios le dijo que construyera un barco enorme, el arca. Llovió cuarenta días, pero Noé, su familia y los animales estaban seguros dentro; después del diluvio Dios puso el arcoíris como señal de su promesa. ([[Génesis 6:5]], [[Génesis 9:13]])",
+      "mem": { "text": "Mi arco he puesto en las nubes", "ref": "Génesis 9:13" }
+    },
+    {
+      "g": "antiguo",
+      "n": 3,
+      "title": "Moisés y el pueblo libre",
+      "text": "El pueblo de Dios estaba esclavo en Egipto, pero Dios vio su sufrimiento y lo escuchó. Mandó a Moisés a hablar con el faraón, y después de la última plaga, el pueblo salió libre y cruzó el mar. En el camino Dios les dio pan del cielo: el maná. ([[Éxodo 3:7]], [[Éxodo 16:4]])",
+      "mem": { "text": "El pueblo clamó a Jehová, y él lo escuchó", "ref": "Éxodo 3:7" }
+    },
+    {
+      "g": "antiguo",
+      "n": 4,
+      "title": "Dios habla con David",
+      "text": "David era un pastor joven que cuidaba las ovejas y tocaba el arpa. Cuando el gigante Goliat insultó al pueblo de Dios, David confió en que Dios lo ayudaría, y con una sola piedra lo venció. Dios dijo que David era un hombre conforme a su corazón. ([[1 Samuel 17:45]])",
+      "mem": { "text": "Jehová es mi pastor", "ref": "Salmos 23:1" }
+    },
+    {
+      "g": "antiguo",
+      "n": 5,
+      "title": "Jonás aprende a obedecer",
+      "text": "Dios le pidió a Jonás que fuera a Nínive a avisar al pueblo, pero Jonás huyó en un barco. Una tormenta enorme lo envolvió, un gran pez lo tragó, y dentro del pez Jonás oró a Dios. Dios escuchó, y Jonás fue a Nínive y el pueblo se arrepintió. ([[Jonás 1:17]], [[Jonás 3:5]])",
+      "mem": { "text": "Clamé a Jehová y él me oyó", "ref": "Jonás 2:2" }
+    },
+    {
+      "g": "antiguo",
+      "n": 6,
+      "title": "Daniel y los leones",
+      "text": "Daniel oraba a Dios tres veces al día, aunque estaba prohibido. Por eso lo echaron al foso de los leones, pero Dios cerró la boca de los leones y Daniel quedó sano. Muchas personas vieron el milagro y alabaron al Dios de Daniel. ([[Daniel 6:10]], [[Daniel 6:22]])",
+      "mem": { "text": "Mi Dios envió su ángel", "ref": "Daniel 6:22" }
+    },
+    {
+      "g": "antiguo",
+      "n": 7,
+      "title": "Un corazón nuevo prometido",
+      "text": "Dios le prometió a su pueblo que un día les daría un corazón nuevo y limpio. No bastaría con obedecer por fuera: Dios pondría su Espíritu adentro de ellos para amarlo de verdad. Esta promesa miraba hacia Jesús. ([[Ezequiel 36:26]])",
+      "mem": { "text": "Os daré corazón nuevo, y pondré dentro de vosotros espíritu nuevo", "ref": "Ezequiel 36:26" }
+    },
+    {
+      "g": "nuevo",
+      "n": 8,
+      "title": "Jesús nace",
+      "text": "En un establo de Belén nació el Salvador del mundo. Los ángeles anunciaron la noticia a unos pastores: «Hoy os ha nacido en la ciudad de David un Salvador, que es Cristo el Señor». María guardaba todo en su corazón. ([[Lucas 2:8-12]])",
+      "mem": { "text": "Os ha nacido hoy un Salvador, que es Cristo el Señor", "ref": "Lucas 2:11" }
+    },
+    {
+      "g": "nuevo",
+      "n": 9,
+      "title": "Jesús bendice a los niños",
+      "text": "Unos niños querían acercarse a Jesús, pero los mayores los hacían a un lado. Jesús se enojó y dijo: «Dejad a los niños venir a mí, porque de los tales es el reino de los cielos». Y los abrazó y los bendijo. ([[Marcos 10:13-16]])",
+      "mem": { "text": "Dejad a los niños venir a mí", "ref": "Marcos 10:14" }
+    },
+    {
+      "g": "nuevo",
+      "n": 10,
+      "title": "El buen samaritano",
+      "text": "Un hombre herido en el camino quedó tirado. Un sacerdote y un levita pasaron y no lo ayudaron, pero un samaritano tuvo compasión y lo cuidó. Jesús dijo: «Anda y haz tú lo mismo»: seamos vecinos de quien necesita ayuda. ([[Lucas 10:30-37]])",
+      "mem": { "text": "Sed misericordiosos, como también vuestro Padre es misericordioso", "ref": "Lucas 6:36" }
+    },
+    {
+      "g": "nuevo",
+      "n": 11,
+      "title": "El pastor que busca la oveja",
+      "text": "Si a un pastor se le pierde una sola oveja de cien, deja las noventa y nueve y va a buscarla. Cuando la encuentra, se alegra más por ella que por las que no se perdieron. Así es el amor de Dios por cada uno de nosotros. ([[Lucas 15:3-7]])",
+      "mem": { "text": "Habrá más gozo por un pecador que se arrepiente", "ref": "Lucas 15:7" }
+    },
+    {
+      "g": "nuevo",
+      "n": 12,
+      "title": "Jesús calma la tormenta",
+      "text": "Jesús dormía en el barco cuando vino una tormenta terrible. Sus discípulos, asustados, lo despertaron: «¡Señor, sálvanos!». Jesús reprendió al viento y al mar, y hubo gran bonanza. Le preguntaron: «¿Quién es éste, que aun los vientos le obedecen?». ([[Mateo 8:23-27]])",
+      "mem": { "text": "¿Quién es éste, que aun el viento y el mar le obedecen?", "ref": "Marcos 4:41" }
+    },
+    {
+      "g": "nuevo",
+      "n": 13,
+      "title": "Jesús muere y resucita",
+      "text": "Jesús no merecía morir, pero dio su vida por nuestros pecados. Al tercer día resucitó: el sepulcro estaba vacío y un ángel dijo: «No está aquí; ha resucitado». Hoy Jesús está vivo, y por él podemos ser amigos de Dios. ([[Mateo 28:5-6]])",
+      "mem": { "text": "Yo soy la resurrección y la vida", "ref": "Juan 11:25" }
+    },
+    {
+      "g": "nuevo",
+      "n": 14,
+      "title": "Un cielo nuevo y una tierra nueva",
+      "text": "La Biblia termina con una promesa hermosa: Dios hará un cielo nuevo y una tierra nueva donde no habrá más llanto, ni dolor, ni muerte. Dios enjugará toda lágrima y viviremos con él para siempre. ([[Apocalipsis 21:1-4]])",
+      "mem": { "text": "Dios enjugará toda lágrima de los ojos de ellos", "ref": "Apocalipsis 21:4" }
+    }
+  ]
+}

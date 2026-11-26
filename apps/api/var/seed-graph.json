@@ -1,0 +1,8 @@
+[
+  {"src": "isa.53.5", "dst": "1pe.2.24", "type": "cita-directa"},
+  {"src": "isa.53.5", "dst": "mat.8.17", "type": "alusion"},
+  {"src": "mat.8.17", "dst": "rom.4.25", "type": "eco"},
+  {"src": "1pe.2.24", "dst": "rom.4.25", "type": "eco"},
+  {"src": "isa.53.5", "dst": "act.8.32", "type": "cita-directa"},
+  {"src": "act.8.32", "dst": "1pe.2.22", "type": "alusion"}
+]

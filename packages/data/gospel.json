@@ -1,0 +1,75 @@
+{
+  "source": "Curaduría Ophir — presentación del evangelio en seis pasos",
+  "license": "CC0",
+  "note": "Los versículos citados siguen el texto de Reina-Valera 1909 (dominio público). Las marcas [[referencia]] se vuelven botones que abren el pasaje en el lector.",
+  "heroQuote": {
+    "text": "El tiempo se ha cumplido, y el reino de Dios se ha acercado; arrepentíos, y creed al evangelio",
+    "ref": "Marcos 1:15"
+  },
+  "sections": [
+    {
+      "n": 1,
+      "tag": "La condena",
+      "title": "Todos hemos pecado",
+      "paras": [
+        "Todos hemos pecado y estamos destituidos de la gloria de Dios [[Romanos 3:23]].",
+        "La paga del pecado es muerte [[Romanos 6:23]] — y esa muerte no es solo física, sino espiritual: separación eterna del Creador. Dios lo declaró sin ambigüedad:",
+        { "q": "El alma que pecare, esa morirá", "r": "Ezequiel 18:4" },
+        "Esa era nuestra condena."
+      ]
+    },
+    {
+      "n": 2,
+      "tag": "La provisión",
+      "title": "Dios proveyó un Sustituto",
+      "paras": [
+        "Pero Dios proveyó salvación. Cristo vino, no solo para morir físicamente, sino para tomar nuestro lugar en el juicio eterno que merecíamos:",
+        { "q": "Mas él herido fue por nuestras rebeliones… y Jehová cargó en él el pecado de todos nosotros", "r": "Isaías 53:5-6" },
+        "En la cruz, Jesús soportó el castigo completo, llevando nuestra condena, y su alma fue puesta en expiación [[Isaías 53:10]]. Por eso clamó: «Consumado es» [[Juan 19:30]] — la deuda fue pagada por completo."
+      ]
+    },
+    {
+      "n": 3,
+      "tag": "La entrega voluntaria",
+      "title": "Nadie me la quita",
+      "paras": [
+        "La muerte de Cristo no fue un accidente ni un mártir más. Él mismo lo dijo:",
+        { "q": "Yo pongo mi vida, para volverla a tomar. Nadie me la quita, sino que yo la pongo de mí mismo. Tengo poder para ponerla, y tengo poder para volverla a tomar", "r": "Juan 10:17-18" },
+        "Entregó su vida voluntariamente y resucitó con autoridad divina, demostrando que la muerte y el juicio fueron vencidos [[Oseas 13:14]]."
+      ]
+    },
+    {
+      "n": 4,
+      "tag": "La definición",
+      "title": "Este es el evangelio",
+      "paras": [
+        { "q": "Cristo murió por nuestros pecados, conforme a las Escrituras; y fue sepultado, y resucitó al tercer día", "r": "1 Corintios 15:3-4" },
+        "No basta creer que Jesús existió: hay que confiar en que Él llevó TU condena y cumplió el juicio que tu alma merecía.",
+        "Dios manda a todos los hombres en todas partes que se arrepientan [[Hechos 17:30]] y crean en el evangelio [[Marcos 1:15]]."
+      ]
+    },
+    {
+      "n": 5,
+      "tag": "La respuesta",
+      "title": "Arrepentete y cree",
+      "paras": [
+        "Si confiesas con tu boca que Jesús es el Señor, y crees en tu corazón que Dios lo levantó de los muertos, serás salvo [[Romanos 10:9]].",
+        "La salvación es por gracia por medio de la fe; y esto no de vosotros, pues es don de Dios; no por obras, para que nadie se gloríe [[Efesios 2:8-9]]."
+      ]
+    },
+    {
+      "n": 6,
+      "tag": "La promesa",
+      "title": "De muerte a vida",
+      "paras": [
+        "Cuando crees, pasas de muerte a vida [[Juan 5:24]]. Ya no hay condenación para los que están en Cristo Jesús [[Romanos 8:1]], y nada —ni muerte, ni vida, ni poder alguno— podrá separarte del amor de Dios [[Romanos 8:38-39]].",
+        "Jesús lo garantizó con sus propias palabras:",
+        { "q": "Yo les doy vida eterna; y no perecerán jamás, ni nadie las arrebatará de mi mano", "r": "Juan 10:28-29" }
+      ]
+    }
+  ],
+  "closing": {
+    "line": "Si Él ya pagó y fue juzgado por ti, no puedes ser juzgado otra vez.",
+    "sub": "Esa salvación es eterna."
+  }
+}

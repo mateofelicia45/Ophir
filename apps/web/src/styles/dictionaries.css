@@ -1,0 +1,185 @@
+.dic-root {
+  max-width: 900px;
+}
+
+/* ---------- Pestañas de fuente ---------- */
+
+.dic-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.dic-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  padding: 12px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-1);
+  background: var(--bg-2);
+  color: var(--text-1);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dic-tab small {
+  font-weight: 400;
+  font-size: 11.5px;
+  color: var(--text-2);
+}
+
+.dic-tab.on {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  color: var(--gold-strong);
+}
+
+/* ---------- Búsqueda ---------- */
+
+.dic-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.dic-search input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-1);
+  background: var(--bg-2);
+  color: var(--text-0);
+  font-size: 15px;
+}
+
+.dic-search input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.dic-search button {
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gold);
+  background: var(--gold-soft);
+  color: var(--gold-strong);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dic-back {
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--border-1);
+  background: transparent;
+  color: var(--text-1);
+  cursor: pointer;
+}
+
+.dic-back:hover {
+  border-color: var(--gold);
+  color: var(--gold-strong);
+}
+
+/* ---------- Lista de resultados ---------- */
+
+.dic-hits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+
+.dic-hit {
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-0);
+  background: var(--bg-2);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.dic-hit b {
+  color: var(--text-0);
+}
+
+.dic-hit span {
+  font-size: 12.5px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dic-hit:hover {
+  border-color: var(--gold);
+}
+
+/* ---------- Artículo ---------- */
+
+.dic-title {
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+
+.dic-def {
+  line-height: 1.75;
+  color: var(--text-1);
+  margin-bottom: 12px;
+}
+
+.dic-ref {
+  display: inline-block;
+  padding: 0 6px;
+  margin: 0 1px;
+  border-radius: 6px;
+  border: 1px solid var(--border-1);
+  background: var(--bg-2);
+  color: var(--gold-strong);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dic-ref:hover {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+}
+
+.dic-credit {
+  margin-top: 26px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-1);
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+/* ---------- Tema Nave ---------- */
+
+.dic-group {
+  margin-bottom: 20px;
+}
+
+.dic-group h4 {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: var(--text-0);
+}
+
+.dic-group h4 small {
+  color: var(--text-2);
+  font-weight: 400;
+}
+
+.dic-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

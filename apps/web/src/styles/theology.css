@@ -1,0 +1,362 @@
+.theology-root {
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1400px;
+}
+
+.th-title {
+  margin: 4px 0 6px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--text-0);
+}
+
+.th-question {
+  margin: 0 0 10px;
+  color: var(--text-1);
+  font-size: 15.5px;
+}
+
+.th-disclaimer {
+  margin: 0;
+  max-width: 720px;
+  padding: 10px 14px;
+  border-left: 2px solid var(--gold);
+  background: var(--gold-soft);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-1);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.th-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Índice sistemático ---------- */
+
+.th-index {
+  background: var(--bg-2);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.th-index-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-0);
+}
+
+.th-index-head h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--gold-strong);
+}
+
+.th-index-head h2 span {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--text-2);
+  margin-left: 8px;
+}
+
+.th-index-key {
+  display: flex;
+  gap: 14px;
+  font-size: 11.5px;
+  color: var(--text-1);
+}
+
+.th-index-key .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.dot.consenso {
+  background: var(--gold-strong);
+}
+
+.dot.debate {
+  background: var(--blue);
+}
+
+.th-index-row {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-0);
+}
+
+.th-index-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.th-index-part {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.th-index-part b {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  color: var(--gold-strong);
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.th-index-part strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--text-0);
+  line-height: 1.3;
+}
+
+.th-index-part small {
+  display: block;
+  color: var(--text-2);
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.th-index-topics {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.th-chip {
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border-0);
+  background: var(--bg-3);
+  font-size: 11.5px;
+  color: var(--text-1);
+  cursor: pointer;
+}
+
+.th-chip:hover {
+  color: var(--text-0);
+  border-color: var(--border-1);
+}
+
+.th-chip.consenso {
+  border-left: 3px solid var(--gold-strong);
+}
+
+.th-chip.debate {
+  border-left: 3px solid var(--blue);
+}
+
+.th-section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--gold);
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--gold-strong);
+}
+
+.th-section-title span {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+}
+
+.th-topic {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scroll-margin-top: 16px;
+}
+
+.th-topic > h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 21px;
+  color: var(--text-0);
+}
+
+.th-consensus {
+  background: var(--bg-2);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-md);
+  padding: 22px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 860px;
+  scroll-margin-top: 16px;
+}
+
+.th-consensus h3 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--gold-strong);
+}
+
+.th-consensus h4 {
+  margin: 10px 0 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.th-affirmations {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.th-affirmations li {
+  color: var(--text-0);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.th-affirmations li::marker {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.th-clarifications {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.th-clarifications li {
+  color: var(--text-1);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.th-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(240px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.th-pos {
+  background: var(--bg-2);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.th-pos h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--gold-strong);
+  border-bottom: 1px solid var(--border-0);
+  padding-bottom: 10px;
+}
+
+.th-summary {
+  margin: 4px 0 6px;
+  color: var(--text-0);
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.th-pos h5 {
+  margin: 8px 0 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.th-refs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-height: 30px;
+  align-content: flex-start;
+}
+
+.th-refs button,
+.th-refraw {
+  padding: 4px 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-0);
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: var(--text-1);
+}
+
+.th-refs button {
+  cursor: pointer;
+  border-bottom-color: var(--blue);
+}
+
+.th-refs button:hover {
+  color: var(--text-0);
+  border-color: var(--blue);
+}
+
+.th-refraw {
+  opacity: 0.75;
+}
+
+.th-objections {
+  margin: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.th-objections li {
+  color: var(--text-1);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.th-footer {
+  color: var(--text-2);
+  font-size: 12px;
+  border-top: 1px solid var(--border-0);
+  padding-top: 12px;
+  max-width: 720px;
+}

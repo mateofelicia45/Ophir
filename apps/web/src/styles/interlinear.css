@@ -1,0 +1,234 @@
+.interlinear-root {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.il-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-0);
+  background: var(--bg-1);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.il-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.il-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 26px;
+  border-bottom: 1px solid var(--border-0);
+}
+
+.il-toolbar .nav-chapter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.il-toolbar .nav-chapter button {
+  width: 30px;
+  height: 30px;
+  font-size: 17px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-sm);
+  color: var(--text-1);
+}
+
+.il-toolbar h2 {
+  font-size: 21px;
+  color: var(--text-0);
+}
+
+.il-lang {
+  font-family: var(--font-display);
+  font-size: 19px;
+  letter-spacing: 0.06em;
+  color: var(--gold-strong);
+  direction: rtl;
+}
+
+.il-lang.gr {
+  direction: ltr;
+  font-style: italic;
+}
+
+.il-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 26px 60px;
+  scrollbar-color: var(--border-1) transparent;
+}
+
+/* ---------- versículo ---------- */
+
+.il-verse {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--border-0);
+}
+
+.ilv-head {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.ilv-num {
+  font-weight: 700;
+  color: var(--gold-strong);
+  font-size: 13px;
+  min-width: 20px;
+  text-align: right;
+}
+
+.ilv-es {
+  color: var(--text-1);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.ilv-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.il-w {
+  background: var(--bg-2);
+  border: 1px solid var(--border-0);
+  border-radius: var(--radius-sm);
+  padding: 6px 9px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 58px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.il-w:hover {
+  border-color: var(--border-1);
+  background: var(--bg-3);
+}
+
+.il-w.on {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+}
+
+.il-w-surf {
+  font-size: 19px;
+  line-height: 1.25;
+  color: var(--text-0);
+}
+
+.il-w-translit {
+  font-size: 11px;
+  color: var(--text-2);
+  font-style: italic;
+}
+
+.il-w-gloss {
+  font-size: 11.5px;
+  color: var(--blue);
+}
+
+/* ---------- opciones ---------- */
+
+.il-options .hint {
+  font-size: 11.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.il-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-1);
+  cursor: pointer;
+}
+
+.il-check input {
+  accent-color: var(--gold);
+}
+
+/* ---------- panel de detalle ---------- */
+
+.il-detail {
+  border: 1px solid var(--border-1);
+  border-left: 3px solid var(--gold);
+  background: var(--bg-2);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.il-detail header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.il-detail header b {
+  color: var(--gold-strong);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.ild-surf {
+  font-size: 34px;
+  line-height: 1.3;
+  color: var(--text-0);
+  margin: 4px 0 0;
+}
+
+.ild-lemma {
+  font-size: 15px;
+  color: var(--text-0);
+}
+
+.ild-morph {
+  font-size: 12px;
+  color: #c9a86a;
+  line-height: 1.5;
+}
+
+.il-detail h5 {
+  margin: 8px 0 2px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.il-detail p {
+  font-size: 13px;
+  color: var(--text-1);
+  line-height: 1.55;
+}
+
+.ild-def {
+  font-size: 12.5px !important;
+  max-height: 130px;
+  overflow-y: auto;
+}

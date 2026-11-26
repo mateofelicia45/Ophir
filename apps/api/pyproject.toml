@@ -1,0 +1,18 @@
+[project]
+name = "ophir-api"
+version = "0.1.0"
+description = "Backend de sincronización de Ophir (resaltados, notas y grafo de referencias)"
+requires-python = ">=3.10"
+dependencies = [
+    "flask>=3.0",
+    "flask-cors>=4.0",
+    "flask-sqlalchemy>=3.1",
+    "SQLAlchemy>=2.0",
+]
+
+[project.optional-dependencies]
+mysql = ["PyMySQL>=1.1", "cryptography>=42"]
+dev = ["pytest>=8"]
+
+[tool.setuptools]
+packages = [{ include = "ophir" }]

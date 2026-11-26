@@ -1,0 +1,884 @@
+{
+  "source": "Curaduría Ophir — índice sistemático según las siete partes de la Teología Sistemática de Wayne Grudem (Zondervan, 1994)",
+  "license": "CC0",
+  "note": "Los temas kind=consenso están zanjados por la Escritura y los concilios ecuménicos. Los kind=debate se presentan con sus mejores argumentos y objeciones recíprocas. Ophir no arbitra entre posiciones (DESIGN.md §5). Los dones del Espíritu se tratan como debate — Grudem es continuista; el panel no toma partido.",
+  "loci": [
+    {
+      "parte": 1,
+      "id": "palabra",
+      "label": "La Palabra de Dios",
+      "desc": "Inspiración, autoridad y canon de la Escritura.",
+      "topics": [
+        "escritura",
+        "canon"
+      ]
+    },
+    {
+      "parte": 2,
+      "id": "dios",
+      "label": "La doctrina de Dios",
+      "desc": "Atributos, Trinidad, creación y providencia.",
+      "topics": [
+        "atributos",
+        "trinidad",
+        "dias-creacion",
+        "soberania"
+      ]
+    },
+    {
+      "parte": 3,
+      "id": "hombre",
+      "label": "La doctrina del hombre",
+      "desc": "Imagen de Dios, la caída y los pactos.",
+      "topics": [
+        "imagen-dios",
+        "pactos-dispensaciones"
+      ]
+    },
+    {
+      "parte": 4,
+      "id": "cristo",
+      "label": "Cristo y el Espíritu Santo",
+      "desc": "Persona y obra de Cristo; los dones del Espíritu.",
+      "topics": [
+        "encarnacion",
+        "resurreccion",
+        "expiacion",
+        "dones"
+      ]
+    },
+    {
+      "parte": 5,
+      "id": "salvacion",
+      "label": "La aplicación de la redención",
+      "desc": "Justificación, perseverancia y la muerte del creyente.",
+      "topics": [
+        "justificacion",
+        "seguridad",
+        "estado-intermedio"
+      ]
+    },
+    {
+      "parte": 6,
+      "id": "iglesia",
+      "label": "La doctrina de la iglesia",
+      "desc": "Las ordenanzas y el gobierno eclesiástico.",
+      "topics": [
+        "bautismo",
+        "cena",
+        "gobierno"
+      ]
+    },
+    {
+      "parte": 7,
+      "id": "futuro",
+      "label": "La doctrina del futuro",
+      "desc": "Segunda venida, milenio y estados nuevos.",
+      "topics": [
+        "milenio",
+        "rapto",
+        "segunda-venida"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "id": "escritura",
+      "kind": "consenso",
+      "titulo": "La inspiración y autoridad de la Escritura",
+      "pregunta": "Doctrina zanjada: la Biblia es la Palabra de Dios escrita.",
+      "afirmaciones": [
+        "Toda la Escritura es inspirada por Dios («theopneustos»: exhalada por él), no solo contiene su palabra.",
+        "Es autoridad final e infalible en todo lo que afirma; los autores escribieron con sus estilos, sin error en lo que Dios quiso enseñar.",
+        "Es necesaria: sin ella nadie llega a certeza del evangelio por vía natural.",
+        "Es clara en lo esencial y suficiente para fe y vida; no se añade revelación normativa después de los apóstoles."
+      ],
+      "textosBase": [
+        "2 Timoteo 3:16",
+        "2 Pedro 1:20-21",
+        "Salmo 119:160",
+        "Isaias 8:20",
+        "Juan 10:35",
+        "Mateo 5:18"
+      ],
+      "aclaraciones": [
+        "Inspiración verbal plenaria: cada palabra y todos los libros, no solo ideas generales.",
+        "Jesús trató el AT como Escritura infalible y preparó la autoridad apostólica del NT (Jn 16:13).",
+        "El canon (ver debate más abajo) no vuelve sagrados los libros: reconoce los ya autorreceptados por la iglesia."
+      ]
+    },
+    {
+      "id": "canon",
+      "kind": "debate",
+      "titulo": "El canon: ¿66 libros o más?",
+      "pregunta": "¿Qué libros son Escritura inspirada?",
+      "posiciones": [
+        {
+          "nombre": "Canon protestante: 66 libros",
+          "resumen": "Solo los libros hebreos de la Biblia palestinense y el NT de 27 libros son inspirados. Los deuterocanónicos son útiles pero no canónicos: nunca formaron parte de la Escritura hebrea ni fueron citados como tal por Cristo.",
+          "textosBase": [
+            "Romanos 3:2",
+            "Lucas 24:44",
+            "Lucas 11:51",
+            "2 Timoteo 3:16",
+            "2 Pedro 3:15-16"
+          ],
+          "objecionesRecibidas": [
+            "La Septuaginta griega usada por los apóstoles incluía los deuterocanónicos.",
+            "No existe lista oficial judía de 22/24 libros antes de finales del s. I d.C.",
+            "La iglesia debatió el alcance del NT durante siglos antes del cierre."
+          ]
+        },
+        {
+          "nombre": "Canon católico/ortodoxo: 73+ libros",
+          "resumen": "La iglesia reconoció e infaliblemente definió el canon de 73 libros (Trento 1546); los deuterocanónicos se leyeron siempre como Escritura desde los primeros siglos.",
+          "textosBase": [
+            "Sabiduria 3:1-4",
+            "2 Macabeos 12:44-46",
+            "Tobias 12:9",
+            "Eclesiastico 44:16"
+          ],
+          "objecionesRecibidas": [
+            "Jerónimo, traductor de la Vulgata, negó el valor canónico de los deuterocanónicos.",
+            "Ningún concilio definió el canon antes del s. IV; el reconocimiento precede a toda definición.",
+            "Algunos pasajes deutero (Macabeos) contradicen doctrina bíblica clara."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "atributos",
+      "kind": "consenso",
+      "titulo": "Los atributos de Dios",
+      "pregunta": "Doctrina zanjada: quién es Dios según se revela.",
+      "afirmaciones": [
+        "Dios es espíritu, infinito, eterno e inmutable en su ser, sabiduría, poder, santidad, justicia, bondad y verdad.",
+        "Omnisciente (conoce lo real y lo posible), omnipotente y omnipresente.",
+        "Sus atributos no compiten entre sí: es a la vez justo y amoroso, trascendente e inmanente.",
+        "Dios no aprende, no cambia de opinión por ignorancia y no puede mentir."
+      ],
+      "textosBase": [
+        "Juan 4:24",
+        "Malaquias 3:6",
+        "Salmo 90:2",
+        "Salmo 139:1-4",
+        "Isaias 46:9-10",
+        "Exodo 34:6-7",
+        "1 Juan 1:5"
+      ],
+      "aclaraciones": [
+        "Distinción clásica: atributos incomunicables (autopexistencia, inmutabilidad) y comunicables (amor, justicia, misericordia).",
+        "Las expresiones como «se arrepintió Jehová» son antropomorfismos fieles al propósito divino, no defectos en Dios (Nm 23:19).",
+        "Conocer SUS atributos es base del culto reverente; reducirlo a un solo rasgo produce ídolos."
+      ]
+    },
+    {
+      "id": "trinidad",
+      "kind": "consenso",
+      "titulo": "La Santísima Trinidad",
+      "pregunta": "Doctrina zanjada: un solo Dios en tres personas.",
+      "afirmaciones": [
+        "Hay un solo Dios vivante y verdadero (Dt 6:4; Is 45:5).",
+        "El Padre es Dios; el Hijo es Dios (Jn 1:1; 20:28); el Espíritu es Dios (Hch 5:3-4).",
+        "Las tres personas son distintas y coeternas: el Padre no es el Hijo, ni el Hijo el Espíritu.",
+        "No hay tres dioses (triteísmo) ni un solo Dios con máscaras (modalismo)."
+      ],
+      "textosBase": [
+        "Deuteronomio 6:4",
+        "Mateo 28:19",
+        "Juan 1:1",
+        "Juan 20:28",
+        "Hechos 5:3-4",
+        "2 Corintios 13:14",
+        "1 Pedro 1:2"
+      ],
+      "aclaraciones": [
+        "Definida en Nicea (325) contra Arrio y precisada en Constantinopla (381).",
+        "Herejías rechazadas: arrianismo (el Hijo creado), modalismo (una persona, tres modos), triteísmo (tres dioses).",
+        "«Persona» no significa individuo moderno autónomo, sino hipóstasis subsistente."
+      ]
+    },
+    {
+      "id": "dias-creacion",
+      "kind": "debate",
+      "titulo": "Los días de la creación (Gn 1)",
+      "pregunta": "¿Son días literales, períodos largos o marco literario?",
+      "posiciones": [
+        {
+          "nombre": "Tierra joven: días de 24 horas",
+          "resumen": "Los días son literales («tarde y mañana»), la creación fue buena desde el inicio y la muerte física entró con el pecado de Adán. La cronología masorética (Ussher) sitúa la creación hace unos 6.000 años.",
+          "textosBase": [
+            "Génesis 1:5",
+            "Exodo 20:11",
+            "Romanos 5:12",
+            "Génesis 1:31",
+            "Marcos 10:6"
+          ],
+          "objecionesRecibidas": [
+            "La astronomía y la geología datan universo y tierra en miles de millones de años.",
+            "La luz de estrellas lejanas requeriría una creación «aparente» ya en tránsito.",
+            "El registro fósil muestra muerte animal antes de cualquier humano."
+          ]
+        },
+        {
+          "nombre": "Día-edad (tierra antigua)",
+          "resumen": "«Yom» puede denotar período largo (Gn 2:4); los días serían épocas de creación progresiva armonizables con la ciencia moderna. Revelación general y especial no pueden contradecirse.",
+          "textosBase": [
+            "Génesis 2:4",
+            "Salmo 90:4",
+            "2 Pedro 3:8",
+            "Salmo 19:1",
+            "Proverbios 25:2"
+          ],
+          "objecionesRecibidas": [
+            "Éxodo 20:11 ancla el descanso sabático humano al patrón semanal divino.",
+            "El orden del relato (plantas antes del sol y las estrellas) choca con la secuencia cósmica natural.",
+            "Una muerte extensa antes del pecado tensiona Romanos 5:12 y Génesis 1:31."
+          ]
+        },
+        {
+          "nombre": "Marco literario",
+          "resumen": "Dos tríadas estructuradas (formación de reinos / llenado con reyes) comunican función teológica y orden, no cronómetro; el texto no enseña edad alguna del universo.",
+          "textosBase": [
+            "Génesis 1:3",
+            "Génesis 1:14",
+            "Génesis 2:4-5",
+            "Juan 5:17",
+            "Salmo 104:2"
+          ],
+          "objecionesRecibidas": [
+            "Israel escuchó tarde-y-mañana, no «estructura retórica»; el sentido primario importa.",
+            "Si Gn 1 no dice cuándo, tampoco autoriza a llenar el vacío con cosmologías extrañas.",
+            "El paralelismo de tríadas es observación útil, no prueba de intención no-cronológica."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "soberania",
+      "kind": "debate",
+      "titulo": "Soberanía, elección y libre albedrío",
+      "pregunta": "¿Cómo se relaciona la elección de Dios con la respuesta humana?",
+      "posiciones": [
+        {
+          "nombre": "Calvinismo",
+          "resumen": "Dios eligió incondicionalmente, antes de la fundación del mundo, a quienes salvaría; la gracia eficaz regenera al elegido, que no puede resistirla finalmente. La muerte de Cristo asegura ciertamente la salvación de los elegidos.",
+          "textosBase": [
+            "Efesios 1:4-5",
+            "Romanos 9:15-16",
+            "Juan 6:44",
+            "Hechos 13:48",
+            "Efesios 2:8-9"
+          ],
+          "objecionesRecibidas": [
+            "Hace a Dios parcial e implicaría deseo de condena sin remedio, contra 2 Pedro 3:9.",
+            "Anula la responsabilidad humana: ¿cómo juzga a quien no pudo elegir?",
+            "Las advertencias condicionales pierden sentido si todo está decretado."
+          ]
+        },
+        {
+          "nombre": "Arminianismo",
+          "resumen": "Cristo murió por todos; Dios elige según su presciencia de quiénes creerán y permanecerán, con gracia preveniente que habilita una respuesta libre real. El creyente puede resistir la gracia.",
+          "textosBase": [
+            "1 Timoteo 2:4",
+            "2 Pedro 3:9",
+            "Juan 3:16",
+            "1 Juan 2:2",
+            "Apocalipsis 22:17"
+          ],
+          "objecionesRecibidas": [
+            "Hace depender la salvación última del hombre, contrariando Jonás 2:9 («de Jehová es la salvación»).",
+            "Romanos 9 presenta la elección antes de obras buenas ni malas, no según fe prevista.",
+            "La voluntad caída, esclava del pecado (Jn 8:34), no puede iniciarse sola hacia Dios."
+          ]
+        },
+        {
+          "nombre": "Molinismo",
+          "resumen": "Dios conoce (conocimiento medio) lo que cada persona libre haría en cada circunstancia posible y sitúa providencialmente el mundo donde sus propósitos se cumplen sin forzar voluntades.",
+          "textosBase": [
+            "1 Samuel 23:10-12",
+            "Mateo 11:21-23",
+            "Hechos 27:31",
+            "1 Corintios 2:8",
+            "Génesis 45:5-8"
+          ],
+          "objecionesRecibidas": [
+            "El «conocimiento medio» carece de base bíblica explícita; es construcción filosófica.",
+            "Dios igualmente instancia mundos con personas condenadas, como en el calvinismo.",
+            "Minimiza la eficacia soberana que la Escritura atribuye al llamado divino (Rom 8:30)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "imagen-dios",
+      "kind": "consenso",
+      "titulo": "El hombre: imagen de Dios y caído en Adán",
+      "pregunta": "Doctrina zanjada: dignidad creada y ruina universal.",
+      "afirmaciones": [
+        "Hombres y mujeres fueron creados a imagen y semejanza de Dios: igualdad personal, valor intrínseco y vocación representativa sobre la creación.",
+        "En Adán todos pecaron; por su transgresión el pecado y la muerte pasaron a toda la humanidad.",
+        "La imagen quedó dañada, no destruida: sigue siendo base de la dignidad humana incluso después de la caída.",
+        "Caídos por nosotros mismos, no podemos levantarnos solos: necesitamos gracia."
+      ],
+      "textosBase": [
+        "Genesis 1:26-27",
+        "Genesis 9:6",
+        "Romanos 5:12",
+        "Efesios 2:1-5",
+        "Efesios 4:24",
+        "Santiago 3:9",
+        "Salmo 8:4-6"
+      ],
+      "aclaraciones": [
+        "Las vistas históricas sobre qué ES la imagen (razón, moralidad, dominio, relación) coinciden en que abarca a todo ser humano sin distinción.",
+        "Contra pelagianismo: la voluntad caída no se inicia sola hacia Dios; contra fatalismo: sigue habiendo responsabilidad real.",
+        "La igualdad hombre-mujer en la imagen es textual antes de cualquier caída (Gn 1:27)."
+      ]
+    },
+    {
+      "id": "pactos-dispensaciones",
+      "kind": "debate",
+      "titulo": "Teología del pacto vs. dispensacionalismo",
+      "pregunta": "¿Es la historia de la salvación un solo plan pactual o administraciones distintas?",
+      "posiciones": [
+        {
+          "nombre": "Teología del pacto",
+          "resumen": "Un plan unitario: pacto de redención (intratrinitario), de obras con Adán y de gracia en Cristo. Un solo pueblo de Dios a través de las edades; la iglesia es el Israel verdadero y los signos se transforman (circuncisión → bautismo).",
+          "textosBase": [
+            "Génesis 3:15",
+            "Génesis 17:7",
+            "Jeremias 31:31-34",
+            "Romanos 2:28-29",
+            "Galatas 3:29",
+            "Efesios 2:12-14",
+            "Hebreos 8:6"
+          ],
+          "objecionesRecibidas": [
+            "Los pactos bíblicos nombrados (Noé, Abraham, Sinaí, David, nuevo) no se dejan reducir a dos.",
+            "Romanos 11 y 1 Corintios 10:32 mantienen distinción real entre Israel y la iglesia.",
+            "Las promesas territoriales a Israel parecen espiritualizadas sin licencia textual."
+          ]
+        },
+        {
+          "nombre": "Dispensacionalismo",
+          "resumen": "Dios administra la historia en dispensaciones distintas; Israel e iglesia son pueblos con programas y destinos propios. La hermenéutica literal restaura las promesas nacionales en el milenio futuro.",
+          "textosBase": [
+            "1 Corintios 10:32",
+            "Efesios 3:5-6",
+            "Romanos 11:25-29",
+            "Daniel 9:24-27",
+            "Apocalipsis 20:1-6",
+            "Génesis 15:18-21"
+          ],
+          "objecionesRecibidas": [
+            "Derriba muros que Efesios 2:14 declara derribados: divide lo que el NT une.",
+            "Como sistema es tardío (Darby, s. XIX); ausente del consenso histórico de la iglesia.",
+            "Su «literalidad» es selectiva: trono y tierra sí, altar y sacrificios ¿también?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "encarnacion",
+      "kind": "consenso",
+      "titulo": "La encarnación: plenamente Dios y plenamente hombre",
+      "pregunta": "Doctrina zanjada: dos naturalezas en una sola persona.",
+      "afirmaciones": [
+        "El Verbo eterno se hizo carne: Jesucristo es 100% Dios y 100% hombre.",
+        "Dos naturalezas completas unidas sin mezcla en una sola persona para siempre.",
+        "Concebido por el Espíritu en María virgen; nació, creció, sintió hambre, cansancio y tentación real.",
+        "Sin pecado: lo que no se asumió no se redimió; ni un Salvador meramente humano ni uno meramente divino salva."
+      ],
+      "textosBase": [
+        "Juan 1:14",
+        "Filipenses 2:6-8",
+        "Colosenses 2:9",
+        "Hebreos 2:14-17",
+        "Lucas 1:35",
+        "1 Juan 4:2-3"
+      ],
+      "aclaraciones": [
+        "Definición de Calcedonia (451): «sin confusión, sin cambio, sin división, sin separación».",
+        "Herejías rechazadas: docetismo (humanidad aparente), apolinarismo (sin alma humana), nestorianismo (dos personas), monofisismo (una sola naturaleza).",
+        "El milagro no es que Cristo dejara de ser Dios, sino que añadió humanidad sin dejar de serlo."
+      ]
+    },
+    {
+      "id": "resurreccion",
+      "kind": "consenso",
+      "titulo": "La resurrección corporal de Cristo",
+      "pregunta": "Doctrina zanjada: Cristo venció a la muerte en el cuerpo.",
+      "afirmaciones": [
+        "Jesús resucitó corporalmente al tercer día: tumba vacía y apariciones físicas lo atestiguan («tocad y ved»).",
+        "La resurrección es fundamento de la fe: si Cristo no resucitó, vana es nuestra predicación y vuestra fe.",
+        "Es primicia y garantía de la resurrección futura de los que son de Cristo.",
+        "Ascendió y está sentado a la diestra del Padre, intercediendo por los suyos."
+      ],
+      "textosBase": [
+        "Lucas 24:39",
+        "1 Corintios 15:14",
+        "1 Corintios 15:20",
+        "Romanos 4:25",
+        "Hechos 2:32",
+        "Hebreos 7:25"
+      ],
+      "aclaraciones": [
+        "El credo temprano de 1 Co 15:3-7 se fecha a pocos años de los hechos; no es leyenda tardía.",
+        "Contra docetismo antiguo y demitologización moderna: la fe cristiana nace de un evento histórico proclamado como hecho público.",
+        "Por la resurrección Dios declaró quién es Jesús: Señor y Cristo (Ro 1:4; Hch 2:36)."
+      ]
+    },
+    {
+      "id": "expiacion",
+      "kind": "debate",
+      "titulo": "¿Por quién murió Cristo?",
+      "pregunta": "Alcance de la expiación: particular o universal.",
+      "posiciones": [
+        {
+          "nombre": "Expiación particular (gracia definida)",
+          "resumen": "Cristo murió efectivamente por las ovejas que el Padre le dio: su cruz no hace posible la salvación sino que la asegura de veras para cada uno de los suyos.",
+          "textosBase": [
+            "Juan 10:11",
+            "Juan 10:15",
+            "Efesios 5:25",
+            "Romanos 8:32-33",
+            "Mateo 1:21"
+          ],
+          "objecionesRecibidas": [
+            "«Uno murió por todos» (2 Co 5:14) y «por los pecados del mundo entero» (1 Jn 2:2) hablan de alcance universal.",
+            "Si murió solo por elegidos, la oferta sincera del evangelio a todos parece deshonesta.",
+            "El valor de la cruz es infinito; restringir su intención carece de texto explícito."
+          ]
+        },
+        {
+          "nombre": "Expiación universal (suficiente para todos)",
+          "resumen": "Cristo murió por cada ser humano; su obra es suficiente para todos y se vuelve eficiente en quienes creen. La cruz provee la base legal de toda oferta de gracia.",
+          "textosBase": [
+            "1 Juan 2:2",
+            "2 Corintios 5:14-15",
+            "1 Timoteo 4:10",
+            "Hebreos 2:9",
+            "Juan 3:16"
+          ],
+          "objecionesRecibidas": [
+            "Si pagó por todos, ¿por qué no se salvan todos? ¿Un doble pago?",
+            "Los «todos» bíblicos suelen significar gente de toda nación, no cada individuo.",
+            "El Buen Pastor da su vida POR sus ovejas, nombradas una por una."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dones",
+      "kind": "debate",
+      "titulo": "Los dones espirituales: ¿continúan o cesaron?",
+      "pregunta": "¿Profecía, lenguas y sanidades siguen hoy como norma?",
+      "posiciones": [
+        {
+          "nombre": "Continuismo",
+          "resumen": "Todos los dones del NT siguen vigentes hasta que venga «lo perfecto»; el Espíritu reparte como quiere y la iglesia debe desearlos ardientemente, con orden.",
+          "textosBase": [
+            "Hechos 2:17",
+            "1 Corintios 13:10",
+            "1 Corintios 14:1",
+            "1 Tesalonicenses 5:20",
+            "Hechos 19:6"
+          ],
+          "objecionesRecibidas": [
+            "Ningún texto declara el cese; el silencio histórico no prueba voluntad divina.",
+            "«Lo perfecto» (1 Co 13:10) apunta a la consumación escatológica, no al cierre del canon.",
+            "Millones de reportes globales contemporáneos no se descartan con una teoría."
+          ]
+        },
+        {
+          "nombre": "Cesacionismo",
+          "resumen": "Los dones-signos confirmaban la revelación fundacional de apóstoles y profetas; cumplido el canon, cesaron como norma, aunque Dios sana y obra soberanamente.",
+          "textosBase": [
+            "Hebreos 2:3-4",
+            "1 Corintios 13:8",
+            "2 Corintios 12:12",
+            "Efesios 2:20",
+            "Hechos 2:22"
+          ],
+          "objecionesRecibidas": [
+            "Fijar fecha de caducidad a un don sin mandato explícito excede el texto.",
+            "Efesios 4:11-13 sitúa los ministerios hasta la madurez plena del cuerpo — aún futura.",
+            "La historia registra brotes carismáticos posteriores a los apóstoles."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "justificacion",
+      "kind": "consenso",
+      "titulo": "Justificación solo por la fe",
+      "pregunta": "Doctrina zanjada: declarado justo por fe en Cristo, sin obras.",
+      "afirmaciones": [
+        "Somos justificados gratuitamente por su gracia, mediante la redención en Cristo, por la fe sin obras de la ley.",
+        "La fe no es mérito: es la mano vacía que recibe la justicia imputada de Cristo.",
+        "Su base es doble: perdón total de los pecados e imputación de su obediencia perfecta.",
+        "Quien está en Cristo, ya no hay condena: paz con Dios ahora y para siempre."
+      ],
+      "textosBase": [
+        "Romanos 3:28",
+        "Romanos 5:1",
+        "Galatas 2:16",
+        "Efesios 2:8-9",
+        "Filipenses 3:9",
+        "2 Corintios 5:21"
+      ],
+      "aclaraciones": [
+        "Grito central de la Reforma: sola fide, sola gratia, solo Christo — el artículo con que la iglesia queda en pie (Lutero).",
+        "Las obras no justifican pero evidencian la fe viva: Santiago complementa a Romanos, no lo contradice.",
+        "Contra el semi-pelagianismo: hasta la fe misma es don (Ef 2:8-9; Flp 1:29)."
+      ]
+    },
+    {
+      "id": "seguridad",
+      "kind": "debate",
+      "titulo": "Seguridad del creyente",
+      "pregunta": "¿Puede un verdadero creyente perder su salvación?",
+      "posiciones": [
+        {
+          "nombre": "Perseverancia de los santos",
+          "resumen": "Dios preserva hasta el fin a quienes verdaderamente son suyos; nadie los arrebata de su mano. Los que caen del todo nunca fueron del todo.",
+          "textosBase": [
+            "Juan 10:28-29",
+            "Romanos 8:38-39",
+            "Filipenses 1:6",
+            "Efesios 1:13-14",
+            "Juan 6:37"
+          ],
+          "objecionesRecibidas": [
+            "Hebreos 6:4-6 y 10:26-29 describen apóstatas que estaban verdaderamente en la fe.",
+            "Advertencias condicionales («si perseveráis…», Col 1:23) serían vacuas.",
+            "Puede producir laxitud moral: «seguro estoy, da igual cómo vivo»."
+          ]
+        },
+        {
+          "nombre": "Posibilidad de apostasía",
+          "resumen": "La salvación se recibe y se conserva en la fe continua; el creyente puede abandonarla y ser cortado, como sarmiento infructuoso que se seca y es echado al fuego.",
+          "textosBase": [
+            "Juan 15:6",
+            "Hebreos 10:26-29",
+            "2 Pedro 2:20-22",
+            "Galatas 5:4",
+            "1 Timoteo 4:1"
+          ],
+          "objecionesRecibidas": [
+            "Nadie puede arrebatar de la mano del Padre (Jn 10:28); ¿quién soy yo para lograrlo?",
+            "Los pasajes de advertencia describen profesantes falsos, no regenerados reales.",
+            "Filipenses 1:6 promete completar la obra comenzada; Dios no abandona lo que empieza."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estado-intermedio",
+      "kind": "debate",
+      "titulo": "La muerte y el estado intermedio",
+      "pregunta": "¿Qué ocurre entre la muerte y la resurrección?",
+      "posiciones": [
+        {
+          "nombre": "Conciencia consciente",
+          "resumen": "El alma separada sigue consciente: los creyentes están con Cristo en gozo; los impíos, en sufrimiento previo al juicio final.",
+          "textosBase": [
+            "Lucas 23:43",
+            "Filipenses 1:23",
+            "2 Corintios 5:8",
+            "Lucas 16:22-26",
+            "Apocalipsis 6:9-11"
+          ],
+          "objecionesRecibidas": [
+            "Lucas 16 es parábola, no informe topográfico.",
+            "«Dormir» es lenguaje frecuente para el cuerpo, no para el alma.",
+            "¿Cómo hay consuelo si aún no hubo juicio ni resurrección?"
+          ]
+        },
+        {
+          "nombre": "Sueño del alma",
+          "resumen": "Entre muerte y resurrección no hay conciencia: el muerto «duerme» y despertará al llamado de Cristo; subjetivamente será inmediato.",
+          "textosBase": [
+            "Daniel 12:2",
+            "Juan 11:11-14",
+            "1 Tesalonicenses 4:13-15",
+            "Eclesiastes 9:5"
+          ],
+          "objecionesRecibidas": [
+            "Pablo preferiría partir y estar CON CRISTO ahora (Flp 1:23).",
+            "Al ladrón se le promete «hoy estarás conmigo» (Lc 23:43).",
+            "Los mártires bajo el altar hablan y claman (Ap 6:9-11)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bautismo",
+      "kind": "debate",
+      "titulo": "El bautismo: modo y sujetos",
+      "pregunta": "¿A quién se bautiza, cómo, y qué significa?",
+      "posiciones": [
+        {
+          "nombre": "Pedobautismo",
+          "resumen": "Se bautiza a los hijos de creyentes con agua derramada o rociada, como signo de la alianza que incluye a la familia — análogo a la circuncisión.",
+          "textosBase": [
+            "Hechos 2:39",
+            "Génesis 17:7",
+            "Colosenses 2:11-12",
+            "1 Corintios 7:14",
+            "Hechos 16:15"
+          ],
+          "objecionesRecibidas": [
+            "Los ejemplos del NT muestran bautismos tras profesar fe personal.",
+            "«Baptizō» significa sumergir; el modo de efusión no refleja el término griego.",
+            "La circuncisión era señal étnico-nacional; la nueva alianza es de regenerados."
+          ]
+        },
+        {
+          "nombre": "Bautismo creyente por inmersión",
+          "resumen": "Solo se bautiza a quien profesa fe personal, por inmersión completa, como símbolo de muerte y resurrección con Cristo.",
+          "textosBase": [
+            "Mateo 28:19",
+            "Hechos 8:36-38",
+            "Romanos 6:3-4",
+            "Hechos 2:41",
+            "Marcos 1:10"
+          ],
+          "objecionesRecibidas": [
+            "Casas enteras fueron bautizadas; difícil excluir a los niños presentes.",
+            "Si el bautismo es mero símbolo, ¿por qué el NT lo trata como condición para perdón y nueva vida?",
+            "La iglesia primitiva ya bautizaba infantes en los siglos II-III."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cena",
+      "kind": "debate",
+      "titulo": "La Cena del Señor",
+      "pregunta": "¿Qué sucede realmente al partir el pan?",
+      "posiciones": [
+        {
+          "nombre": "Transubstanciación (católica)",
+          "resumen": "En la consagración el pan y el vino dejan de serlo en su sustancia y se convierten en el cuerpo, sangre, alma y divinidad de Cristo, aunque conserven las apariencias externas. Es un sacrificio propiciatorio real.",
+          "textosBase": [
+            "Mateo 26:26-28",
+            "Juan 6:53-56",
+            "1 Corintios 10:16",
+            "Lucas 22:19-20",
+            "1 Corintios 11:27-29"
+          ],
+          "objecionesRecibidas": [
+            "Cristo estaba corporalmente presente al decir «esto es mi cuerpo».",
+            "El sacrificio de la cruz fue único y definitivo (Heb 10:12-14).",
+            "La distinción sustancia/accidentes es metafísica aristotélica ajena al texto."
+          ]
+        },
+        {
+          "nombre": "Presencia real sacramental (luterana)",
+          "resumen": "Cristo está verdaderamente presente «en, con y bajo» el pan y el vino; los comulgantes reciben su cuerpo y sangre junto con los elementos, aunque estos no cambien de sustancia.",
+          "textosBase": [
+            "Mateo 26:26",
+            "1 Corintios 10:16",
+            "Juan 6:51",
+            "1 Corintios 11:29"
+          ],
+          "objecionesRecibidas": [
+            "«Esto es mi cuerpo» admite lectura figurada como las demás metáforas del discurso («yo soy la vid»).",
+            "La comunicación de atributos que sostiene la omnipresencia del cuerpo humano carece de base bíblica.",
+            "Recibir indignadamente a los impíos sería imposible si Cristo estuviera allí objetivamente."
+          ]
+        },
+        {
+          "nombre": "Presencia espiritual / memoria (reformada y evangélica)",
+          "resumen": "El pan no cambia ni contiene a Cristo: por el Espíritu el creyente comulga fe-vivamente con su cuerpo resucitado, celebrando memorial proclamatorio hasta que él venga.",
+          "textosBase": [
+            "Lucas 22:19",
+            "1 Corintios 11:24-26",
+            "Juan 6:63",
+            "Hebreos 8:6",
+            "1 Pedro 3:18"
+          ],
+          "objecionesRecibidas": [
+            "Los corintios enfermaban por profanar algo más serio que un símbolo (1 Co 11:30).",
+            "«Esta es mi cuerpo» sin calificador sugiere identificación más fuerte.",
+            "Jesús mismo oró «que sean uno… como nosotros», más que un simple recuerdo."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gobierno",
+      "kind": "debate",
+      "titulo": "El gobierno de la iglesia",
+      "pregunta": "¿Quién gobierna: obispos, tribunales de ancianos o la congregación?",
+      "posiciones": [
+        {
+          "nombre": "Episcopal",
+          "resumen": "Obispos consagrados en sucesión apostólica ordenan ministros y gobiernan diócesis; presbíteros y diáconos sirven bajo su autoridad.",
+          "textosBase": [
+            "Tito 1:5",
+            "Hechos 20:28",
+            "1 Timoteo 5:22",
+            "2 Timoteo 1:6"
+          ],
+          "objecionesRecibidas": [
+            "El NT usa «obispo» y «presbítero» indistintamente (Tit 1:5-7; Fil 1:1).",
+            "No hay un obispo monárquico sobre una ciudad en las páginas del NT.",
+            "La iglesia local tiene autoridad disciplinaria propia (Mt 18:17)."
+          ]
+        },
+        {
+          "nombre": "Presbiteriano",
+          "resumen": "Ancianos gobernantes (pastores y laicos) dirigen cada iglesia y se asocian en tribunales graduados — presbiterio, sínodo — que ordenan y juzgan.",
+          "textosBase": [
+            "Hechos 15:6",
+            "Hechos 15:22-23",
+            "1 Timoteo 4:14",
+            "Tito 1:5"
+          ],
+          "objecionesRecibidas": [
+            "Hechos 15 fue concilio apostólico único, no tribunal permanente replicable.",
+            "El NT no describe presbiterios con jurisdicción sobre varias congregaciones.",
+            "Cristo gobierna directamente por su Espíritu a la iglesia local."
+          ]
+        },
+        {
+          "nombre": "Congregacional",
+          "resumen": "Bajo Cristo, la congregación reunida es la autoridad final: elige a sus líderes, recibe y expulsa miembros, y decide los asuntos mayores.",
+          "textosBase": [
+            "Mateo 18:17",
+            "Hechos 6:3",
+            "1 Corintios 5:4-5",
+            "2 Corintios 2:6"
+          ],
+          "objecionesRecibidas": [
+            "Los ancianos deben gobernar, no solo ejecutar votos (1 Ti 5:17; Heb 13:17).",
+            "La democracia puede ahogar el pastorado bíblico que ha de rendir cuentas por las almas.",
+            "«Mayoría» no es garantía de dirección del Espíritu."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "milenio",
+      "kind": "debate",
+      "titulo": "El milenio de Apocalipsis 20",
+      "pregunta": "¿Qué es el reino de mil años y cuándo ocurre?",
+      "posiciones": [
+        {
+          "nombre": "Premilenialismo",
+          "resumen": "Cristo regresará antes del milenio para reinar literalmente en la tierra desde Jerusalén; Israel tiene aún un futuro nacional que se cumple en ese reino mesiánico.",
+          "textosBase": [
+            "Apocalipsis 20:4-6",
+            "Isaias 11:6-9",
+            "Zacarias 14:4-9",
+            "Romanos 11:25-29",
+            "Apocalipsis 19:11-16"
+          ],
+          "objecionesRecibidas": [
+            "Un solo pasaje simbólico (Ap 20) no sostiene un esquema entero contra el resto del NT.",
+            "El NT aplica las promesas territoriales a Cristo y a la iglesia, no a una geopolítica futura.",
+            "Dos resurrecciones separadas por mil años contradicen Jn 5:28-29 (una resurrección general)."
+          ]
+        },
+        {
+          "nombre": "Amilenialismo",
+          "resumen": "El milenio es símbolo del reinado presente de Cristo con los santos difuntos, entre la primera y segunda venida; no habrá edad dorada terrenal previa a la consumación.",
+          "textosBase": [
+            "Apocalipsis 20:1-3",
+            "Mateo 13:31-33",
+            "Mateo 28:18",
+            "Efesios 2:6",
+            "Daniel 7:13-14"
+          ],
+          "objecionesRecibidas": [
+            "Deja sin cumplimiento histórico literal gran parte de la profecía sobre paz universal.",
+            "Satanás «atado» mientras engaña a las naciones parece contradictorio en el mismo texto.",
+            "Romanos 11 anticipa todavía un futuro para Israel tras «la plenitud de los gentiles»."
+          ]
+        },
+        {
+          "nombre": "Postmilenialismo",
+          "resumen": "El evangelio triunfará progresivamente hasta cristianizar el mundo durante largos siglos; después vendrá Cristo para la resurrección y el juicio final.",
+          "textosBase": [
+            "Mateo 13:31-32",
+            "Salmo 110:1",
+            "1 Corintios 15:24-25",
+            "Habacuc 2:14",
+            "Isaias 2:2-4"
+          ],
+          "objecionesRecibidas": [
+            "El NT describe apostasía y tribulación crecientes al final, no victoria previa (2 Ti 3:1-5; Mt 24).",
+            "Las guerras mundiales golpearon fuerte su optimismo clásico decimonónico.",
+            "Confunde expansión relativa del evangelio con la consumación reservada a la venida."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rapto",
+      "kind": "debate",
+      "titulo": "El rapto de la iglesia: ¿antes o después de la tribulación?",
+      "pregunta": "¿Cuándo serán arrebatados los creyentes?",
+      "posiciones": [
+        {
+          "nombre": "Pretribulacionista",
+          "resumen": "Cristo arrebata a su iglesia ANTES de la gran tribulación (de siete años); Israel retoma el protagonismo profético; la venida en gloria ocurre al final.",
+          "textosBase": [
+            "1 Tesalonicenses 4:16-17",
+            "Daniel 9:27",
+            "Apocalipsis 3:10",
+            "1 Tesalonicenses 5:9"
+          ],
+          "objecionesRecibidas": [
+            "La «dos fases» de la venida no aparece en ningún texto.",
+            "Las iglesias de Apocalipsis 2-3 viven DENTRO de tribulación.",
+            "Mateo 24 sitúa la reunión de los elegidos DESPUÉS de la tribulación."
+          ]
+        },
+        {
+          "nombre": "Postribulacionista",
+          "resumen": "Una sola venida: al FINAL de la tribulación Cristo desciende, raptará a los suyos para recibirlos, y ejecuta el juicio instaurando el reino.",
+          "textosBase": [
+            "Mateo 24:29-31",
+            "2 Tesalonicenses 2:1-4",
+            "1 Corintios 15:51-52",
+            "Apocalipsis 7:14"
+          ],
+          "objecionesRecibidas": [
+            "Dios no destinó a la iglesia PARA ira (1 Ts 5:9): ¿cómo se cruza la última semana?",
+            "Apocalipsis 3:10 promete guardar EN la hora de la prueba.",
+            "La expectativa inminente del NT sugiere que nada debe precederla."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "segunda-venida",
+      "kind": "consenso",
+      "titulo": "Segunda venida, juicio final y restauración",
+      "pregunta": "Doctrina zanjada: vendrá otra vez, juzgará y renovará todo.",
+      "afirmaciones": [
+        "Este mismo Jesús volverá de manera visible, personal y gloriosa.",
+        "Habrá resurrección de muertos y juicio final: los justos a resurrección de vida, los demás a condenación.",
+        "Dios creará cielos nuevos y tierra nueva donde habitará con su pueblo para siempre.",
+        "No hay fecha ni señal secreta: será repentino, público y definitivo; velad."
+      ],
+      "textosBase": [
+        "Hechos 1:11",
+        "Mateo 24:30",
+        "Juan 5:28-29",
+        "Apocalipsis 20:11-15",
+        "Apocalipsis 21:1-4",
+        "2 Pedro 3:10-13"
+      ],
+      "aclaraciones": [
+        "Credo niceno: «de nuevo ha de venir con gloria para juzgar a vivos y muertos, cuyo reino no tendrá fin».",
+        "El CUÁNDO y el orden de los acontecimientos sí se debaten (ver sección debate); el HECHO mismo, jamás.",
+        "La esperanza escatológica no es escape del mundo sino renovación de toda cosa (Ro 8:19-23)."
+      ]
+    }
+  ]
+}

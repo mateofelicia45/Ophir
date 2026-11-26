@@ -1,0 +1,10 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+apps/api/var/*.db
+apps/api/var-script/
+.env
+.env.*
+.DS_Store
