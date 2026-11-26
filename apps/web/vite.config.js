@@ -12,6 +12,10 @@ export default defineConfig({
       '@data': path.resolve(monorepoRoot, 'packages/data'),
     },
   },
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.js'],
+  },
   server: {
     fs: {
       allow: [monorepoRoot],
