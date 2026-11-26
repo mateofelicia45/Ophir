@@ -90,9 +90,13 @@ export default function Sidebar() {
                 }
                 title={collapsed ? item.label : undefined}
               >
-                <span className="nav-icon">{item.icon}</span>
-                {!collapsed && <span className="nav-label">{item.label}</span>}
-                {isActive && !collapsed && <span className="nav-indicator" />}
+                {({ isActive }) => (
+                  <>
+                    <span className="nav-icon">{item.icon}</span>
+                    {!collapsed && <span className="nav-label">{item.label}</span>}
+                    {isActive && !collapsed && <span className="nav-indicator" />}
+                  </>
+                )}
               </NavLink>
             ))}
           </div>
