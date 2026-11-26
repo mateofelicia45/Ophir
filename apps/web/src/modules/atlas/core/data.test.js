@@ -33,3 +33,12 @@ describe('datos del atlas', () => {
     expect(paradas).toHaveLength(180);
   });
 });
+
+import { parseRef } from './refs.js';
+
+describe('referencias de paradas', () => {
+  it('every stop ref parses', () => {
+    const malas = paradas.filter((s) => !parseRef(s.ref)).map((s) => s.ref);
+    expect(malas).toEqual([]);
+  });
+});
