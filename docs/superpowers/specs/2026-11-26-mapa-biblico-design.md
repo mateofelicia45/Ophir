@@ -20,7 +20,12 @@ El globo 3D actual no sirve para eso. Israel ocupa un punto en una esfera, las "
    - En la ficha de un lugar, los versículos abren el **Lector de Ophir**. Hoy abren BibleGateway.
 6. **Medir distancias.** Lo que hoy hacen los "fijados" pasa a ser una herramienta de medición clara: km en línea recta y días de camino aproximados (unos 30 km por día a pie).
 7. **Funciona sin conexión.** La geografía base viaja dentro del proyecto. Solo el relieve fino puede depender de internet, y si falta el mapa sigue siendo legible.
-8. **Usable en celular.** En pantallas chicas, los paneles pasan a una hoja inferior deslizable.
+8. **Poder ubicarse.** Mateo pidió "todo, poder ubicarme": orientarse en la geografía aunque no la conozca de memoria. Para eso el mapa ofrece:
+   - una barra de escala y un mini-mapa de ubicación que muestra dónde está la vista dentro del Mediterráneo;
+   - un interruptor «nombres modernos», que superpone ciudades y países actuales (Tel Aviv, Ammán, Damasco, Israel, Jordania…) en un tono tenue;
+   - un botón «¿Dónde estoy?» que, con permiso del navegador, ubica al usuario o, si está lejos del área, muestra la distancia y la dirección hasta Jerusalén.
+9. **Caminos antiguos con su contexto.** Una capa de rutas de la época (Vía Maris, Camino del Rey, camino de la cresta o de los patriarcas, valle del Jordán) muestra *por qué* la gente viajaba como viajaba. Ejemplo pedido por Mateo: los judíos que iban de Galilea a Judea solían bordear Samaria por el valle del Jordán, mientras que la ruta directa cruzaba Samaria. Ese contraste ilumina Juan 4:4, «le era necesario pasar por Samaria». Cada camino tiene una nota y sus pasajes.
+10. **Usable en celular.** En pantallas chicas, los paneles pasan a una hoja inferior deslizable.
 
 ## 3. No-objetivos
 
@@ -62,6 +67,8 @@ Mateo eligió **A**.
   - Ministerio de Jesús
   - Los tres viajes misioneros de Pablo
   - El viaje de Pablo a Roma
+- `roads.json`: caminos antiguos como líneas con `id`, `name`, `eras`, `note`, `refs[]` y `coords` (polilínea curada a mano). Las variantes de ruta, como «rodeo por el Jordán» y «directo por Samaria», se modelan como caminos separados con una nota que los relaciona.
+- `modern.json`: ciudades y países actuales para el interruptor «nombres modernos».
 - `eras-borders.json`: polígonos aproximados de los poderes principales por era (Egipto, Asiria, Babilonia, Persia, Grecia/seléucidas, Roma, Israel/Judá unidos y divididos). Siempre se dibujan con borde punteado y la etiqueta «aproximado».
 - `locations.json`: se agrega un campo opcional `eras[]`. Los lugares sin `eras` aparecen en todas.
 - `timeline.json`: los eventos ganan un campo opcional `places[]` con ids de lugares.
@@ -89,6 +96,8 @@ Todo el módulo vive en `/atlas`. La URL acepta `?lugar=`, `?ruta=`, `?era=` y `
 - **Ruta activa:** la línea se dibuja tramo a tramo. Las flechas ◀ ▶ avanzan de parada y muestran el versículo del tramo, en RV1909 desde `bibleService`.
 - **Medir:** clic en dos o más lugares para ver la distancia por tramo, el total y los días de camino.
 - **Leyenda** de categorías y de confianza, plegable.
+- **Orientación:** barra de escala, mini-mapa, interruptor «nombres modernos» y botón «¿Dónde estoy?».
+- **Capa «Caminos antiguos»:** al tocar un camino se abre su nota y sus pasajes.
 
 ### 6.4 Integraciones
 - `ReaderPage`: botón «🗺 Mapa» en la barra, que navega a `/atlas?cap=<libro>.<cap>`. El mapa resalta los lugares cuyo `bibleVerses` cae en ese capítulo y las rutas con algún tramo en ese capítulo.
