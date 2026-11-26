@@ -61,4 +61,16 @@ describe('store', () => {
     saveStore({ ...DEF, history: h });
     expect(JSON.parse(ls.data[KEY]).history).toHaveLength(30);
   });
+  it('campos con tipo equivocado: se conserva el valor por defecto', () => {
+    stub(mem({ [KEY]: JSON.stringify({
+      v: 1, theme: 'pink', favorites: 'x', pending: null, notes: null, history: 5, layers: [1], extras: 'no',
+    }) }));
+    expect(loadStore()).toEqual(DEF);
+    stub(mem({ [KEY]: JSON.stringify({ v: 1, favorites: ['a', 3, null], notes: { p: 'ok', q: 7 }, layers: { a: true, b: 'x' }, theme: 'light' }) }));
+    const s = loadStore();
+    expect(s.favorites).toEqual(['a']);
+    expect(s.notes).toEqual({ p: 'ok' });
+    expect(s.layers).toEqual({ a: true });
+    expect(s.theme).toBe('light');
+  });
 });

@@ -2,9 +2,11 @@ import { describe, it, expect } from 'vitest';
 import places from '@data/atlas/places.json';
 import fichas from '@data/atlas/fichas.json';
 import historia from '@data/atlas/historia.json';
+import locations from '@data/atlas/locations.json';
 import { buildAtlasDb } from './db.js';
 import { parseAtlasParams, toAtlasSearch } from './urlState.js';
-import { LEGACY_IDS } from './legacyIds.js';
+import { LEGACY_IDS, LEGACY_OVERRIDES } from './legacyIds.js';
+import { haversineKm } from './geo.js';
 
 const db = buildAtlasDb({ places, fichas, historia });
 const vacio = { placeId: null, routeId: null, periodId: '', chapter: null };
@@ -49,5 +51,25 @@ describe('toAtlasSearch', () => {
   it('ida y vuelta', () => {
     const st = { placeId: 'jerusalem', routeId: db.routes[0].id, periodId: Object.keys(db.periodById)[0], chapter: { b: 0, c: 12 } };
     expect(parseAtlasParams(toAtlasSearch(st), db)).toEqual(st);
+  });
+});
+
+describe('LEGACY_IDS', () => {
+  const old = JSON.parse(JSON.stringify(locations));
+  it('cada destino existe en la base', () => {
+    Object.entries(LEGACY_IDS).forEach(([k, v]) => expect(db.byId.has(v), `${k} -> ${v}`).toBe(true));
+  });
+  it('cada match queda a <= 60 km de las coordenadas viejas, salvo overrides', () => {
+    Object.entries(LEGACY_IDS).forEach(([k, v]) => {
+      if (LEGACY_OVERRIDES.includes(k)) return;
+      const o = old.find((x) => x.id === k);
+      const p = db.byId.get(v);
+      expect(p.hasPos, k).toBe(true);
+      expect(haversineKm([o.longitude, o.latitude], [p.lon, p.lat]), `${k} -> ${v}`).toBeLessThanOrEqual(60);
+    });
+  });
+  it('los falsos positivos conocidos no están mapeados', () => {
+    ['judah', 'masada', 'elusa', 'encampo', 'bosor', 'lo-debar'].forEach((k) => expect(LEGACY_IDS[k]).toBeUndefined());
+    expect(LEGACY_IDS.babilonia).toBe('babylon-1');
   });
 });
