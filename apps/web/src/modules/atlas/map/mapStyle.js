@@ -9,6 +9,8 @@ import { territoryLayers, territoryLabelLayers } from './layers/territories.js';
 import { roadLayers, roadLabelLayers } from './layers/roads.js';
 import { routeLegLayers, routeStopLayers } from './layers/routes.js';
 import { measureLayers } from './layers/measure.js';
+import { modernLayers } from './layers/modern.js';
+import { youLayers } from './layers/you.js';
 import { splitPins, clusterLayers, placeLayers, markerImage, MARKER_IMAGE, HALO_MAX } from './layers/places.js';
 
 export {
@@ -27,7 +29,7 @@ export function buildStyle({
   data = {},
 } = {}) {
   const P = PALETTES[theme] || PALETTES.light;
-  const ex = { labels: true, cluster: false, borders: false, ...extras };
+  const ex = { labels: true, cluster: false, borders: false, roads: false, modern: false, ...extras };
   const legColor = routeColor || P.r0;
   const places = data.places || fc();
   // Con selectedId la selección no depende de que la propiedad `sel` esté al día.
@@ -42,6 +44,8 @@ export function buildStyle({
     borders: { type: 'geojson', data: basemap.borders },
     territories: { type: 'geojson', data: data.territories || fc() },
     roads: { type: 'geojson', data: data.roads || fc() },
+    modern: { type: 'geojson', data: data.modern || fc() },
+    you: { type: 'geojson', data: data.you || fc() },
     'route-legs': { type: 'geojson', data: data.legs || fc() },
     'route-stops': { type: 'geojson', data: data.stops || fc() },
     'route-anim': { type: 'geojson', data: data.anim || fc() },
@@ -59,22 +63,24 @@ export function buildStyle({
   const layers = [
     ...baseLayers(P, { theme, relief, borders: ex.borders }),
     ...territoryLayers(P),
-    ...roadLayers(P),
+    ...roadLayers(P, ex.roads),
     ...routeLegLayers(legColor),
   ];
   if (ex.cluster) layers.push(...clusterLayers(P));
 
   const pl = placeLayers(P, { labelsOn: ex.labels, isSel, notSel });
   layers.push(
+    ...modernLayers(P, ex.modern),
     pl.circle,
     ...riverLabelLayers(P, ex.labels),
-    ...roadLabelLayers(P, ex.labels),
+    ...roadLabelLayers(P, ex.labels, ex.roads),
     ...territoryLabelLayers(P, ex.labels),
     ...pl.low,
     ...pl.major,
     ...pl.top,
     ...routeStopLayers(P, legColor, ex.labels),
     ...measureLayers(P),
+    ...youLayers(P),
   );
 
   // Las paradas del recorrido abierto (`rs`) las dibujan sus propias capas: sin marcador

@@ -11,11 +11,13 @@ export const GROUPS = [
   ['roads', ['roads']],
   ['route-legs', ['route-legs-texto', 'route-legs-aprox', 'route-legs-hipotetico', 'route-anim-texto', 'route-anim-aprox', 'route-anim-hipotetico']],
   ['places-cluster', ['places-cluster', 'places-cluster-count']],
+  ['modern', ['modern-countries', 'modern-cities-3', 'modern-cities-2', 'modern-cities-1']],
   ['places-circle', ['places-circle']],
   ['places-major', ['places-major', 'places-selected']],
   ['place-labels-top', ['places-key', 'place-labels-foc', 'place-labels-sel', 'places-foc']],
   ['route-stops', ['route-stops', 'route-stop-active', 'route-stops-name', 'route-stops-num']],
   ['measure', ['measure-casing', 'measure-line', 'measure-points', 'measure-num', 'measure-leg-label']],
+  ['you', ['you-halo', 'you-dot']],
 ];
 const GROUP_OF = new Map(GROUPS.flatMap(([g, list]) => list.map((id) => [id, g])));
 export function layerGroup(id) {

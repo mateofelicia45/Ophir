@@ -297,3 +297,23 @@ position:relative;height:100%;width:100%;display:flex;flex-direction:column;back
   .atlas-app .maptools .legend{right:46px;bottom:auto;top:0;width:min(280px,calc(100vw - 80px));max-height:60vh}
   .atlas-app .measure{bottom:44px}
 }
+
+/* ---- Caminos antiguos y orientación ---- */
+.atlas-app .cmprow{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px solid var(--line2)}
+.atlas-app .cmprow i{width:12px;height:4px;border-radius:2px}
+.atlas-app .cmprow .mini{text-align:left;padding:0;color:var(--accent)}
+.atlas-app .cmprow b{font-weight:600;white-space:nowrap}
+.atlas-app .locate{position:absolute;top:144px;right:12px;z-index:6;width:36px;height:36px;box-shadow:var(--shadow)}
+.atlas-app .locate:disabled{opacity:.6;cursor:progress}
+.atlas-app .minimap{position:absolute;right:12px;bottom:64px;width:164px;height:114px;padding:2px;border:1px solid var(--line);border-radius:10px;background:var(--paper);box-shadow:var(--shadow);cursor:crosshair;z-index:6}
+.atlas-app .minimap svg{display:block;border-radius:7px}
+.atlas-app .mm-sea{fill:var(--sea)}
+.atlas-app .mm-land{fill:var(--land);stroke:var(--coast);stroke-width:.4}
+.atlas-app .mm-jer{fill:var(--clay)}
+.atlas-app .mm-view{fill:var(--accent);fill-opacity:.16;stroke:var(--accent);stroke-width:1.2}
+@media (max-width:759px){
+  .atlas-app .minimap{display:none}
+}
+@media (min-width:760px){
+  .atlas-app .mapwrap:has(.minimap) .rstep{left:12px;transform:none;width:min(430px,calc(100% - 204px))}
+}

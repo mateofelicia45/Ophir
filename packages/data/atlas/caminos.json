@@ -1,0 +1,305 @@
+{
+ "fuente": "Trazados aproximados, curados a mano a partir de las posiciones de OpenBible.info (CC BY 4.0).",
+ "caminos": [
+  {
+   "id": "via-maris",
+   "nombre": "Vía Maris (Camino del Mar)",
+   "periodos": [
+    "reino-dividido",
+    "asirio",
+    "jesus"
+   ],
+   "nota": "La gran ruta costera entre Egipto y Mesopotamia: bajaba por la llanura filistea, cruzaba la sierra del Carmelo por el paso de Aruna hasta Meguido y seguía por Galilea hacia Hazor y Damasco. Por ella marcharon ejércitos egipcios, asirios y romanos. El nombre «Vía Maris» viene de la Vulgata de Isaías 9:1 («camino del mar») y de la tradición posterior; en los textos antiguos no aparece como una sola calzada con ese nombre.",
+   "refs": [
+    "Éxodo 13:17",
+    "1 Reyes 9:15",
+    "2 Reyes 15:29",
+    "Isaías 9:1"
+   ],
+   "aprox": true,
+   "coords": [
+    [
+     32.4929,
+     30.9648
+    ],
+    [
+     33.8,
+     31.13
+    ],
+    [
+     34.4644,
+     31.504
+    ],
+    [
+     34.5458,
+     31.6639
+    ],
+    [
+     34.6578,
+     31.7572
+    ],
+    [
+     34.753,
+     32.0545
+    ],
+    [
+     34.9304,
+     32.105
+    ],
+    [
+     35.07,
+     32.5
+    ],
+    [
+     35.1844,
+     32.5853
+    ],
+    [
+     35.4,
+     32.74
+    ],
+    [
+     35.575,
+     32.8811
+    ],
+    [
+     35.5692,
+     33.0183
+    ],
+    [
+     35.8,
+     33.12
+    ],
+    [
+     36.3064,
+     33.5111
+    ]
+   ]
+  },
+  {
+   "id": "camino-del-rey",
+   "nombre": "Camino del Rey",
+   "periodos": [
+    "exodo",
+    "conquista",
+    "reino-dividido"
+   ],
+   "nota": "Ruta de norte a sur por la meseta de Transjordania, desde el golfo de Aqaba hasta Damasco, pasando por Edom, Moab y Amón. Israel pidió permiso para usarla y se lo negaron (Nm 20:17; 21:22). Siglos más tarde los romanos la reconstruyeron como Via Nova Traiana.",
+   "refs": [
+    "Números 20:17",
+    "Números 21:22",
+    "Deuteronomio 2:27"
+   ],
+   "aprox": true,
+   "coords": [
+    [
+     35,
+     29.5307
+    ],
+    [
+     35.5,
+     30
+    ],
+    [
+     35.73,
+     30.2
+    ],
+    [
+     35.6039,
+     30.7458
+    ],
+    [
+     35.7014,
+     31.1806
+    ],
+    [
+     35.7766,
+     31.5022
+    ],
+    [
+     35.7955,
+     31.7161
+    ],
+    [
+     35.8091,
+     31.8008
+    ],
+    [
+     35.9343,
+     31.9547
+    ],
+    [
+     36.015,
+     32.4999
+    ],
+    [
+     36.1061,
+     32.6253
+    ],
+    [
+     36.3064,
+     33.5111
+    ]
+   ]
+  },
+  {
+   "id": "camino-cresta",
+   "nombre": "Camino de la cresta (de los patriarcas)",
+   "periodos": [
+    "patriarcas",
+    "conquista",
+    "reino-unido"
+   ],
+   "nota": "El eje norte-sur de la montaña central, sobre la línea divisoria de aguas: evita los valles y las zonas anegadas. Une Beerseba, Hebrón, Belén, Jerusalén, Betel, Silo y Siquem. Génesis 12:6-8 sitúa a Abram en Siquem y Betel, y Jueces 21:19 menciona «el camino que sube de Betel a Siquem».",
+   "refs": [
+    "Génesis 12:6-8",
+    "Génesis 13:18",
+    "Génesis 37:17",
+    "Jueces 21:19"
+   ],
+   "aprox": true,
+   "coords": [
+    [
+     34.8408,
+     31.2447
+    ],
+    [
+     35.1022,
+     31.5251
+    ],
+    [
+     35.2076,
+     31.7043
+    ],
+    [
+     35.2342,
+     31.7767
+    ],
+    [
+     35.2307,
+     31.8231
+    ],
+    [
+     35.2316,
+     31.8543
+    ],
+    [
+     35.2414,
+     31.9228
+    ],
+    [
+     35.2895,
+     32.0557
+    ],
+    [
+     35.2819,
+     32.2136
+    ],
+    [
+     35.2399,
+     32.4135
+    ]
+   ]
+  },
+  {
+   "id": "galilea-judea-jordan",
+   "nombre": "De Galilea a Jerusalén por el valle del Jordán",
+   "periodos": [
+    "jesus"
+   ],
+   "nota": "Por la enemistad entre judíos y samaritanos (Jn 4:9; Lc 9:52-53), algunos peregrinos de Galilea preferían rodear Samaria: bajaban por el valle del Jordán, cruzaban a Perea y subían a Jerusalén por Jericó. Era más largo y caluroso, pero evitaba roces. Jesús llegó a Jerusalén por Jericó en su último viaje (Lc 18:35; 19:1).",
+   "refs": [
+    "Lucas 9:51-56",
+    "Lucas 17:11",
+    "Lucas 18:35",
+    "Lucas 19:1",
+    "Marcos 10:1"
+   ],
+   "relacion": "galilea-judea-samaria",
+   "aprox": true,
+   "coords": [
+    [
+     35.2977,
+     32.7021
+    ],
+    [
+     35.5031,
+     32.5036
+    ],
+    [
+     35.57,
+     32.38
+    ],
+    [
+     35.58,
+     32.15
+    ],
+    [
+     35.56,
+     31.96
+    ],
+    [
+     35.52,
+     31.88
+    ],
+    [
+     35.4362,
+     31.8519
+    ],
+    [
+     35.3615,
+     31.8175
+    ],
+    [
+     35.2559,
+     31.7717
+    ],
+    [
+     35.2342,
+     31.7767
+    ]
+   ]
+  },
+  {
+   "id": "galilea-judea-samaria",
+   "nombre": "De Galilea a Jerusalén por Samaria",
+   "periodos": [
+    "jesus"
+   ],
+   "nota": "El camino más corto: unos tres días según Josefo (Vida 269), que además cuenta que los galileos solían cruzar Samaria para ir a las fiestas (Antigüedades 20.118). Juan 4:4 dice que a Jesús «le era necesario pasar por Samaria»: allí habló con la mujer junto al pozo de Jacob, en Sicar. No estaba libre de roces: en Lc 9:52-53 una aldea samaritana no lo recibió.",
+   "refs": [
+    "Juan 4:3-6",
+    "Juan 4:43",
+    "Lucas 9:52-53"
+   ],
+   "relacion": "galilea-judea-jordan",
+   "aprox": true,
+   "coords": [
+    [
+     35.2977,
+     32.7021
+    ],
+    [
+     35.328,
+     32.5579
+    ],
+    [
+     35.2987,
+     32.4608
+    ],
+    [
+     35.289,
+     32.2178
+    ],
+    [
+     35.2414,
+     31.9228
+    ],
+    [
+     35.2342,
+     31.7767
+    ]
+   ]
+  }
+ ]
+}

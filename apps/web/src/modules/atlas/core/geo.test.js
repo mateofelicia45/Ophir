@@ -4,7 +4,7 @@ import fichas from '@data/atlas/fichas.json';
 import historia from '@data/atlas/historia.json';
 import { buildAtlasDb } from './db.js';
 import {
-  placesToGeoJSON, routeToGeoJSON, territoriesToGeoJSON, roadsToGeoJSON, haversineKm, measure, measureToGeoJSON,
+  placesToGeoJSON, routeToGeoJSON, territoriesToGeoJSON, roadsToGeoJSON, modernToGeoJSON, haversineKm, measure, measureToGeoJSON,
 } from './geo.js';
 
 const db = buildAtlasDb({ places, fichas, historia });
@@ -89,7 +89,22 @@ describe('roadsToGeoJSON', () => {
   it('genera LineString con id, name y aprox', () => {
     const fc = roadsToGeoJSON([{ id: 'r1', nombre: 'Vía', periodos: [], nota: '', refs: [], relacion: 'x', aprox: true, coords: [[0, 0], [1, 1]] }]);
     expect(fc.features[0].geometry.type).toBe('LineString');
-    expect(fc.features[0].properties).toMatchObject({ id: 'r1', name: 'Vía', aprox: true, relacion: 'x' });
+    expect(fc.features[0].properties).toMatchObject({ id: 'r1', name: 'Vía', aprox: true, relacion: 'x', sel: 0, cmp: 0 });
+  });
+  it('marca el camino abierto y el que se compara', () => {
+    const roads = [{ id: 'a', nombre: 'A', coords: [[0, 0], [1, 1]] }, { id: 'b', nombre: 'B', coords: [[0, 0], [1, 1]] }];
+    const p = roadsToGeoJSON(roads, { selectedId: 'a', compareId: 'b' }).features.map((f) => f.properties);
+    expect(p.map((x) => [x.sel, x.cmp])).toEqual([[1, 0], [0, 1]]);
+  });
+});
+
+describe('modernToGeoJSON', () => {
+  it('ciudades con rango y países sin rango', () => {
+    const fc = modernToGeoJSON({ ciudades: [{ n: 'Ammán', c: [35.9, 31.9], r: 1 }], paises: [{ n: 'Jordania', c: [36, 31] }] });
+    expect(fc.features.map((f) => f.properties)).toEqual([
+      { name: 'Jordania', kind: 'country', rank: 0 },
+      { name: 'Ammán', kind: 'city', rank: 1 },
+    ]);
   });
 });
 

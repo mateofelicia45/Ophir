@@ -9,7 +9,7 @@ import { buildStyle, PALETTES, ATLAS_BOUNDS, INITIAL_VIEW, CREDITS, layerGroup, 
 const basemap = { land, borders, lakes, rivers };
 const ORDER = [
   'sea', 'hillshade', 'land', 'lakes', 'rivers', 'borders', 'territories-fill', 'territories-line',
-  'roads', 'route-legs', 'places-cluster', 'places-circle', 'place-labels', 'places-major', 'place-labels-top', 'route-stops', 'measure',
+  'roads', 'route-legs', 'places-cluster', 'modern', 'places-circle', 'place-labels', 'places-major', 'place-labels-top', 'route-stops', 'measure', 'you',
 ];
 const ids = (st) => st.layers.map((l) => l.id);
 const groupsInOrder = (st) => {
@@ -197,7 +197,8 @@ describe('buildStyle', () => {
       expect(l.paint['text-halo-blur'], l.id).toBe(0);
       expect(l.paint['text-halo-width'], l.id).toBeGreaterThanOrEqual(2.4);
       const ls = l.layout['text-letter-spacing'];
-      if (typeof ls === 'number') expect(ls, l.id).toBeLessThanOrEqual(0.1);
+      // Los países llevan mayúsculas muy espaciadas a propósito (nombres de referencia, tenues).
+      if (typeof ls === 'number' && l.id !== 'modern-countries') expect(ls, l.id).toBeLessThanOrEqual(0.1);
     }
   });
 
@@ -326,8 +327,63 @@ describe('capas de medición', () => {
       const at = (id) => ids.indexOf(id);
       expect(at('measure-casing')).toBeGreaterThan(at('route-stops-num'));
       expect(at('measure-line')).toBeGreaterThan(at('measure-casing'));
-      expect(at('measure-leg-label')).toBe(ids.length - 1);
+      expect(at('measure-leg-label')).toBe(ids.length - 3);
+      expect(at('you-dot')).toBe(ids.length - 1);
       expect(at('measure-num')).toBeGreaterThan(at('measure-points'));
     }
+  });
+});
+
+describe('caminos antiguos y nombres modernos', () => {
+  const ex = (extras) => buildStyle({ basemap, extras });
+  const layer = (st, id) => st.layers.find((l) => l.id === id);
+
+  it('los caminos y los nombres modernos arrancan apagados y se encienden con extras', () => {
+    const off = ex({});
+    expect(layer(off, 'roads').layout.visibility).toBe('none');
+    expect(layer(off, 'roads-label').layout.visibility).toBe('none');
+    expect(layer(off, 'modern-countries').layout.visibility).toBe('none');
+    const on = ex({ roads: true, modern: true });
+    expect(layer(on, 'roads').layout.visibility).toBe('visible');
+    expect(layer(on, 'roads-label').layout.visibility).toBe('visible');
+    for (const id of ['modern-countries', 'modern-cities-1', 'modern-cities-2', 'modern-cities-3']) {
+      expect(layer(on, id).layout.visibility, id).toBe('visible');
+    }
+    // sin etiquetas, el nombre del camino se apaga aunque el camino se vea
+    expect(layer(ex({ roads: true, labels: false }), 'roads-label').layout.visibility).toBe('none');
+  });
+
+  it('el camino siempre va punteado y resalta el abierto y el comparado', () => {
+    const l = layer(ex({ roads: true }), 'roads');
+    expect(l.paint['line-dasharray']).toBeDefined();
+    const json = JSON.stringify(l.paint['line-color']);
+    expect(json).toContain(PALETTES.light.clay);
+    expect(json).toContain(PALETTES.light.accent);
+  });
+
+  it('los nombres modernos ceden ante los bíblicos: van debajo en la pila y sin superposición', () => {
+    const st = ex({ roads: true, modern: true });
+    const at = (id) => ids(st).indexOf(id);
+    const topModern = Math.max(...ids(st).filter((id) => id.startsWith('modern-')).map(at));
+    expect(topModern).toBeLessThan(at('river-labels'));
+    expect(topModern).toBeLessThan(at('place-labels-1'));
+    expect(topModern).toBeLessThan(at('places-key'));
+    for (const l of st.layers.filter((x) => x.id.startsWith('modern-'))) {
+      expect(l.layout['text-allow-overlap']).toBeUndefined();
+      expect(l.layout['icon-allow-overlap']).toBeUndefined();
+    }
+  });
+
+  it('las ciudades chicas aparecen más tarde que las grandes y los países se van al acercar', () => {
+    const st = ex({ modern: true });
+    expect(layer(st, 'modern-cities-1').minzoom).toBeLessThan(layer(st, 'modern-cities-3').minzoom);
+    expect(layer(st, 'modern-countries').maxzoom).toBeLessThanOrEqual(8);
+  });
+
+  it('el estilo con todo encendido es válido y trae las fuentes modern y you', () => {
+    const st = ex({ roads: true, modern: true, cluster: true, borders: true });
+    expect(validateStyleMin(st)).toEqual([]);
+    expect(st.sources.modern.type).toBe('geojson');
+    expect(st.sources.you.type).toBe('geojson');
   });
 });

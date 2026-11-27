@@ -1,5 +1,6 @@
 // Panel derecho (400 px): la ficha del lugar elegido o, sin selección, la bienvenida del prototipo.
 import PlaceSheet from './PlaceSheet.jsx';
+import RoadSheet from './RoadSheet.jsx';
 
 const QUICK = [
   ['Éfeso', { type: 'place', id: 'ephesus' }],
@@ -41,10 +42,12 @@ function Welcome({ db, onAction }) {
   );
 }
 
-export default function RightPanel({ db, place, onClose, onAction, ...sheet }) {
+export default function RightPanel({ db, place, road, onClose, onAction, ...sheet }) {
   return (
-    <aside className="right" aria-label="Ficha del lugar">
-      {place
+    <aside className="right" aria-label={road ? 'Ficha del camino' : 'Ficha del lugar'}>
+      {road
+        ? <RoadSheet db={db} onClose={onClose} onReadRef={sheet.onReadRef} {...road} />
+        : place
         ? <PlaceSheet key={place.id} db={db} place={place} onClose={onClose} onAction={onAction} {...sheet} />
         : <Welcome db={db} onAction={onAction} />}
     </aside>

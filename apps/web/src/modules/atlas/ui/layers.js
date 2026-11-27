@@ -8,6 +8,7 @@ export const EXTRAS = [
   { id: 'borders', label: 'Fronteras políticas modernas (orientativas)', def: false },
   { id: 'roads', label: 'Caminos antiguos', def: false },
   { id: 'modern', label: 'Nombres modernos', def: false },
+  { id: 'minimap', label: 'Minimapa de orientación', def: true },
 ];
 
 export const typeOn = (layers, id) => !layers || layers[id] !== false;

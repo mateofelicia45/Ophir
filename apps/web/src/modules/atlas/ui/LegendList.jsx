@@ -35,6 +35,7 @@ export default function LegendList() {
         <Line dash="1.5 5.5" /><span>Ubicación o trayecto hipotético</span>
         <Terr color="var(--c2)" op=".15" dash="8 4" w="1.5" /><span>Territorio antiguo (contorno aproximado)</span>
         <Terr color="var(--c4)" op=".06" dash="2 4" w="1.6" /><span>Territorio de extensión discutida</span>
+        <Line style={{ stroke: 'var(--t-camino)', strokeDasharray: '8 3.5 2 3.5' }} /><span>Camino antiguo (trazado aproximado)</span>
         <Line style={{ stroke: 'var(--border)', strokeWidth: 1.4, strokeDasharray: '1 3.2' }} /><span>Frontera política moderna</span>
       </div>
     </>

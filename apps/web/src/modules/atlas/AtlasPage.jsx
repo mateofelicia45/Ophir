@@ -19,6 +19,8 @@ import MeasureCard from './ui/MeasureCard.jsx';
 import { useMeasure } from './ui/useMeasure.js';
 import { useLayers } from './ui/useLayers.js';
 import { hiddenTypes, territoryPeriods } from './ui/layers.js';
+import { useMapAids } from './ui/useMapAids.js';
+import MapOverlays from './ui/MapOverlays.jsx';
 import { useRouteStepper } from './ui/useRouteStepper.js';
 import { EMPTY_FILTERS } from './ui/filters.js';
 import { filterPlaces } from './core/filter.js';
@@ -32,8 +34,6 @@ import { PALETTES } from './map/mapStyle.js';
 import { useOpenParsedRef } from '../../hooks/useOpenParsedRef.js';
 
 const AtlasMap = lazy(() => import('./map/AtlasMap.jsx'));
-// Caminos antiguos: vacío hasta que la Tarea 12 aporte los datos.
-const NO_ROADS = { type: 'FeatureCollection', features: [] };
 
 export default function AtlasPage() {
   const { db, error, retry } = useAtlasDb();
@@ -211,6 +211,7 @@ export default function AtlasPage() {
   const routeGeo = stepper.geo || undefined;
   const routeColor = route ? (PALETTES[theme] || PALETTES.light)['r' + route.colorIndex] : undefined;
   const extras = store.extras;
+  const aids = useMapAids({ extras, placeId: selectedId, setPlaceId: setSelectedId, openRight, setFitBounds, setFlyTo });
 
   // En modo Medir un lugar se suma a la medición en vez de abrir la ficha.
   const { on: measuring, addPlace, addPoint } = measure;
@@ -293,7 +294,7 @@ export default function AtlasPage() {
               routeColor={routeColor}
               selectedId={selectedId}
               extras={extras}
-              roadsGeo={NO_ROADS}
+              {...aids.mapProps}
               measureGeo={measure.geo}
               onSelectPlace={onMapSelect}
               onMapClick={measuring ? addPoint : undefined}
@@ -302,6 +303,7 @@ export default function AtlasPage() {
             />
           </Suspense>
           <Legend open={legendOpen} onToggle={() => setLegendOpen((v) => !v)} />
+          <MapOverlays orient={aids.orient} mini={aids.mini} />
           {measuring && (
             <MeasureCard points={measure.points} summary={measure.summary} onUndo={measure.undo}
               onClear={measure.clear} onClose={measure.close} />
@@ -347,8 +349,10 @@ export default function AtlasPage() {
           <RightPanel
             db={db}
             place={selected}
+            road={aids.sheet}
             onClose={() => {
               setSelectedId(null);
+              aids.closeRoad();
               // En celular o con un solo panel, cerrar la ficha devuelve el lugar al mapa o a Explorar.
               if (narrow) openRight(false);
               else if (single) { openRight(false); openLeft(true); }

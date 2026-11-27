@@ -84,12 +84,23 @@ export function territoriesToGeoJSON(territories) {
   }));
 }
 
-export function roadsToGeoJSON(roads) {
+// Caminos antiguos. `sel` marca el abierto y `cmp` el que se compara con él: el mapa
+// los resalta; el resto queda en su trazo base.
+export function roadsToGeoJSON(roads, { selectedId, compareId } = {}) {
   return fc(roads.map((r) => {
-    const properties = { id: r.id, name: r.nombre, aprox: !!r.aprox };
+    const properties = {
+      id: r.id, name: r.nombre, aprox: !!r.aprox, sel: r.id === selectedId ? 1 : 0, cmp: r.id === compareId ? 1 : 0,
+    };
     if (r.relacion) properties.relacion = r.relacion;
     return { type: 'Feature', properties, geometry: { type: 'LineString', coordinates: r.coords } };
   }));
+}
+
+// Nombres modernos de referencia: ciudades (con rango 1-3) y países.
+export function modernToGeoJSON(modernos) {
+  const cities = (modernos.ciudades || []).map((c) => pt(c.c, { name: c.n, kind: 'city', rank: c.r || 3 }));
+  const countries = (modernos.paises || []).map((c) => pt(c.c, { name: c.n, kind: 'country', rank: 0 }));
+  return fc([...countries, ...cities]);
 }
 
 const fmtKm = (km) => (km < 10 ? km.toFixed(1) : String(Math.round(km))).replace('.', ',') + ' km';

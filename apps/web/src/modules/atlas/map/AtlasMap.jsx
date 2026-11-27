@@ -11,6 +11,8 @@ import land from '@data/atlas/basemap/land.json';
 import borders from '@data/atlas/basemap/borders.json';
 import lakes from '@data/atlas/basemap/lakes.json';
 import rivers from '@data/atlas/basemap/rivers.json';
+import modernos from '@data/atlas/modernos.json';
+import { modernToGeoJSON } from '../core/geo.js';
 import { sliceLine, easeOut } from '../core/routes.js';
 import { buildStyle, splitPins, markerImage, MARKER_IMAGE, INITIAL_VIEW, ATLAS_BOUNDS, CREDITS } from './mapStyle.js';
 
@@ -18,6 +20,7 @@ maplibregl.setWorkerUrl(workerUrl);
 
 const BASEMAP = { land, borders, lakes, rivers };
 const EMPTY = { type: 'FeatureCollection', features: [] };
+const MODERN = modernToGeoJSON(modernos);
 const HIT_PAD = 6;
 const ANIM_MS = 600;
 const ROAD_LAYERS = ['roads', 'roads-label'];
@@ -49,6 +52,7 @@ export default function AtlasMap({
   routeLeg = null,
   roadsGeo = EMPTY,
   measureGeo = EMPTY,
+  youGeo = EMPTY,
   selectedId,
   focusBounds = null,
   extras,
@@ -57,6 +61,7 @@ export default function AtlasMap({
   onSelectPlace,
   onSelectRoad,
   onMapClick,
+  onView,
   flyTo = null,
   fitBounds = null,
   className,
@@ -71,8 +76,8 @@ export default function AtlasMap({
   // Últimos valores de props, para los listeners creados una sola vez.
   const live = useRef({});
   live.current = {
-    theme, places, territories, routeGeo, routeLeg, roadsGeo, measureGeo, selectedId, extrasKey, routeColor, relief,
-    onSelectPlace, onSelectRoad, onMapClick,
+    theme, places, territories, routeGeo, routeLeg, roadsGeo, measureGeo, youGeo, selectedId, extrasKey, routeColor, relief,
+    onSelectPlace, onSelectRoad, onMapClick, onView,
   };
 
   const pendingRef = useRef(new Set());
@@ -87,6 +92,8 @@ export default function AtlasMap({
       case 'route-anim': return p.routeLeg ? { type: 'FeatureCollection', features: [p.routeLeg] } : EMPTY;
       case 'route-stops': return (p.routeGeo && p.routeGeo.stops) || EMPTY;
       case 'measure': return p.measureGeo || EMPTY;
+      case 'modern': return MODERN;
+      case 'you': return p.youGeo || EMPTY;
       default: return EMPTY;
     }
   };
@@ -118,6 +125,8 @@ export default function AtlasMap({
         stops: sourceData('route-stops'),
         anim: sourceData('route-anim'),
         measure: sourceData('measure'),
+        modern: sourceData('modern'),
+        you: sourceData('you'),
       },
     });
   };
@@ -211,9 +220,21 @@ export default function AtlasMap({
       if (pendingRef.current.size) flushPending(map);
     });
 
+    // Límites visibles, para el minimapa: durante el movimiento, una vez por cuadro.
+    let viewRaf = 0;
+    const emitView = () => {
+      viewRaf = 0;
+      const cb = live.current.onView;
+      if (cb) cb(map.getBounds().toArray());
+    };
+    const queueView = () => { if (!viewRaf) viewRaf = requestAnimationFrame(emitView); };
+    map.on('move', queueView);
+    map.on('load', emitView);
+
     mapRef.current = map;
     window.__atlasMap = map;
     return () => {
+      cancelAnimationFrame(viewRaf);
       mapRef.current = null;
       firstStyle.current = true;
       if (window.__atlasMap === map) delete window.__atlasMap;
@@ -284,6 +305,7 @@ export default function AtlasMap({
   }, [routeLeg]);
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => markDirty('measure'), [measureGeo]);
+  useEffect(() => markDirty('you'), [youGeo]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
   // Cámara. Los efectos dependen de la identidad del objeto, no de su valor: el
@@ -294,7 +316,7 @@ export default function AtlasMap({
     if (!map || !flyTo || !Number.isFinite(flyTo.lon) || !Number.isFinite(flyTo.lat)) return;
     // El contenedor pudo cambiar de tamaño en el mismo render (p. ej. al cerrar un panel).
     map.resize();
-    const zoom = Number.isFinite(flyTo.zoom) ? flyTo.zoom : Math.max(map.getZoom(), 8);
+    const zoom = Number.isFinite(flyTo.zoom) ? flyTo.zoom : flyTo.keepZoom ? map.getZoom() : Math.max(map.getZoom(), 8);
     if (reducedMotion()) map.jumpTo({ center: [flyTo.lon, flyTo.lat], zoom });
     else map.flyTo({ center: [flyTo.lon, flyTo.lat], zoom, essential: true });
   }, [flyTo]);
