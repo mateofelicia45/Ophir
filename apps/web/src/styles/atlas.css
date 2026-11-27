@@ -255,3 +255,25 @@ position:relative;height:100%;width:100%;display:flex;flex-direction:column;back
 .atlas-app .cert+.muted{margin-bottom:10px!important}
 .atlas-app .kv dd .mono{line-height:1.4}
 .atlas-app .kv{align-items:baseline}
+
+/* Recorridos: lista por período y cartel paso a paso */
+.atlas-app .rgrp{margin-top:10px}
+.atlas-app .rgh{margin:0;padding:6px 0 2px;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--clay);font-weight:600}
+.atlas-app .rrow:focus-within{background:var(--panel2)}
+.atlas-app .rname{min-height:44px}
+.atlas-app .st.cur .no{box-shadow:0 0 0 3px var(--accentSoft)}
+.atlas-app .st.cur .stn{color:var(--accent)}
+.atlas-app .st .tb{margin-left:2px}
+.atlas-app .rstep{position:absolute;left:50%;transform:translateX(-50%);bottom:52px;width:min(430px,calc(100% - 24px));background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--rc,var(--clay));border-radius:12px;box-shadow:var(--shadow);padding:6px 12px 12px}
+.atlas-app .rs-top{display:flex;align-items:center;gap:8px}
+.atlas-app .rs-title{flex:1;min-width:0;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atlas-app .rs-nav{display:flex;align-items:center;gap:8px}
+.atlas-app .rs-nav .ib{width:44px;height:44px;font-size:13px}
+.atlas-app .rs-nav .ib:disabled{opacity:.4;cursor:default}
+.atlas-app .rs-count{flex:1;text-align:center;font-weight:600;font-size:14px}
+.atlas-app .rs-name{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-family:"Source Serif 4",Georgia,serif;font-size:19px;font-weight:600}
+.atlas-app .rs-name .no{flex:none;width:26px;height:26px;border-radius:13px;background:var(--rc,var(--clay));color:#fff;font-family:"IBM Plex Sans",sans-serif;font-size:11.5px;display:flex;align-items:center;justify-content:center}
+.atlas-app .rs-note{margin:6px 0 0;font-size:13px;line-height:1.45}
+.atlas-app .rs-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px}
+.atlas-app .rs-meta .refc{margin:0}
+.atlas-app .rs-dist{margin:8px 0 0}

@@ -11,6 +11,7 @@ import land from '@data/atlas/basemap/land.json';
 import borders from '@data/atlas/basemap/borders.json';
 import lakes from '@data/atlas/basemap/lakes.json';
 import rivers from '@data/atlas/basemap/rivers.json';
+import { sliceLine, easeOut } from '../core/routes.js';
 import { buildStyle, splitPins, markerImage, MARKER_IMAGE, INITIAL_VIEW, ATLAS_BOUNDS, CREDITS } from './mapStyle.js';
 
 maplibregl.setWorkerUrl(workerUrl);
@@ -18,6 +19,7 @@ maplibregl.setWorkerUrl(workerUrl);
 const BASEMAP = { land, borders, lakes, rivers };
 const EMPTY = { type: 'FeatureCollection', features: [] };
 const HIT_PAD = 6;
+const ANIM_MS = 600;
 const ROAD_LAYERS = ['roads', 'roads-label'];
 
 // MapLibre necesita una URL absoluta con los marcadores {fontstack}/{range} sin codificar.
@@ -44,6 +46,7 @@ export default function AtlasMap({
   places = EMPTY,
   territories = EMPTY,
   routeGeo,
+  routeLeg = null,
   roadsGeo = EMPTY,
   measureGeo = EMPTY,
   selectedId,
@@ -68,7 +71,7 @@ export default function AtlasMap({
   // Últimos valores de props, para los listeners creados una sola vez.
   const live = useRef({});
   live.current = {
-    theme, places, territories, routeGeo, roadsGeo, measureGeo, selectedId, extrasKey, routeColor, relief,
+    theme, places, territories, routeGeo, routeLeg, roadsGeo, measureGeo, selectedId, extrasKey, routeColor, relief,
     onSelectPlace, onSelectRoad, onMapClick,
   };
 
@@ -81,6 +84,7 @@ export default function AtlasMap({
       case 'territories': return p.territories || EMPTY;
       case 'roads': return p.roadsGeo || EMPTY;
       case 'route-legs': return (p.routeGeo && p.routeGeo.legs) || EMPTY;
+      case 'route-anim': return p.routeLeg ? { type: 'FeatureCollection', features: [p.routeLeg] } : EMPTY;
       case 'route-stops': return (p.routeGeo && p.routeGeo.stops) || EMPTY;
       case 'measure': return p.measureGeo || EMPTY;
       default: return EMPTY;
@@ -112,6 +116,7 @@ export default function AtlasMap({
         roads: sourceData('roads'),
         legs: sourceData('route-legs'),
         stops: sourceData('route-stops'),
+        anim: sourceData('route-anim'),
         measure: sourceData('measure'),
       },
     });
@@ -245,6 +250,39 @@ export default function AtlasMap({
   useEffect(() => markDirty('territories'), [territories]);
   useEffect(() => markDirty('roads'), [roadsGeo]);
   useEffect(() => markDirty('route-legs', 'route-stops'), [routeGeo]);
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  // Tramo activo del recorrido: se dibuja recortando su geometría por frames
+  // (~600 ms). Con movimiento reducido aparece entero. Se cancela al cambiar de
+  // tramo y al desmontar.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return undefined;
+    const src = routeLeg && map.getSource('route-anim');
+    if (!routeLeg || !src || reducedMotion()) {
+      markDirty('route-anim');
+      return undefined;
+    }
+    const line = routeLeg.geometry.coordinates;
+    const frame = (t) => ({
+      type: 'FeatureCollection',
+      features: [{ ...routeLeg, geometry: { type: 'LineString', coordinates: sliceLine(line, t) } }],
+    });
+    src.setData(frame(0));
+    let raf = 0;
+    let start = 0;
+    const tick = (now) => {
+      if (!start) start = now;
+      const k = Math.min(1, (now - start) / ANIM_MS);
+      const s = mapRef.current && mapRef.current.getSource('route-anim');
+      if (!s) return;
+      s.setData(frame(easeOut(k)));
+      if (k < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [routeLeg]);
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => markDirty('measure'), [measureGeo]);
   /* eslint-enable react-hooks/exhaustive-deps */
 

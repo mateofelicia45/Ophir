@@ -229,6 +229,20 @@ describe('buildStyle', () => {
     expect(l.filter).toContainEqual(['==', ['get', 'foc'], 1]);
     expect(l.paint['text-color']).toBe(PALETTES.light.clay);
   });
+  it.each(['light', 'dark'])('tema %s: el tramo animado conserva el punteado de aprox/hipotético', (theme) => {
+    const st = buildStyle({ theme, basemap, relief: false });
+    const anim = st.layers.filter((l) => l.id.startsWith('route-anim'));
+    expect(anim.map((l) => l.id).sort()).toEqual(['route-anim-aprox', 'route-anim-hipotetico', 'route-anim-texto']);
+    const by = (id) => anim.find((l) => l.id === id);
+    expect(by('route-anim-aprox').paint['line-dasharray']).toEqual([3, 2]);
+    expect(by('route-anim-hipotetico').paint['line-dasharray']).toEqual([0.5, 2.5]);
+    expect(by('route-anim-aprox').filter).toEqual(['==', ['get', 'leg'], 'aprox']);
+    expect(by('route-anim-hipotetico').filter).toEqual(['==', ['get', 'leg'], 'hipotetico']);
+    expect(by('route-anim-texto').paint['line-dasharray']).toBeUndefined();
+    expect(JSON.stringify(by('route-anim-texto').filter)).not.toMatch(/aprox|hipotetico/);
+    expect(st.sources['route-anim'].type).toBe('geojson');
+    expect(layerGroup('route-anim-aprox')).toBe('route-legs');
+  });
   it('el color de la ruta activa se recibe por parámetro', () => {
     const st = buildStyle({ theme: 'light', basemap, relief: false, routeColor: '#123456' });
     const legs = st.layers.filter((l) => l.id.startsWith('route-legs'));

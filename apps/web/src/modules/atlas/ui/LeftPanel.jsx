@@ -1,6 +1,7 @@
 // Panel izquierdo (336 px) con las pestañas del prototipo. Capas, Rutas y Estudio
 // muestran por ahora sus encabezados; los completan las tareas siguientes.
 import ExplorePanel from './ExplorePanel.jsx';
+import RoutesPanel from './RoutesPanel.jsx';
 
 const TABS = [['explorar', 'Explorar'], ['capas', 'Capas'], ['rutas', 'Rutas'], ['estudio', 'Estudio']];
 
@@ -9,7 +10,7 @@ const Sec = ({ title, children }) => (
 );
 const Note = ({ children }) => <p className="muted sm" style={{ margin: '0 0 8px' }}>{children}</p>;
 
-export default function LeftPanel({ tab, onTab, explore }) {
+export default function LeftPanel({ tab, onTab, explore, routes }) {
   return (
     <aside className="left" aria-label="Exploración, capas, rutas y estudio">
       <nav className="tabs" aria-label="Secciones" role="tablist">
@@ -30,11 +31,7 @@ export default function LeftPanel({ tab, onTab, explore }) {
             <Sec title="Leyenda" />
           </>
         )}
-        {tab === 'rutas' && (
-          <Sec title="Recorridos y viajes">
-            <Note>Las líneas unen las paradas en el orden del texto: no reproducen el camino exacto.</Note>
-          </Sec>
-        )}
+        {tab === 'rutas' && <RoutesPanel {...routes} />}
         {tab === 'estudio' && (
           <>
             <Sec title="Cobertura de la base de datos" />

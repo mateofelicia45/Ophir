@@ -13,9 +13,11 @@ import TopBar from './ui/TopBar.jsx';
 import LeftPanel from './ui/LeftPanel.jsx';
 import RightPanel from './ui/RightPanel.jsx';
 import FocusCard from './ui/FocusCard.jsx';
+import RouteStepper from './ui/RouteStepper.jsx';
+import { useRouteStepper } from './ui/useRouteStepper.js';
 import { EMPTY_FILTERS } from './ui/filters.js';
 import { filterPlaces } from './core/filter.js';
-import { placesToGeoJSON, routeToGeoJSON, territoriesToGeoJSON } from './core/geo.js';
+import { placesToGeoJSON, territoriesToGeoJSON } from './core/geo.js';
 import { parseAtlasParams, toAtlasSearch } from './core/urlState.js';
 import { loadStore, saveStore } from './core/store.js';
 import { pushHistory } from './core/lists.js';
@@ -105,6 +107,7 @@ export default function AtlasPage() {
     const f = db && routeFocus(db, id);
     if (!f) return;
     setRouteId(id);
+    setTab('rutas');
     applyFocus(f);
   }, [db, applyFocus]);
 
@@ -185,7 +188,8 @@ export default function AtlasPage() {
     [db, periodId],
   );
   const route = db && routeId ? db.routes.find((r) => r.id === routeId) : null;
-  const routeGeo = useMemo(() => (route ? routeToGeoJSON(route, db) : undefined), [route, db]);
+  const stepper = useRouteStepper({ db, route, setFlyTo });
+  const routeGeo = stepper.geo || undefined;
   const routeColor = route ? (PALETTES[theme] || PALETTES.light)['r' + route.colorIndex] : undefined;
   const extras = store.extras;
 
@@ -227,6 +231,15 @@ export default function AtlasPage() {
               onPerson: (name) => applyFocus(personFocus(db, name)),
               onClear: () => { setFilters(EMPTY_FILTERS); setPeriodId(''); },
             }}
+            routes={{
+              db,
+              routeId,
+              step: stepper.step,
+              onOpen: focusRoute,
+              onStep: stepper.goTo,
+              onClose: clearFocus,
+              onReadRef: readPassage,
+            }}
           />
         )}
         <main className="mapwrap">
@@ -236,6 +249,7 @@ export default function AtlasPage() {
               places={placesGeo}
               territories={territoriesGeo}
               routeGeo={routeGeo}
+              routeLeg={routeGeo ? routeGeo.active : null}
               routeColor={routeColor}
               selectedId={selectedId}
               extras={extras}
@@ -244,7 +258,18 @@ export default function AtlasPage() {
               fitBounds={fitBounds}
             />
           </Suspense>
-          {db && focus && (
+          {db && route && (
+            <RouteStepper
+              db={db}
+              route={route}
+              step={stepper.step}
+              progress={stepper.progress}
+              onStep={stepper.goTo}
+              onClose={clearFocus}
+              onReadRef={readPassage}
+            />
+          )}
+          {db && focus && focus.kind !== 'Recorrido' && (
             <FocusCard
               focus={focus}
               db={db}

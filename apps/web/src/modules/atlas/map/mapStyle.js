@@ -65,12 +65,12 @@ const GROUPS = [
   ['territories-fill', ['territories-fill']],
   ['territories-line', ['territories-line', 'territories-line-disc']],
   ['roads', ['roads']],
-  ['route-legs', ['route-legs-texto', 'route-legs-aprox', 'route-legs-hipotetico']],
+  ['route-legs', ['route-legs-texto', 'route-legs-aprox', 'route-legs-hipotetico', 'route-anim-texto', 'route-anim-aprox', 'route-anim-hipotetico']],
   ['places-cluster', ['places-cluster', 'places-cluster-count']],
   ['places-circle', ['places-circle']],
   ['places-major', ['places-major', 'places-selected']],
   ['place-labels-top', ['places-key', 'place-labels-foc', 'place-labels-sel', 'places-foc']],
-  ['route-stops', ['route-stops', 'route-stops-num']],
+  ['route-stops', ['route-stops', 'route-stop-active', 'route-stops-num']],
   ['measure', ['measure-line', 'measure-points']],
 ];
 const GROUP_OF = new Map(GROUPS.flatMap(([g, list]) => list.map((id) => [id, g])));
@@ -214,6 +214,34 @@ function labelLayers(P, labelsOn, notSel) {
   return out;
 }
 
+// Tramos pendientes (los que vienen después de la parada activa) se dibujan tenues.
+const AHEAD_OPACITY = ['case', ['==', get('ahead'), 1], 0.35, 1];
+
+// Las tres capas de un origen de tramos. Aproximado e hipotético siempre punteados
+// (DESIGN.md §5); solo texto/inicio van con trazo continuo.
+function legLayers(source, color) {
+  return [
+    {
+      id: source + '-texto', type: 'line', source,
+      filter: ['in', get('leg'), ['literal', ['texto', 'inicio']]],
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': color, 'line-width': 2.6, 'line-opacity': AHEAD_OPACITY },
+    },
+    {
+      id: source + '-aprox', type: 'line', source,
+      filter: ['==', get('leg'), 'aprox'],
+      layout: { 'line-join': 'round' },
+      paint: { 'line-color': color, 'line-width': 2.6, 'line-dasharray': [3, 2], 'line-opacity': AHEAD_OPACITY },
+    },
+    {
+      id: source + '-hipotetico', type: 'line', source,
+      filter: ['==', get('leg'), 'hipotetico'],
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': color, 'line-width': 2.6, 'line-dasharray': [0.5, 2.5], 'line-opacity': AHEAD_OPACITY },
+    },
+  ];
+}
+
 export function buildStyle({
   theme = 'light',
   basemap,
@@ -242,6 +270,7 @@ export function buildStyle({
     roads: { type: 'geojson', data: data.roads || fc() },
     'route-legs': { type: 'geojson', data: data.legs || fc() },
     'route-stops': { type: 'geojson', data: data.stops || fc() },
+    'route-anim': { type: 'geojson', data: data.anim || fc() },
     places: { type: 'geojson', data: places },
     pins: ex.cluster
       ? { type: 'geojson', data: splitPins(places), cluster: true, clusterRadius: 38, clusterMaxZoom: 7 }
@@ -307,24 +336,8 @@ export function buildStyle({
       layout: { 'line-join': 'round' },
       paint: { 'line-color': P['t-camino'], 'line-width': ['interpolate', ['linear'], ['zoom'], 5, 1.4, 10, 2.4], 'line-dasharray': [4, 1.8, 0.9, 1.8] },
     },
-    {
-      id: 'route-legs-texto', type: 'line', source: 'route-legs',
-      filter: ['in', get('leg'), ['literal', ['texto', 'inicio']]],
-      layout: { 'line-join': 'round', 'line-cap': 'round' },
-      paint: { 'line-color': legColor, 'line-width': 2.6 },
-    },
-    {
-      id: 'route-legs-aprox', type: 'line', source: 'route-legs',
-      filter: ['==', get('leg'), 'aprox'],
-      layout: { 'line-join': 'round' },
-      paint: { 'line-color': legColor, 'line-width': 2.6, 'line-dasharray': [3, 2] },
-    },
-    {
-      id: 'route-legs-hipotetico', type: 'line', source: 'route-legs',
-      filter: ['==', get('leg'), 'hipotetico'],
-      layout: { 'line-join': 'round', 'line-cap': 'round' },
-      paint: { 'line-color': legColor, 'line-width': 2.6, 'line-dasharray': [0.5, 2.5] },
-    },
+    ...legLayers('route-legs', legColor),
+    ...legLayers('route-anim', legColor),
   );
 
   if (ex.cluster) {
@@ -475,6 +488,15 @@ export function buildStyle({
       paint: {
         'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 7, 10, 9],
         'circle-color': legColor, 'circle-stroke-color': P.paper, 'circle-stroke-width': 1.5,
+        'circle-opacity': AHEAD_OPACITY, 'circle-stroke-opacity': AHEAD_OPACITY,
+      },
+    },
+    {
+      id: 'route-stop-active', type: 'circle', source: 'route-stops', filter: ['==', get('act'), 1],
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 12, 10, 15],
+        'circle-color': legColor, 'circle-opacity': 0.22,
+        'circle-stroke-color': legColor, 'circle-stroke-width': 2,
       },
     },
     {
@@ -483,7 +505,7 @@ export function buildStyle({
         'text-field': ['to-string', get('n')], 'text-font': FONTS.sansMedium, 'text-size': 10.5,
         'text-allow-overlap': true, 'text-ignore-placement': true,
       },
-      paint: { 'text-color': '#FFFFFF' },
+      paint: { 'text-color': '#FFFFFF', 'text-opacity': AHEAD_OPACITY },
     },
     {
       id: 'measure-line', type: 'line', source: 'measure', filter: ['==', ['geometry-type'], 'LineString'],
