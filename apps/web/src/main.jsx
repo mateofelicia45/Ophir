@@ -5,7 +5,6 @@ import { PassageProvider } from './context/PassageContext.jsx';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/layout.css';
-import './styles/atlas.css';
 import './styles/reader.css';
 import './styles/notes.css';
 import './styles/crossrefs.css';

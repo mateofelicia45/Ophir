@@ -1,635 +1,288 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import Globe from './globe/Globe.js';
-import MarkerManager, { categoryColor } from './globe/Markers.js';
-import { loadAtlasData } from './atlasData.js';
-import LocationPanel from './LocationPanel.jsx';
+// Página del atlas: mapa de estudio MapLibre con búsqueda, filtros y paneles.
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-500.css';
+import '@fontsource/ibm-plex-sans/latin-600.css';
+import '@fontsource/source-serif-4/latin-400.css';
+import '@fontsource/source-serif-4/latin-600.css';
+import '../../styles/atlas.css';
+import { useAtlasDb } from './ui/useAtlasDb.js';
+import TopBar from './ui/TopBar.jsx';
+import LeftPanel from './ui/LeftPanel.jsx';
+import RightPanel from './ui/RightPanel.jsx';
+import FocusCard from './ui/FocusCard.jsx';
+import { EMPTY_FILTERS } from './ui/filters.js';
+import { filterPlaces } from './core/filter.js';
+import { placesToGeoJSON, routeToGeoJSON, territoriesToGeoJSON } from './core/geo.js';
+import { parseAtlasParams, toAtlasSearch } from './core/urlState.js';
+import { loadStore, saveStore } from './core/store.js';
+import { pushHistory } from './core/lists.js';
+import { parseRef, toOphirRef } from './core/refs.js';
+import { passageFocus, personFocus, routeFocus, cameraFor, periodBounds } from './core/focus.js';
+import { PALETTES } from './map/mapStyle.js';
+import { useOpenParsedRef } from '../../hooks/useOpenParsedRef.js';
 
-const STORIES = {
-  mefiboset: {
-    title: 'Mefiboset (2 Samuel 4:4; 5:1-5; 9:1-13)',
-    description: 'Historia completa: caída en Jezreel, reinado de David en Hebrón/Jerusalén, bondad a Mefiboset',
-    locations: ['jezreel', 'hebron', 'jerusalem', 'lo-debar', 'mahanaim'],
-    color: '#c8a446',
-  },
-  abraham: {
-    title: 'Abraham: Ur a Canaán',
-    description: 'El viaje del patriarca (Génesis 11-13)',
-    locations: ['ur', 'harran', 'sichem', 'belen', 'hebron', 'mamre'],
-    color: '#6b8e23',
-  },
-  jesus_ministerio: {
-    title: 'Ministerio de Jesús en Galilea',
-    description: 'Lugares clave del ministerio galileo',
-    locations: ['nazaret', 'cafarnaum', 'belen', 'mar-galilea', 'monte-carmelo', 'monte-olivos'],
-    color: '#4a90d9',
-  },
-  pablo_viajes: {
-    title: 'Viajes de Pablo (Hechos 13-28)',
-    description: 'Ciudades visitadas en los viajes misioneros',
-    locations: ['antioquia-siria', 'tarso', 'chipre', 'pafos', 'perge', 'antioquia-pisidia', 'iconio', 'listra', 'derbe', 'troas', 'filipos', 'tesalonica', 'berea', 'atenas', 'corinto', 'efeso', 'mileto', 'jerusalem', 'cesarea', 'roma'],
-    color: '#cd5c5c',
-  },
+const AtlasMap = lazy(() => import('./map/AtlasMap.jsx'));
+
+const isNarrow = () => {
+  try {
+    return window.innerWidth < 900;
+  } catch {
+    return false;
+  }
 };
 
-function clusterLabel(cluster) {
-  const preview = cluster.names.slice(0, 3).join(', ');
-  const rest = cluster.names.length - 3;
-  return rest > 0 ? `${preview} +${rest} más` : preview;
-}
-
-// Haversine distance in km
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
 export default function AtlasPage() {
-  const containerRef = useRef(null);
-  const tooltipRef = useRef(null);
-  const globeRef = useRef(null);
-  const markersRef = useRef(null);
+  const { db, error, retry } = useAtlasDb();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openParsedRef = useOpenParsedRef();
 
-  const [data, setData] = useState(null);
-  const [ready, setReady] = useState(false);
-  const [searchText, setSearchText] = useState('');
-  const [filters, setFilters] = useState({
-    query: '',
-    region: '',
-    category: '',
-    book: '',
-  });
-  const [selected, setSelected] = useState(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showList, setShowList] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [showStories, setShowStories] = useState(false);
-  const [activeStory, setActiveStory] = useState(null);
-  const [pinned, setPinned] = useState(new Set());
-  const [showPinned, setShowPinned] = useState(false);
+  const [store, setStore] = useState(loadStore);
+  const [narrow] = useState(isNarrow);
+  const [leftOpen, setLeftOpen] = useState(() => !narrow);
+  const [rightOpen, setRightOpen] = useState(() => !narrow);
+  const [tab, setTab] = useState('explorar');
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [periodId, setPeriodId] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
+  const [routeId, setRouteId] = useState(null);
+  const [focus, setFocus] = useState(null);
+  // Pedidos de cámara: un objeto nuevo por pedido (contrato de AtlasMap).
+  const [flyTo, setFlyTo] = useState(null);
+  const [fitBounds, setFitBounds] = useState(null);
 
-  function togglePin(locId) {
-    setPinned((prev) => {
-      const next = new Set(prev);
-      if (next.has(locId)) next.delete(locId);
-      else next.add(locId);
+  const updateStore = useCallback((fn) => {
+    setStore((s) => {
+      const next = fn(s);
+      saveStore(next);
       return next;
     });
-  }
+  }, []);
+  const theme = store.theme;
 
-  function clearPins() {
-    setPinned(new Set());
-  }
+  // ---- Acciones ----
+  // Encuadre de un foco: deja libre a la izquierda el ancho del cartel del foco.
+  const frame = useCallback((cam) => {
+    if (!cam) return;
+    const left = !narrow && window.innerWidth >= 1100 ? 370 : 40;
+    const pad = { top: 50, bottom: 50, right: 50, left };
+    const d = 0.25;
+    const bounds = cam.center
+      ? [[cam.center[0] - d, cam.center[1] - d], [cam.center[0] + d, cam.center[1] + d]]
+      : cam.bounds;
+    setFitBounds({ bounds, padding: pad });
+  }, [narrow]);
 
-  function pinStory(storyKey) {
-    const story = STORIES[storyKey];
-    if (!story) return;
-    setPinned((prev) => new Set([...prev, ...story.locations]));
-  }
+  const selectPlace = useCallback((id, { fly = true } = {}) => {
+    const p = db && db.byId.get(id);
+    if (!p) return;
+    setSelectedId(id);
+    setRightOpen(true);
+    if (narrow) setLeftOpen(false);
+    updateStore((s) => pushHistory(s, id));
+    // Un lugar sin coordenadas se elige igual, pero no se vuela a 0,0.
+    if (fly && p.hasPos) setFlyTo({ lon: p.lon, lat: p.lat });
+  }, [db, narrow, updateStore]);
 
-  function unpinStory(storyKey) {
-    const story = STORIES[storyKey];
-    if (!story) return;
-    setPinned((prev) => {
-      const next = new Set(prev);
-      story.locations.forEach((id) => next.delete(id));
-      return next;
-    });
-  }
+  const choosePeriod = useCallback((id, fit = true) => {
+    setPeriodId(id || '');
+    if (fit && id && db) {
+      const b = periodBounds(db, id);
+      if (b) setFitBounds(b);
+    }
+  }, [db]);
 
-  useEffect(() => {
-    const globe = new Globe(containerRef.current);
-    const markers = new MarkerManager(globe);
-    const atlasData = loadAtlasData();
+  const applyFocus = useCallback((f) => {
+    if (!f) return;
+    setFocus(f);
+    if (f.kind !== 'Recorrido') setRouteId(null);
+    if (narrow) setLeftOpen(false);
+    // Sin lugar elegido, el panel derecho solo muestra la bienvenida: se cierra para dar lugar al mapa.
+    if (!selectedId) setRightOpen(false);
+    frame(cameraFor(db, [...f.placeIds]));
+  }, [db, frame, narrow, selectedId]);
 
-    globeRef.current = globe;
-    markersRef.current = markers;
+  const focusPassage = useCallback((ref) => {
+    if (db && ref) applyFocus(passageFocus(db, ref));
+  }, [db, applyFocus]);
 
-    markers.createMarkers(atlasData.locations);
-    setData(atlasData);
-    setReady(true);
+  const focusRoute = useCallback((id) => {
+    const f = db && routeFocus(db, id);
+    if (!f) return;
+    setRouteId(id);
+    applyFocus(f);
+  }, [db, applyFocus]);
 
-    const dom = globe.renderer.domElement;
+  const runAction = useCallback((a) => {
+    if (!a || !db) return;
+    switch (a.type) {
+      case 'place': selectPlace(a.id); break;
+      case 'passage': focusPassage(a.ref || parseRef(a.text)); break;
+      case 'person': applyFocus(personFocus(db, a.id)); break;
+      case 'period': choosePeriod(a.id); break;
+      case 'route': focusRoute(a.id); break;
+      default: break;
+    }
+  }, [db, selectPlace, focusPassage, applyFocus, choosePeriod, focusRoute]);
 
-    const projectMouse = (event) => {
-      const rect = dom.getBoundingClientRect();
-      globe.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      globe.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      globe.raycaster.setFromCamera(globe.mouse, globe.camera);
-    };
-
-    const pickTarget = (event) => {
-      projectMouse(event);
-      const targets = markersRef.current?.getTargets() || [];
-      const meshes = [];
-      for (const t of targets) {
-        t.mesh.children.forEach((child) => {
-          if (child.isMesh) meshes.push(child);
-        });
-      }
-      const hits = globe.raycaster.intersectObjects(meshes);
-      if (hits.length === 0) return null;
-      const hit = hits[0].object;
-      for (const t of targets) {
-        if (t.mesh === hit.parent || t.mesh.children.includes(hit)) return t;
-      }
-      return null;
-    };
-
-    const onClick = (event) => {
-      const target = pickTarget(event);
-      if (!target) return;
-      if (target.cluster) {
-        // Clic en cluster: acercarse hasta que se abra en sus pines
-        setSelected(null);
-        markersRef.current.resetHighlight();
-        const d = globe.camera.position.length();
-        globe.flyTo(
-          target.cluster.latitude,
-          target.cluster.longitude,
-          Math.max(7.8, d * 0.6)
-        );
-        return;
-      }
-      selectLocation(target.data);
-    };
-
-    const onHover = (event) => {
-      const tooltip = tooltipRef.current;
-      const target = pickTarget(event);
-      if (target && tooltip) {
-        tooltip.textContent = target.cluster
-          ? clusterLabel(target.cluster)
-          : target.data.name;
-        tooltip.style.left = `${event.clientX + 12}px`;
-        tooltip.style.top = `${event.clientY - 10}px`;
-        tooltip.classList.add('visible');
-        dom.style.cursor = 'pointer';
-        return;
-      }
-      tooltip?.classList.remove('visible');
-      dom.style.cursor = 'default';
-    };
-
-    dom.addEventListener('click', onClick);
-    dom.addEventListener('mousemove', onHover);
-
-    return () => {
-      dom.removeEventListener('click', onClick);
-      dom.removeEventListener('mousemove', onHover);
-      markers.dispose();
-      globe.dispose();
-      globeRef.current = null;
-      markersRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const clearFocus = useCallback(() => {
+    setFocus(null);
+    setRouteId(null);
   }, []);
 
+  const readPassage = useCallback((ref) => openParsedRef(toOphirRef(ref)), [openParsedRef]);
+
+  // ---- URL ----
+  // Se lee una vez, en cuanto está la base (durante el render, patrón de React para
+  // derivar estado); desde entonces el estado manda y la URL lo refleja.
+  const [urlReady, setUrlReady] = useState(false);
+  if (db && !urlReady) {
+    setUrlReady(true);
+    const st = parseAtlasParams(searchParams.toString(), db);
+    if (st.periodId) choosePeriod(st.periodId, !st.placeId && !st.routeId && !st.chapter);
+    if (st.chapter) focusPassage({ b: st.chapter.b, c1: st.chapter.c, v1: 0, c2: st.chapter.c, v2: 999 });
+    if (st.routeId) focusRoute(st.routeId);
+    if (st.placeId) {
+      const p = db.byId.get(st.placeId);
+      setSelectedId(st.placeId);
+      setRightOpen(true);
+      if (p.hasPos) setFlyTo({ lon: p.lon, lat: p.lat, zoom: 8 });
+    }
+  }
+
+  const urlSearch = toAtlasSearch({
+    placeId: selectedId,
+    routeId,
+    periodId,
+    chapter: focus && focus.kind === 'Pasaje' ? focus.chapter : null,
+  });
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFilters((f) => ({ ...f, query: searchText.trim() }));
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [searchText]);
+    if (!urlReady) return;
+    const cur = searchParams.toString();
+    if (urlSearch.replace(/^\?/, '') !== cur) setSearchParams(urlSearch, { replace: true });
+  }, [urlReady, urlSearch, searchParams, setSearchParams]);
 
-  const filtered = useMemo(
-    () => (data ? data.getFiltered(filters) : []),
-    [data, filters]
+  // ---- Datos del mapa (memorizados: la identidad dispara setData) ----
+  const filtered = useMemo(() => {
+    if (!db) return [];
+    const types = filters.type ? new Set([filters.type]) : new Set();
+    return filterPlaces(db, { testament: filters.testament, book: filters.book, periodId, types })
+      .filter((p) => (!filters.cert || p.certainty === filters.cert) && (!filters.onlyCurated || p.curated));
+  }, [db, filters, periodId]);
+
+  const placesGeo = useMemo(() => {
+    if (!db) return undefined;
+    // Los lugares del foco y el elegido se ven aunque los filtros los excluyan.
+    const ids = new Set(filtered.map((p) => p.id));
+    const extra = [];
+    const add = (id) => {
+      if (id && !ids.has(id) && db.byId.has(id)) { ids.add(id); extra.push(db.byId.get(id)); }
+    };
+    if (focus) focus.placeIds.forEach(add);
+    add(selectedId);
+    return placesToGeoJSON(filtered.concat(extra), { selectedId, focusIds: focus ? focus.placeIds : null });
+  }, [db, filtered, focus, selectedId]);
+
+  const territoriesGeo = useMemo(
+    () => (db ? territoriesToGeoJSON(periodId ? db.territories.filter((t) => t.periodId === periodId) : []) : undefined),
+    [db, periodId],
   );
+  const route = db && routeId ? db.routes.find((r) => r.id === routeId) : null;
+  const routeGeo = useMemo(() => (route ? routeToGeoJSON(route, db) : undefined), [route, db]);
+  const routeColor = route ? (PALETTES[theme] || PALETTES.light)['r' + route.colorIndex] : undefined;
+  const extras = useMemo(() => ({ ...store.extras }), [store.extras]);
 
-  const suggestions = useMemo(
-    () =>
-      data && filters.query
-        ? data.getFiltered({ query: filters.query }).slice(0, 8)
-        : [],
-    [data, filters.query]
-  );
+  const onMapSelect = useCallback((id) => selectPlace(id, { fly: false }), [selectPlace]);
 
-  useEffect(() => {
-    if (!ready || !markersRef.current) return;
-    const hasFilter =
-      filters.query || filters.region || filters.category || filters.book;
-    const storyIds = activeStory ? STORIES[activeStory].locations : null;
-    const pinnedIds = Array.from(pinned);
-    
-    if (storyIds) {
-      // Modo historia: mostrar solo los lugares de la historia + fijados
-      markersRef.current.showOnly([...new Set([...storyIds, ...pinnedIds])]);
-    } else if (hasFilter) {
-      markersRef.current.showOnly([...new Set([...filtered.map((l) => l.id), ...pinnedIds])]);
-    } else if (pinnedIds.length > 0) {
-      // Solo fijados: mostrar solo los fijados
-      markersRef.current.showOnly(pinnedIds);
-    } else {
-      markersRef.current.showAll();
-    }
-  }, [filtered, filters, ready, activeStory, pinned]);
-
-  function selectLocation(loc) {
-    setSelected(loc);
-    markersRef.current?.highlightById(loc.id);
-    globeRef.current?.flyTo(loc.latitude, loc.longitude);
-  }
-
-  function closePanel() {
-    setSelected(null);
-    markersRef.current?.resetHighlight();
-  }
-
-  function resetFilters() {
-    setSearchText('');
-    setFilters({ query: '', region: '', category: '', book: '' });
-    setActiveStory(null);
-  }
-
-  function selectStory(storyKey) {
-    const story = STORIES[storyKey];
-    if (!story) return;
-    setActiveStory(storyKey);
-    setShowStories(false);
-    setShowFilters(false);
-    setSearchText('');
-    setFilters({ query: '', region: '', category: '', book: '' });
-    
-    // Resaltar el primer lugar de la historia
-    const firstLoc = data?.getById(story.locations[0]);
-    if (firstLoc) {
-      selectLocation(firstLoc);
-    }
-  }
-
-  function clearStory() {
-    setActiveStory(null);
-    markersRef.current?.showAll();
-    markersRef.current?.resetHighlight();
-    setSelected(null);
-  }
-
-  function zoom(step) {
-    const globe = globeRef.current;
-    if (!globe) return;
-    const distance = globe.camera.position.length();
-    if (step > 0 && distance > 7.5) {
-      const dir = globe.camera.position.clone().normalize();
-      globe.camera.position.sub(dir.multiplyScalar(1));
-    }
-    if (step < 0 && distance < 24) {
-      const dir = globe.camera.position.clone().normalize();
-      globe.camera.position.add(dir.multiplyScalar(1));
-    }
-  }
-
-  function resetView() {
-    globeRef.current?.resetView();
-    markersRef.current?.resetHighlight();
-    setSelected(null);
-  }
-
-  const hasActiveFilter =
-    filters.query || filters.region || filters.category || filters.book;
+  const selected = db && selectedId ? db.byId.get(selectedId) : null;
+  const cls = ['atlas-app', theme === 'dark' ? 'dark' : '', leftOpen ? 'lo' : '', rightOpen ? 'ro' : ''].filter(Boolean).join(' ');
 
   return (
-    <div className="atlas-root">
-      <div className="globe-container" ref={containerRef} />
-
-      <div className="atlas-topbar">
-        <div className="search-wrap">
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Buscar lugar..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+    <div className={cls}>
+      <TopBar
+        db={db}
+        theme={theme}
+        onTheme={() => updateStore((s) => ({ ...s, theme: s.theme === 'dark' ? 'light' : 'dark' }))}
+        periodId={periodId}
+        onPeriod={(v) => choosePeriod(v)}
+        leftOpen={leftOpen}
+        rightOpen={rightOpen}
+        onToggleLeft={() => setLeftOpen((v) => !v)}
+        onToggleRight={() => setRightOpen((v) => !v)}
+        onAction={runAction}
+      />
+      <div className="body">
+        {narrow && leftOpen && (
+          <button type="button" className="scrim" onClick={() => setLeftOpen(false)} aria-label="Cerrar el panel" />
+        )}
+        {db && (
+          <LeftPanel
+            tab={tab}
+            onTab={setTab}
+            explore={{
+              db,
+              places: filtered,
+              filters,
+              onFilters: setFilters,
+              periodId,
+              onPeriod: (v) => choosePeriod(v),
+              onSelect: (id) => selectPlace(id),
+              onPerson: (name) => applyFocus(personFocus(db, name)),
+              onClear: () => { setFilters(EMPTY_FILTERS); setPeriodId(''); },
+            }}
           />
-          <div
-            className={`suggestions${suggestions.length > 0 ? ' active' : ''}`}
-          >
-            {suggestions.map((loc) => (
-              <div
-                key={loc.id}
-                className="suggestion-item"
-                onMouseDown={() => {
-                  setSearchText('');
-                  selectLocation(loc);
-                }}
-              >
-                {loc.name}
-                <em>{loc.region}</em>
-              </div>
-            ))}
-          </div>
-        </div>
-        <button
-          className="btn-icon"
-          title="Historias bíblicas"
-          onClick={() => setShowStories((v) => !v)}
-        >
-          📖
-        </button>
-        <button
-          className={`btn-icon ${pinned.size > 0 ? 'pinned-active' : ''}`}
-          title={`Lugares fijados (${pinned.size})`}
-          onClick={() => setShowPinned((v) => !v)}
-        >
-          📌
-        </button>
-        <button
-          className="btn-icon"
-          title="Filtros"
-          onClick={() => setShowFilters((v) => !v)}
-        >
-          ⚙
-        </button>
-      </div>
-
-      {showStories && data && (
-        <div className="stories-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <h3>Historias bíblicas</h3>
-            <button className="btn-icon" onClick={() => setShowStories(false)}>
-              ✕
-            </button>
-          </div>
-          <div className="stories-list">
-            {Object.entries(STORIES).map(([key, story]) => {
-              const allPinned = story.locations.every((id) => pinned.has(id));
-              const somePinned = story.locations.some((id) => pinned.has(id));
-              return (
-                <div key={key} className="story-row">
-                  <button
-                    className={`story-btn ${activeStory === key ? 'active' : ''}`}
-                    onClick={() => selectStory(key)}
-                    style={{ borderLeftColor: story.color, flex: 1 }}
-                  >
-                    <div className="story-title">{story.title}</div>
-                    <div className="story-desc">{story.description}</div>
-                    <div className="story-loc-count">{story.locations.length} lugares</div>
-                  </button>
-                  <button
-                    className={`story-pin-btn ${allPinned ? 'pinned' : somePinned ? 'partial' : ''}`}
-                    onClick={(e) => { e.stopPropagation(); allPinned ? unpinStory(key) : pinStory(key); }}
-                    title={allPinned ? 'Desfijar todos' : 'Fijar todos los lugares de esta historia'}
-                  >
-                    📌
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-          {activeStory && (
-            <button className="btn-reset" onClick={clearStory} style={{ marginTop: '12px' }}>
-              Limpiar historia
-            </button>
+        )}
+        <main className="mapwrap">
+          <Suspense fallback={null}>
+            <AtlasMap
+              theme={theme}
+              places={placesGeo}
+              territories={territoriesGeo}
+              routeGeo={routeGeo}
+              routeColor={routeColor}
+              selectedId={selectedId}
+              extras={extras}
+              onSelectPlace={onMapSelect}
+              flyTo={flyTo}
+              fitBounds={fitBounds}
+            />
+          </Suspense>
+          {db && focus && (
+            <FocusCard
+              focus={focus}
+              db={db}
+              periodId={periodId}
+              onClose={clearFocus}
+              onSelect={(id) => selectPlace(id)}
+              onPeriod={(id) => choosePeriod(id, false)}
+              onRoute={focusRoute}
+              onReadPassage={readPassage}
+            />
           )}
-        </div>
-      )}
-
-      {showPinned && data && pinned.size > 0 && (
-        <div className="pinned-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-            <h3>Lugares fijados ({pinned.size})</h3>
-            <button className="btn-icon" onClick={() => setShowPinned(false)}>
-              ✕
-            </button>
-          </div>
-          <div className="pinned-list">
-            {Array.from(pinned).map((id) => {
-              const loc = data.getById(id);
-              return loc ? (
-                <div key={loc.id} className="pinned-item">
-                  <span
-                    className="pinned-item-dot"
-                    style={{
-                      background: `#${categoryColor(loc.category)
-                        .toString(16)
-                        .padStart(6, '0')}`,
-                    }}
-                  />
-                  <div className="pinned-item-info">
-                    <div className="pinned-item-name">{loc.name}</div>
-                    <div className="pinned-item-region">{loc.region || ''}</div>
-                  </div>
-                  <button
-                    className="pinned-item-unpin"
-                    onClick={(e) => { e.stopPropagation(); togglePin(loc.id); }}
-                    title="Desfijar"
-                  >
-                    📌
-                  </button>
-                </div>
-              ) : null;
-            })}
-          </div>
-          {pinned.size >= 2 && (
-            <div className="pinned-distances">
-              <h4>Distancias entre fijados</h4>
-              {(() => {
-                const pinnedLocs = Array.from(pinned).map((id) => data.getById(id)).filter(Boolean);
-                const rows = [];
-                for (let i = 0; i < pinnedLocs.length; i++) {
-                  for (let j = i + 1; j < pinnedLocs.length; j++) {
-                    const a = pinnedLocs[i];
-                    const b = pinnedLocs[j];
-                    const dist = haversine(a.latitude, a.longitude, b.latitude, b.longitude);
-                    rows.push(`${a.name} ↔ ${b.name}: ${dist.toFixed(1)} km`);
-                  }
-                }
-                return rows.map((r, idx) => <div key={idx} className="distance-row">{r}</div>);
-              })()}
+          {!db && !error && (
+            <div className="state mui" role="status">
+              <div className="spin" aria-hidden="true" />
+              <p style={{ margin: 0 }}><b>Cargando la base geográfica…</b></p>
             </div>
           )}
-          <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-            <button className="btn-reset" onClick={clearPins} style={{ flex: 1 }}>
-              Desfijar todos
-            </button>
-            <button className="btn-reset" onClick={() => setShowPinned(false)} style={{ flex: 1 }}>
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showFilters && data && (
-        <div className="filters-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <h3>Filtros</h3>
-            <button className="btn-icon" onClick={() => setShowFilters(false)}>
-              ✕
-            </button>
-          </div>
-          <div className="filter-group">
-            <label htmlFor="filter-region">Región</label>
-            <select
-              id="filter-region"
-              value={filters.region}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, region: e.target.value }))
-              }
-            >
-              <option value="">Todas las regiones</option>
-              {data.regions.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label htmlFor="filter-category">Categoría</label>
-            <select
-              id="filter-category"
-              value={filters.category}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, category: e.target.value }))
-              }
-            >
-              <option value="">Todas las categorías</option>
-              {data.categories.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label htmlFor="filter-book">Libro de la Biblia</label>
-            <select
-              id="filter-book"
-              value={filters.book}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, book: e.target.value }))
-              }
-            >
-              <option value="">Todos los libros</option>
-              {data.books.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button className="btn-reset" onClick={resetFilters}>
-            Restablecer filtros
-          </button>
-        </div>
-      )}
-
-      {showList && (
-        <div className="location-list">
-          <div className="list-header">
-            <h3>Lugares</h3>
-            <span className="list-count">
-              {filtered.length} de {data ? data.locations.length : 0}
-            </span>
-            <button
-              className="btn-icon"
-              style={{ marginLeft: 'auto' }}
-              onClick={() => setShowList(false)}
-            >
-              ✕
-            </button>
-          </div>
-          <div className="list-items">
-            {filtered.map((loc) => (
-              <div
-                key={loc.id}
-                className="list-item"
-                onClick={() => selectLocation(loc)}
-              >
-                <span
-                  className="list-item-dot"
-                  style={{
-                    background: `#${categoryColor(loc.category)
-                      .toString(16)
-                      .padStart(6, '0')}`,
-                  }}
-                />
-                <div>
-                  <div className="list-item-name">{loc.name}</div>
-                  <div className="list-item-region">{loc.region || ''}</div>
-                </div>
-                <span className="list-item-cat">{loc.category || ''}</span>
-                <button
-                  className={`pin-btn ${pinned.has(loc.id) ? 'pinned' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); togglePin(loc.id); }}
-                  title={pinned.has(loc.id) ? 'Desfijar' : 'Fijar'}
-                >
-                  📌
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <button
-        className="btn-list-toggle"
-        onClick={() => setShowList((v) => !v)}
-      >
-        ☰ Lugares{hasActiveFilter ? ` (${filtered.length})` : ''}
-      </button>
-
-      <div className="map-controls">
-        <button className="btn-control" title="Acercar" onClick={() => zoom(1)}>
-          +
-        </button>
-        <button
-          className="btn-control"
-          title="Alejar"
-          onClick={() => zoom(-1)}
-        >
-          −
-        </button>
-        <button className="btn-control" title="Vista inicial" onClick={resetView}>
-          ⟲
-        </button>
+          {error && (
+            <div className="state mui" role="alert">
+              <p style={{ margin: 0 }}><b>No se pudieron cargar los datos del atlas.</b></p>
+              <p className="muted sm" style={{ margin: 0 }}>{error}</p>
+              <button type="button" className="btn" onClick={retry}>Reintentar</button>
+            </div>
+          )}
+        </main>
+        {db && (
+          <RightPanel
+            db={db}
+            place={selected}
+            onClose={() => { setSelectedId(null); if (narrow) setRightOpen(false); }}
+            onAction={runAction}
+          />
+        )}
       </div>
-
-      <LocationPanel location={selected} onClose={closePanel} />
-
-      {showHelp && (
-        <div className="help-overlay" onClick={(e) => e.target === e.currentTarget && setShowHelp(false)}>
-          <div className="help-modal">
-            <div className="help-header">
-              <h2>Cómo usar el Atlas</h2>
-              <button className="btn-icon" onClick={() => setShowHelp(false)}>
-                ✕
-              </button>
-            </div>
-            <div className="help-body">
-              <div className="help-item">
-                🖱 <strong>Rotar globo:</strong> arrastrá con el mouse
-              </div>
-              <div className="help-item">
-                🔍 <strong>Zoom:</strong> rueda del mouse o botones +/−
-              </div>
-              <div className="help-item">
-                📍 <strong>Ver lugar:</strong> clic en un marcador
-              </div>
-              <div className="help-item">
-                🔎 <strong>Buscar:</strong> escribí en la barra superior
-              </div>
-              <div className="help-item">
-                📋 <strong>Lista:</strong> botón ☰ Lugares
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="tooltip" ref={tooltipRef} />
-
-      {!ready && (
-        <div className="atlas-loading">
-          <p>Cargando Atlas Bíblico...</p>
-        </div>
-      )}
     </div>
   );
 }
