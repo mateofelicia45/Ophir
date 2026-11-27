@@ -125,6 +125,8 @@ export default function AtlasPage() {
     setRouteId(null);
   }, []);
 
+  const flyToCoords = useCallback((lon, lat) => setFlyTo({ lon, lat, zoom: 10 }), []);
+
   const readPassage = useCallback((ref) => openParsedRef(toOphirRef(ref)), [openParsedRef]);
 
   // ---- URL ----
@@ -279,6 +281,11 @@ export default function AtlasPage() {
               else if (single) { openRight(false); openLeft(true); }
             }}
             onAction={runAction}
+            store={store}
+            onUpdateStore={updateStore}
+            onSelectPlace={selectPlace}
+            onFlyTo={flyToCoords}
+            onReadRef={readPassage}
           />
         )}
       </div>

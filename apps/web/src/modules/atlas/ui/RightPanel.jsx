@@ -1,8 +1,5 @@
-// Panel derecho (400 px). Con un lugar elegido muestra el encabezado de la ficha;
-// la ficha completa llega con la Tarea 9. Sin selección, la bienvenida del prototipo.
-import { displayName } from '../core/text.js';
-import { Q_SHORT, typeShort } from '../core/labels.js';
-import { IconClose } from './icons.jsx';
+// Panel derecho (400 px): la ficha del lugar elegido o, sin selección, la bienvenida del prototipo.
+import PlaceSheet from './PlaceSheet.jsx';
 
 const QUICK = [
   ['Éfeso', { type: 'place', id: 'ephesus' }],
@@ -14,24 +11,6 @@ const QUICK = [
   ['Éxodo', { type: 'route', id: 'exodo' }],
   ['1 Reyes 18', { type: 'passage', text: '1 Reyes 18' }],
 ];
-
-function PlaceHeader({ place, onClose }) {
-  return (
-    <div className="fh">
-      <div className="fhrow">
-        <div className="badges">
-          <span className={'bd ty-' + place.type}><i className="dot" />{typeShort(place.type) || place.type}</span>
-          <span className={'bd q-' + place.certainty}>{Q_SHORT[place.certainty] || place.certainty}</span>
-          {!place.curated && <span className="bd basic">Ficha básica</span>}
-        </div>
-        <button type="button" className="ib sm" onClick={onClose} aria-label="Cerrar la ficha"><IconClose /></button>
-      </div>
-      <h2>{displayName(place.name)}</h2>
-      {place.curated && place.curated.moderno && <p className="var">{place.curated.moderno}</p>}
-      {!place.hasPos && <p className="cert q-desconocida">Sin ubicación conocida: el lugar no se puede situar en el mapa.</p>}
-    </div>
-  );
-}
 
 function Welcome({ db, onAction }) {
   const st = db.stats;
@@ -62,10 +41,12 @@ function Welcome({ db, onAction }) {
   );
 }
 
-export default function RightPanel({ db, place, onClose, onAction }) {
+export default function RightPanel({ db, place, onClose, onAction, ...sheet }) {
   return (
     <aside className="right" aria-label="Ficha del lugar">
-      {place ? <PlaceHeader place={place} onClose={onClose} /> : <Welcome db={db} onAction={onAction} />}
+      {place
+        ? <PlaceSheet key={place.id} db={db} place={place} onClose={onClose} onAction={onAction} {...sheet} />
+        : <Welcome db={db} onAction={onAction} />}
     </aside>
   );
 }

@@ -175,6 +175,7 @@ export function buildAtlasDb({ places, fichas, historia }) {
     byOb,
     periods,
     periodById,
+    fuentes: fichas.fuentes || {},
     chapterPeriods,
     routes,
     territories,
