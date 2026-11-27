@@ -37,7 +37,7 @@ const reducedMotion = () => {
 
 const placeLayerIds = (map) => map.getStyle().layers
   .map((l) => l.id)
-  .filter((id) => id === 'places-circle' || id === 'places-major' || id === 'places-foc' || id === 'places-selected' || id.startsWith('place-labels'));
+  .filter((id) => id === 'places-circle' || id === 'places-major' || id === 'places-key' || id === 'places-foc' || id === 'places-selected' || id.startsWith('place-labels'));
 
 export default function AtlasMap({
   theme = 'light',
@@ -137,9 +137,13 @@ export default function AtlasMap({
     map.addControl(new maplibregl.AttributionControl({ compact: false, customAttribution: CREDITS }), 'bottom-right');
 
     // El disco de los marcadores se genera aquí y se vuelve a dar si un cambio de estilo lo pide.
-    map.on('styleimagemissing', (e) => {
-      if (e.id === MARKER_IMAGE && !map.hasImage(MARKER_IMAGE)) map.addImage(MARKER_IMAGE, markerImage(), { sdf: true, pixelRatio: 2 });
-    });
+    // El disco de los marcadores se registra en cuanto existe el estilo (y otra vez si
+    // un setStyle lo pierde), antes de que se procesen las teselas de 'pins'.
+    const addMarker = () => {
+      if (!map.hasImage(MARKER_IMAGE)) map.addImage(MARKER_IMAGE, markerImage(), { sdf: true, pixelRatio: 2 });
+    };
+    map.on('style.load', addMarker);
+    map.on('styleimagemissing', (e) => { if (e.id === MARKER_IMAGE) addMarker(); });
 
     // El relieve es online y opcional: si falla, se oculta sin llenar la consola.
     let warned = false;

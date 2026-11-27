@@ -69,14 +69,15 @@ const GROUPS = [
   ['places-cluster', ['places-cluster', 'places-cluster-count']],
   ['places-circle', ['places-circle']],
   ['places-major', ['places-major', 'places-selected']],
-  ['place-labels-top', ['place-labels-foc', 'place-labels-sel', 'places-foc']],
+  ['place-labels-top', ['places-key', 'place-labels-foc', 'place-labels-sel', 'places-foc']],
   ['route-stops', ['route-stops', 'route-stops-num']],
   ['measure', ['measure-line', 'measure-points']],
 ];
 const GROUP_OF = new Map(GROUPS.flatMap(([g, list]) => list.map((id) => [id, g])));
 export function layerGroup(id) {
   if (GROUP_OF.has(id)) return GROUP_OF.get(id);
-  if (/^place-labels(-[a-z]+)?-1$/.test(id)) return 'place-labels-top';
+  // Nombres de pin de los marcadores principales (importancia 1-2) y todos los nombres de zona (mares, regiones...).
+  if (/^place-labels-[12]$/.test(id) || /^place-labels-[a-z]+-\d$/.test(id)) return 'place-labels-top';
   if (id.startsWith('place-labels') || id === 'river-labels' || id === 'roads-label' || id === 'territories-label') return 'place-labels';
   return null;
 }
@@ -198,6 +199,13 @@ function labelLayers(P, labelsOn, notSel) {
           'text-letter-spacing': upper ? (fam.key === 'reino' ? 0.1 : 0.08) : fam.key === 'mar' ? 0.03 : 0.02,
           'text-max-width': upper ? 12 : 8,
           'text-padding': 4,
+          // Un nombre de zona puede subir o bajar un poco para no tapar un marcador
+          // principal (nunca al costado, donde parecería el nombre del punto).
+          // Los mares, sobre el agua, pueden correrse también hacia los lados.
+          'text-variable-anchor': fam.key === 'mar'
+            ? ['center', 'top', 'bottom', 'right', 'left', 'top-right', 'bottom-right']
+            : ['center', 'top', 'bottom'],
+          'text-radial-offset': fam.key === 'mar' ? 1.2 : 0.6,
         },
         paint: { 'text-color': typeColor(P), ...halo },
       });
@@ -377,11 +385,14 @@ export function buildStyle({
     },
   });
   // Importancia 4: debajo de los nombres (se colocan después y ceden su lugar).
-  // Importancia 1 a 3: encima, colocados primero.
+  // Importancia 3: encima de los nombres comunes, cede ante los principales.
+  // Importancia 1-2 y el elegido (places-key): siempre visibles y colocados antes que
+  // los nombres, que los esquivan con text-variable-anchor; cada nombre junto a su punto.
   const notFoc = ['!=', get('foc'), 1];
-  layers.push(marker('places-circle', ['all', ['==', get('importance'), 4], notFoc], false));
+  const notSelM = ['!', isSel];
+  layers.push(marker('places-circle', ['all', ['==', get('importance'), 4], notFoc, notSelM], false));
   const majorLayers = [
-    marker('places-major', ['all', ['<=', get('importance'), 3], notFoc], true),
+    marker('places-major', ['all', ['==', get('importance'), 3], notFoc, notSelM], true),
     {
       id: 'places-selected', type: 'circle', source: 'places', filter: isSel,
       paint: {
@@ -425,7 +436,16 @@ export function buildStyle({
     ...majorLayers,
     // Encima de los marcadores y colocados antes que ellos: los nombres principales,
     // los del foco y el elegido nunca ceden su lugar.
-    ...placeLabels.filter((l) => layerGroup(l.id) === 'place-labels-top'),
+    // Nombres de zona (mares, regiones, reinos): esquivan a los marcadores principales y
+    // los menores (importancia 3 y 4) ceden ante ellos.
+    // Prioridad de colocación (de menor a mayor): zonas 2-4, pin 2, zonas 1 (mares
+    // principales), pin 1. Cada marcador principal conserva su nombre al lado.
+    ...placeLabels.filter((l) => /^place-labels-[a-z]+-[234]$/.test(l.id)),
+    ...placeLabels.filter((l) => l.id === 'place-labels-2'),
+    ...placeLabels.filter((l) => /^place-labels-[a-z]+-1$/.test(l.id)),
+    ...placeLabels.filter((l) => l.id === 'place-labels-1'),
+    // Se coloca antes que todos los nombres: siempre se ve y ellos lo esquivan.
+    marker('places-key', ['all', ['any', ['<=', get('importance'), 2], isSel], notFoc], true, true),
     {
       // Los lugares del foco (pasaje, personaje, recorrido) siempre llevan nombre, en arcilla.
       id: 'place-labels-foc', type: 'symbol', source: 'places', filter: ['all', ['==', get('foc'), 1], notSel],

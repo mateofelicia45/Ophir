@@ -164,20 +164,28 @@ describe('buildStyle', () => {
 
   it('los marcadores son símbolos SDF: entran en las colisiones con los nombres', () => {
     const st = buildStyle({ basemap, theme: 'light' });
-    const marks = st.layers.filter((l) => ['places-circle', 'places-major', 'places-foc'].includes(l.id));
-    expect(marks).toHaveLength(3);
+    const marks = st.layers.filter((l) => ['places-circle', 'places-major', 'places-key', 'places-foc'].includes(l.id));
+    expect(marks).toHaveLength(4);
     for (const l of marks) {
       expect(l.type).toBe('symbol');
       expect(l.layout['icon-image']).toBe(MARKER_IMAGE);
     }
     const by = Object.fromEntries(marks.map((l) => [l.id, l.layout]));
-    // nunca se dibujan a través de un nombre, salvo los del foco
+    // los menores ceden; los principales (importancia 1-2, elegido) y los del foco siempre
+    // se ven y bloquean, así los nombres los esquivan
     expect(by['places-circle']['icon-allow-overlap']).toBe(false);
     expect(by['places-major']['icon-allow-overlap']).toBe(false);
     expect(by['places-major']['icon-ignore-placement']).toBe(false);
-    expect(by['places-foc']['icon-allow-overlap']).toBe(true);
-    // los nombres principales y los del foco se colocan antes que los marcadores
+    for (const id of ['places-key', 'places-foc']) {
+      expect(by[id]['icon-allow-overlap'], id).toBe(true);
+      expect(by[id]['icon-ignore-placement'], id).toBe(false);
+    }
+    const key = JSON.stringify(marks.find((l) => l.id === 'places-key').filter);
+    expect(key).toContain('["<=",["get","importance"],2]');
+    // orden de colocación: arriba se coloca primero
     const order = ids(st);
+    expect(order.indexOf('places-key')).toBeGreaterThan(order.indexOf('place-labels-1'));
+    expect(order.indexOf('places-foc')).toBeGreaterThan(order.indexOf('place-labels-foc'));
     expect(order.indexOf('place-labels-1')).toBeGreaterThan(order.indexOf('places-major'));
     expect(order.indexOf('place-labels-4')).toBeLessThan(order.indexOf('places-major'));
   });
@@ -209,7 +217,7 @@ describe('buildStyle', () => {
     const threshold = ((6 - HALO_MAX) / 8) * 255;
     expect(img.data[(c * img.width) * 4 + 3]).toBeLessThan(threshold);
     const st = buildStyle({ basemap, theme: 'light' });
-    for (const id of ['places-circle', 'places-major', 'places-foc']) {
+    for (const id of ['places-circle', 'places-major', 'places-key', 'places-foc']) {
       const w = st.layers.find((l) => l.id === id).paint['icon-halo-width'];
       for (let i = 4; i < w.length; i += 2) expect(w[i][0], id).toBe('min');
     }
