@@ -1,16 +1,13 @@
-// Panel izquierdo (336 px) con las pestañas del prototipo. Capas, Rutas y Estudio
-// muestran por ahora sus encabezados; los completan las tareas siguientes.
+// Panel izquierdo (336 px) con las pestañas del prototipo.
 import ExplorePanel from './ExplorePanel.jsx';
 import RoutesPanel from './RoutesPanel.jsx';
+import LayersPanel from './LayersPanel.jsx';
+import StudyPanel from './StudyPanel.jsx';
 
 const TABS = [['explorar', 'Explorar'], ['capas', 'Capas'], ['rutas', 'Rutas'], ['estudio', 'Estudio']];
 
-const Sec = ({ title, children }) => (
-  <section className="sec"><h3 className="h3">{title}</h3>{children}</section>
-);
-const Note = ({ children }) => <p className="muted sm" style={{ margin: '0 0 8px' }}>{children}</p>;
 
-export default function LeftPanel({ tab, onTab, explore, routes }) {
+export default function LeftPanel({ tab, onTab, explore, routes, layers, study }) {
   return (
     <aside className="left" aria-label="Exploración, capas, rutas y estudio">
       <nav className="tabs" aria-label="Secciones" role="tablist">
@@ -19,30 +16,11 @@ export default function LeftPanel({ tab, onTab, explore, routes }) {
             className={'tab' + (tab === id ? ' on' : '')} onClick={() => onTab(id)}>{label}</button>
         ))}
       </nav>
-      <div className="scroll lpad" role="tabpanel">
+      <div className="scroll lpad" role="tabpanel" key={tab}>
         {tab === 'explorar' && <ExplorePanel {...explore} />}
-        {tab === 'capas' && (
-          <>
-            <Sec title="Capas geográficas" />
-            <Sec title="Capas históricas y bíblicas">
-              <Note>Cada capa muestra los territorios y recorridos de su época. El selector de período de la barra superior, además, filtra los lugares.</Note>
-            </Sec>
-            <Sec title="Opciones del mapa" />
-            <Sec title="Leyenda" />
-          </>
-        )}
+        {tab === 'capas' && <LayersPanel {...layers} />}
         {tab === 'rutas' && <RoutesPanel {...routes} />}
-        {tab === 'estudio' && (
-          <>
-            <Sec title="Cobertura de la base de datos" />
-            <Sec title="Favoritos" />
-            <Sec title="Pendientes de estudio" />
-            <Sec title="Mis notas" />
-            <Sec title="Historial" />
-            <Sec title="Exportar" />
-            <Sec title="Fuentes y créditos" />
-          </>
-        )}
+        {tab === 'estudio' && <StudyPanel {...study} />}
       </div>
     </aside>
   );

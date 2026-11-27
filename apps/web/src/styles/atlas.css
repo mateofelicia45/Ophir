@@ -277,3 +277,23 @@ position:relative;height:100%;width:100%;display:flex;flex-direction:column;back
 .atlas-app .rs-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px}
 .atlas-app .rs-meta .refc{margin:0}
 .atlas-app .rs-dist{margin:8px 0 0}
+
+/* ---- Capas, leyenda, medición y estudio ---- */
+.atlas-app .maptools{position:absolute;top:96px;right:12px;z-index:6;display:flex;flex-direction:column;align-items:flex-end}
+.atlas-app .maptools>.ib{width:36px;height:36px;box-shadow:var(--shadow)}
+.atlas-app .maptools .legend{top:0;right:46px;width:270px;max-height:min(70vh,560px)}
+.atlas-app .chk .lgs{margin:0 -2px}
+.atlas-app .sub{margin:12px 0 4px;font-size:12px;font-weight:600;color:var(--ink2)}
+.atlas-app .measure{position:absolute;left:12px;bottom:44px;width:min(272px,calc(100% - 24px));max-height:calc(100% - 140px);overflow:auto;background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--ink);border-radius:12px;box-shadow:var(--shadow);padding:10px 12px 12px}
+.atlas-app .measure .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.atlas-app .measure p{margin:0 0 8px}
+.atlas-app .mlegs{list-style:none;margin:0 0 8px;padding:0;font-size:12.5px;border-top:1px solid var(--line2)}
+.atlas-app .mlegs li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line2)}
+.atlas-app .mlegs li span{min-width:0;color:var(--ink2);overflow-wrap:anywhere}
+.atlas-app .mlegs li b{flex:none;font-weight:600}
+.atlas-app .mtot{font-size:13.5px}
+.atlas-app .measure .btn{height:34px;padding:0 10px;font-size:12.5px}
+@media (max-width:899px){
+  .atlas-app .maptools .legend{right:46px;bottom:auto;top:0;width:min(280px,calc(100vw - 80px));max-height:60vh}
+  .atlas-app .measure{bottom:44px}
+}

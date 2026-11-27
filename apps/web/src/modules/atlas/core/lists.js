@@ -28,3 +28,15 @@ export function pushHistory(store, id) {
   const h = (store.history || []).filter((x) => x !== id);
   return { ...store, history: [id, ...h].slice(0, 30) };
 }
+
+// Listas de la pestaña Estudio para revisar la base: lugares de identificación
+// discutida que ya tienen ficha, fichas básicas con más menciones (las primeras
+// `limit`) y lugares sin coordenadas.
+export function verifyLists(db, limit = 40) {
+  const byRefs = (a, b) => b.refs.length - a.refs.length;
+  return {
+    discussed: db.places.filter((p) => p.certainty === 'discutida' && p.curated).sort(byRefs).slice(0, limit),
+    basic: db.places.filter((p) => !p.curated).sort(byRefs).slice(0, limit),
+    unlocated: db.places.filter((p) => !p.hasPos),
+  };
+}

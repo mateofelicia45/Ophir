@@ -1,6 +1,6 @@
 // Barra superior del atlas (58 px): paneles, marca, búsqueda, período y tema.
 import SearchBox from './SearchBox.jsx';
-import { IconLeftPanel, IconRightPanel, IconSun, IconMoon, Logo } from './icons.jsx';
+import { IconLeftPanel, IconRightPanel, IconSun, IconMoon, IconRuler, Logo } from './icons.jsx';
 
 export function PeriodSelect({ db, value, onChange, className }) {
   return (
@@ -12,7 +12,7 @@ export function PeriodSelect({ db, value, onChange, className }) {
 }
 
 export default function TopBar({
-  db, theme, onTheme, periodId, onPeriod, leftOpen, rightOpen, onToggleLeft, onToggleRight, onAction,
+  db, theme, onTheme, periodId, onPeriod, leftOpen, rightOpen, onToggleLeft, onToggleRight, onAction, measuring, onMeasure,
 }) {
   const themeLabel = theme === 'dark' ? 'Tema: oscuro (pulsa para claro)' : 'Tema: claro (pulsa para oscuro)';
   return (
@@ -31,6 +31,10 @@ export default function TopBar({
           <span className="sr-only">Período histórico</span>
           <PeriodSelect db={db} value={periodId} onChange={onPeriod} className="sel" />
         </label>
+        <button type="button" className={'ib' + (measuring ? ' on' : '')} onClick={onMeasure} aria-pressed={!!measuring}
+          aria-label="Medir distancias (Esc para cerrar)" title="Medir distancias">
+          <IconRuler />
+        </button>
         <button type="button" className="ib" onClick={onTheme} aria-label={themeLabel} title={themeLabel}>
           {theme === 'dark' ? <IconMoon /> : <IconSun />}
         </button>

@@ -14,6 +14,11 @@ import LeftPanel from './ui/LeftPanel.jsx';
 import RightPanel from './ui/RightPanel.jsx';
 import FocusCard from './ui/FocusCard.jsx';
 import RouteStepper from './ui/RouteStepper.jsx';
+import Legend from './ui/Legend.jsx';
+import MeasureCard from './ui/MeasureCard.jsx';
+import { useMeasure } from './ui/useMeasure.js';
+import { useLayers } from './ui/useLayers.js';
+import { hiddenTypes, territoryPeriods } from './ui/layers.js';
 import { useRouteStepper } from './ui/useRouteStepper.js';
 import { EMPTY_FILTERS } from './ui/filters.js';
 import { filterPlaces } from './core/filter.js';
@@ -27,6 +32,8 @@ import { PALETTES } from './map/mapStyle.js';
 import { useOpenParsedRef } from '../../hooks/useOpenParsedRef.js';
 
 const AtlasMap = lazy(() => import('./map/AtlasMap.jsx'));
+// Caminos antiguos: vacío hasta que la Tarea 12 aporte los datos.
+const NO_ROADS = { type: 'FeatureCollection', features: [] };
 
 export default function AtlasPage() {
   const { db, error, retry } = useAtlasDb();
@@ -46,6 +53,8 @@ export default function AtlasPage() {
   // Pedidos de cámara: un objeto nuevo por pedido (contrato de AtlasMap).
   const [flyTo, setFlyTo] = useState(null);
   const [fitBounds, setFitBounds] = useState(null);
+  const [legendOpen, setLegendOpen] = useState(false);
+  const measure = useMeasure();
 
   const updateStore = useCallback((fn) => {
     setStore((s) => {
@@ -55,6 +64,7 @@ export default function AtlasPage() {
     });
   }, []);
   const theme = store.theme;
+  const layerActions = useLayers(updateStore);
 
   // ---- Acciones ----
   // Encuadre de un foco: deja libre a la izquierda el cartel del foco, según el
@@ -166,9 +176,11 @@ export default function AtlasPage() {
   const filtered = useMemo(() => {
     if (!db) return [];
     const types = filters.type ? new Set([filters.type]) : new Set();
+    const hidden = hiddenTypes(store.layers);
     return filterPlaces(db, { testament: filters.testament, book: filters.book, periodId, types })
+      .filter((p) => !hidden.has(p.type))
       .filter((p) => (!filters.cert || p.certainty === filters.cert) && (!filters.onlyCurated || p.curated));
-  }, [db, filters, periodId]);
+  }, [db, filters, periodId, store.layers]);
 
   const routeStopIds = useMemo(() => {
     const r = db && routeId ? db.routes.find((x) => x.id === routeId) : null;
@@ -188,17 +200,24 @@ export default function AtlasPage() {
     return placesToGeoJSON(filtered.concat(extra), { selectedId, focusIds: focus ? focus.placeIds : null, routeIds: routeStopIds });
   }, [db, filtered, focus, selectedId, routeStopIds]);
 
-  const territoriesGeo = useMemo(
-    () => (db ? territoriesToGeoJSON(periodId ? db.territories.filter((t) => t.periodId === periodId) : []) : undefined),
-    [db, periodId],
-  );
+  // Territorios: el período elegido y las capas históricas encendidas se suman (ui/layers.js).
+  const territoriesGeo = useMemo(() => {
+    if (!db) return undefined;
+    const ids = territoryPeriods(periodId, store.layers);
+    return territoriesToGeoJSON(db.territories.filter((t) => ids.has(t.periodId)));
+  }, [db, periodId, store.layers]);
   const route = db && routeId ? db.routes.find((r) => r.id === routeId) : null;
   const stepper = useRouteStepper({ db, route, setFlyTo });
   const routeGeo = stepper.geo || undefined;
   const routeColor = route ? (PALETTES[theme] || PALETTES.light)['r' + route.colorIndex] : undefined;
   const extras = store.extras;
 
-  const onMapSelect = useCallback((id) => selectPlace(id, { fly: false }), [selectPlace]);
+  // En modo Medir un lugar se suma a la medición en vez de abrir la ficha.
+  const { on: measuring, addPlace, addPoint } = measure;
+  const onMapSelect = useCallback((id) => {
+    if (measuring) addPlace(db && db.byId.get(id));
+    else selectPlace(id, { fly: false });
+  }, [measuring, addPlace, db, selectPlace]);
 
   const selected = db && selectedId ? db.byId.get(selectedId) : null;
   const cls = ['atlas-app', theme === 'dark' ? 'dark' : '', leftOpen ? 'lo' : '', rightOpen ? 'ro' : ''].filter(Boolean).join(' ');
@@ -216,6 +235,8 @@ export default function AtlasPage() {
         onToggleLeft={() => openLeft(!leftOpen)}
         onToggleRight={() => openRight(!rightOpen)}
         onAction={runAction}
+        measuring={measuring}
+        onMeasure={measure.toggle}
       />
       <div className="body">
         {narrow && leftOpen && (
@@ -235,6 +256,20 @@ export default function AtlasPage() {
               onSelect: (id) => selectPlace(id),
               onPerson: (name) => applyFocus(personFocus(db, name)),
               onClear: () => { setFilters(EMPTY_FILTERS); setPeriodId(''); },
+            }}
+            layers={{
+              db,
+              layers: store.layers,
+              extras: store.extras,
+              periodId,
+              ...layerActions,
+            }}
+            study={{
+              db,
+              store,
+              filtered,
+              selectedId,
+              onSelect: (id) => selectPlace(id),
             }}
             routes={{
               db,
@@ -258,11 +293,19 @@ export default function AtlasPage() {
               routeColor={routeColor}
               selectedId={selectedId}
               extras={extras}
+              roadsGeo={NO_ROADS}
+              measureGeo={measure.geo}
               onSelectPlace={onMapSelect}
+              onMapClick={measuring ? addPoint : undefined}
               flyTo={flyTo}
               fitBounds={fitBounds}
             />
           </Suspense>
+          <Legend open={legendOpen} onToggle={() => setLegendOpen((v) => !v)} />
+          {measuring && (
+            <MeasureCard points={measure.points} summary={measure.summary} onUndo={measure.undo}
+              onClear={measure.clear} onClose={measure.close} />
+          )}
           {db && route && (
             <RouteStepper
               db={db}

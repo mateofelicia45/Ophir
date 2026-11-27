@@ -4,7 +4,7 @@ import fichas from '@data/atlas/fichas.json';
 import historia from '@data/atlas/historia.json';
 import { buildAtlasDb } from './db.js';
 import {
-  placesToGeoJSON, routeToGeoJSON, territoriesToGeoJSON, roadsToGeoJSON, haversineKm, measure,
+  placesToGeoJSON, routeToGeoJSON, territoriesToGeoJSON, roadsToGeoJSON, haversineKm, measure, measureToGeoJSON,
 } from './geo.js';
 
 const db = buildAtlasDb({ places, fichas, historia });
@@ -97,5 +97,22 @@ describe('placesToGeoJSON: nombres', () => {
   it('quita el sufijo numérico de OpenBible en la etiqueta', () => {
     const fc = placesToGeoJSON([{ id: 'x', name: 'Monte Seir 1', type: 'montana', certainty: 'segura', importance: 3, lon: 35, lat: 30, hasPos: true }]);
     expect(fc.features[0].properties.name).toBe('Monte Seir');
+  });
+});
+
+describe('measureToGeoJSON', () => {
+  it('sin puntos queda vacío y con uno solo hay un punto, sin línea', () => {
+    expect(measureToGeoJSON([]).features).toHaveLength(0);
+    const one = measureToGeoJSON([[35, 31]]);
+    expect(one.features.map((f) => f.geometry.type)).toEqual(['Point']);
+  });
+  it('con dos o más puntos agrega una LineString que los une en orden', () => {
+    const g = measureToGeoJSON([pos('Dan'), pos('Beersheba 1')]);
+    const line = g.features.find((f) => f.geometry.type === 'LineString');
+    expect(line.geometry.coordinates).toEqual([pos('Dan'), pos('Beersheba 1')]);
+    expect(g.features.filter((f) => f.geometry.type === 'Point').map((f) => f.properties.n)).toEqual([1, 2]);
+  });
+  it('measure([]) es cero', () => {
+    expect(measure([])).toEqual({ legs: [], totalKm: 0, days: 0 });
   });
 });

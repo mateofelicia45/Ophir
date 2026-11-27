@@ -91,3 +91,12 @@ export function roadsToGeoJSON(roads) {
     return { type: 'Feature', properties, geometry: { type: 'LineString', coordinates: r.coords } };
   }));
 }
+
+// Polilínea de medición y un punto numerado por vértice. `points` son [lon, lat].
+export function measureToGeoJSON(points) {
+  const features = points.map((c, i) => pt(c, { n: i + 1 }));
+  if (points.length >= 2) {
+    features.unshift({ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: points } });
+  }
+  return fc(features);
+}

@@ -26,3 +26,6 @@ export const Logo = () => (
     <path d="M16 9.5v13M12.2 13.5h7.6" strokeWidth="2.2" strokeLinecap="round" />
   </svg>
 );
+export const IconRuler = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" strokeWidth="1.8" {...S}><path d="m3 17 14-14 4 4L7 21z" /><path d="m7 13 2 2M10 10l2 2M13 7l2 2" /></svg>
+);

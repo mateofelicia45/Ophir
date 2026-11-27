@@ -3,7 +3,7 @@ import places from '@data/atlas/places.json';
 import fichas from '@data/atlas/fichas.json';
 import historia from '@data/atlas/historia.json';
 import { buildAtlasDb } from './db.js';
-import { listOf, toggleList, pushHistory } from './lists.js';
+import { listOf, toggleList, pushHistory, verifyLists } from './lists.js';
 
 const db = buildAtlasDb({ places, fichas, historia });
 
@@ -33,5 +33,16 @@ describe('pushHistory', () => {
     expect(s.history[0]).toBe('p20');
     expect(s.history).toHaveLength(30);
     expect(s.history.filter((x) => x === 'p20')).toHaveLength(1);
+  });
+});
+
+describe('verifyLists', () => {
+  it('separa discutidas con ficha, fichas básicas y lugares sin coordenadas', () => {
+    const v = verifyLists(db, 5);
+    expect(v.discussed.every((p) => p.certainty === 'discutida' && p.curated)).toBe(true);
+    expect(v.basic).toHaveLength(5);
+    expect(v.basic.every((p) => !p.curated)).toBe(true);
+    expect(v.basic[0].refs.length).toBeGreaterThanOrEqual(v.basic[4].refs.length);
+    expect(v.unlocated.length).toBe(db.places.filter((p) => !p.hasPos).length);
   });
 });
