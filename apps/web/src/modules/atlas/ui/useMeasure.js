@@ -23,7 +23,12 @@ export function useMeasure() {
 
   useEffect(() => {
     if (!on) return undefined;
-    const h = (e) => { if (e.key === 'Escape') close(); };
+    const h = (e) => {
+      if (e.key !== 'Escape' || e.defaultPrevented) return;
+      const t = e.target;
+      if (t && t.closest && t.closest('input, textarea, select, [contenteditable]')) return;
+      close();
+    };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, [on, close]);

@@ -110,7 +110,17 @@ describe('measureToGeoJSON', () => {
     const g = measureToGeoJSON([pos('Dan'), pos('Beersheba 1')]);
     const line = g.features.find((f) => f.geometry.type === 'LineString');
     expect(line.geometry.coordinates).toEqual([pos('Dan'), pos('Beersheba 1')]);
-    expect(g.features.filter((f) => f.geometry.type === 'Point').map((f) => f.properties.n)).toEqual([1, 2]);
+    expect(g.features.filter((f) => f.properties.kind === 'v').map((f) => f.properties.n)).toEqual([1, 2]);
+  });
+  it('agrega un punto con la distancia en el medio de cada tramo', () => {
+    const g = measureToGeoJSON([pos('Dan'), pos('Beersheba 1')]);
+    const legs = g.features.filter((f) => f.properties.kind === 'leg');
+    expect(legs).toHaveLength(1);
+    expect(legs[0].properties.label).toMatch(/^2\d\d km$/);
+    const [lon, lat] = legs[0].geometry.coordinates;
+    expect(lon).toBeCloseTo((pos('Dan')[0] + pos('Beersheba 1')[0]) / 2, 6);
+    expect(lat).toBeCloseTo((pos('Dan')[1] + pos('Beersheba 1')[1]) / 2, 6);
+    expect(g.features.filter((f) => f.properties.kind === 'v')).toHaveLength(2);
   });
   it('measure([]) es cero', () => {
     expect(measure([])).toEqual({ legs: [], totalKm: 0, days: 0 });

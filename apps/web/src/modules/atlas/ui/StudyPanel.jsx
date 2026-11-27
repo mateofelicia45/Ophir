@@ -98,9 +98,9 @@ export default function StudyPanel({ db, store, filtered, selectedId, onSelect }
             Favoritos (Markdown)
           </button>
           <button type="button" className="btn ghost"
-            onClick={() => save('atlas-biblico-lugares.csv', exportCsv(db, filtered), 'text/csv')}>CSV (filtro actual)</button>
+            onClick={() => save('atlas-biblico-filtro.csv', exportCsv(db, filtered), 'text/csv')}>CSV (filtro actual)</button>
           <button type="button" className="btn ghost"
-            onClick={() => save('atlas-biblico.geojson', exportGeoJSON(db, filtered), 'application/geo+json')}>GeoJSON (filtro actual)</button>
+            onClick={() => save('atlas-biblico-filtro.geojson', exportGeoJSON(db, filtered), 'application/geo+json')}>GeoJSON (filtro actual)</button>
           <button type="button" className="btn ghost"
             onClick={() => save('atlas-biblico-lugares.csv', exportCsv(db, db.places), 'text/csv')}>CSV (toda la base)</button>
           <button type="button" className="btn ghost"

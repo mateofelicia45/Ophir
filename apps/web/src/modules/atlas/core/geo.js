@@ -92,9 +92,17 @@ export function roadsToGeoJSON(roads) {
   }));
 }
 
-// Polilínea de medición y un punto numerado por vértice. `points` son [lon, lat].
+const fmtKm = (km) => (km < 10 ? km.toFixed(1) : String(Math.round(km))).replace('.', ',') + ' km';
+
+// Polilínea de medición, un vértice numerado (kind 'v') por punto y, en el medio de
+// cada tramo, un punto con la distancia (kind 'leg'). `points` son [lon, lat].
 export function measureToGeoJSON(points) {
-  const features = points.map((c, i) => pt(c, { n: i + 1 }));
+  const features = points.map((c, i) => pt(c, { kind: 'v', n: i + 1 }));
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1];
+    const b = points[i];
+    features.push(pt([(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], { kind: 'leg', label: fmtKm(haversineKm(a, b)) }));
+  }
   if (points.length >= 2) {
     features.unshift({ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: points } });
   }

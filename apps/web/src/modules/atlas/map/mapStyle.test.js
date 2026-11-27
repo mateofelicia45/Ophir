@@ -318,3 +318,16 @@ describe('constantes del mapa', () => {
     expect(Object.keys(PALETTES.dark).sort()).toEqual(Object.keys(PALETTES.light).sort());
   });
 });
+
+describe('capas de medición', () => {
+  it('van encima de los marcadores y sus etiquetas, con casing bajo la línea', () => {
+    for (const theme of ['light', 'dark']) {
+      const ids = buildStyle({ theme, basemap }).layers.map((l) => l.id);
+      const at = (id) => ids.indexOf(id);
+      expect(at('measure-casing')).toBeGreaterThan(at('route-stops-num'));
+      expect(at('measure-line')).toBeGreaterThan(at('measure-casing'));
+      expect(at('measure-leg-label')).toBe(ids.length - 1);
+      expect(at('measure-num')).toBeGreaterThan(at('measure-points'));
+    }
+  });
+});

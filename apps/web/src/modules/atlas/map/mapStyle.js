@@ -71,7 +71,7 @@ const GROUPS = [
   ['places-major', ['places-major', 'places-selected']],
   ['place-labels-top', ['places-key', 'place-labels-foc', 'place-labels-sel', 'places-foc']],
   ['route-stops', ['route-stops', 'route-stop-active', 'route-stops-name', 'route-stops-num']],
-  ['measure', ['measure-line', 'measure-points']],
+  ['measure', ['measure-casing', 'measure-line', 'measure-points', 'measure-num', 'measure-leg-label']],
 ];
 const GROUP_OF = new Map(GROUPS.flatMap(([g, list]) => list.map((id) => [id, g])));
 export function layerGroup(id) {
@@ -522,13 +522,34 @@ export function buildStyle({
       paint: { 'text-color': ['case', ['==', get('ahead'), 1], legColor, '#FFFFFF'] },
     },
     {
-      id: 'measure-line', type: 'line', source: 'measure', filter: ['==', ['geometry-type'], 'LineString'],
+      id: 'measure-casing', type: 'line', source: 'measure', filter: ['==', ['geometry-type'], 'LineString'],
       layout: { 'line-cap': 'round', 'line-join': 'round' },
-      paint: { 'line-color': P.ink, 'line-width': 2, 'line-dasharray': [2, 1.5] },
+      paint: { 'line-color': P.paper, 'line-opacity': 0.92, 'line-width': 7.5 },
     },
     {
-      id: 'measure-points', type: 'circle', source: 'measure', filter: ['==', ['geometry-type'], 'Point'],
-      paint: { 'circle-radius': 4.5, 'circle-color': P.paper, 'circle-stroke-color': P.ink, 'circle-stroke-width': 2 },
+      id: 'measure-line', type: 'line', source: 'measure', filter: ['==', ['geometry-type'], 'LineString'],
+      layout: { 'line-cap': 'butt', 'line-join': 'round' },
+      paint: { 'line-color': P.accent, 'line-width': 3.5, 'line-dasharray': [4, 1.6] },
+    },
+    {
+      id: 'measure-points', type: 'circle', source: 'measure', filter: ['==', get('kind'), 'v'],
+      paint: { 'circle-radius': 8, 'circle-color': P.accent, 'circle-stroke-color': P.paper, 'circle-stroke-width': 2 },
+    },
+    {
+      id: 'measure-num', type: 'symbol', source: 'measure', filter: ['==', get('kind'), 'v'],
+      layout: {
+        'text-field': ['to-string', get('n')], 'text-font': FONTS.sansMedium, 'text-size': 11,
+        'text-allow-overlap': true, 'text-ignore-placement': true,
+      },
+      paint: { 'text-color': P.accentInk },
+    },
+    {
+      id: 'measure-leg-label', type: 'symbol', source: 'measure', filter: ['==', get('kind'), 'leg'],
+      layout: {
+        'text-field': get('label'), 'text-font': FONTS.sansMedium, 'text-size': 12.5,
+        'text-allow-overlap': true, 'text-ignore-placement': true, 'text-offset': [0, -1.1],
+      },
+      paint: { 'text-color': P.ink, 'text-halo-color': P.paper, 'text-halo-width': 2.6, 'text-halo-blur': 0 },
     },
   );
 
