@@ -62,6 +62,7 @@ export default function AtlasMap({
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const reliefFailedRef = useRef(false);
+  const firstStyle = useRef(true);
   const extrasKey = JSON.stringify({ labels: true, cluster: false, borders: false, ...extras });
 
   // Últimos valores de props, para los listeners creados una sola vez.
@@ -69,6 +70,29 @@ export default function AtlasMap({
   live.current = {
     theme, places, territories, routeGeo, roadsGeo, measureGeo, selectedId, extrasKey, routeColor, relief,
     onSelectPlace, onSelectRoad, onMapClick,
+  };
+
+  const pendingRef = useRef(new Set());
+  const sourceData = (id) => {
+    const p = live.current;
+    switch (id) {
+      case 'places': return p.places || EMPTY;
+      case 'pins': return splitPins(p.places || EMPTY);
+      case 'territories': return p.territories || EMPTY;
+      case 'roads': return p.roadsGeo || EMPTY;
+      case 'route-legs': return (p.routeGeo && p.routeGeo.legs) || EMPTY;
+      case 'route-stops': return (p.routeGeo && p.routeGeo.stops) || EMPTY;
+      case 'measure': return p.measureGeo || EMPTY;
+      default: return EMPTY;
+    }
+  };
+  const flushPending = (map) => {
+    for (const id of [...pendingRef.current]) {
+      const src = map.getSource(id);
+      if (!src) continue;
+      src.setData(sourceData(id));
+      pendingRef.current.delete(id);
+    }
   };
 
   const currentStyle = () => {
@@ -83,12 +107,12 @@ export default function AtlasMap({
       selectedId: p.selectedId,
       glyphs: glyphsUrl(),
       data: {
-        places: p.places || EMPTY,
-        territories: p.territories || EMPTY,
-        roads: p.roadsGeo || EMPTY,
-        legs: (p.routeGeo && p.routeGeo.legs) || EMPTY,
-        stops: (p.routeGeo && p.routeGeo.stops) || EMPTY,
-        measure: p.measureGeo || EMPTY,
+        places: sourceData('places'),
+        territories: sourceData('territories'),
+        roads: sourceData('roads'),
+        legs: sourceData('route-legs'),
+        stops: sourceData('route-stops'),
+        measure: sourceData('measure'),
       },
     });
   };
@@ -168,10 +192,16 @@ export default function AtlasMap({
       map.getCanvas().style.cursor = over ? 'pointer' : '';
     });
 
+    // Datos que llegaron antes de que existiera su fuente (carga inicial o setStyle).
+    map.on('styledata', () => {
+      if (pendingRef.current.size) flushPending(map);
+    });
+
     mapRef.current = map;
     window.__atlasMap = map;
     return () => {
       mapRef.current = null;
+      firstStyle.current = true;
       if (window.__atlasMap === map) delete window.__atlasMap;
       map.remove();
     };
@@ -180,8 +210,7 @@ export default function AtlasMap({
   }, []);
 
   // Estilo: tema, extras, selección, color de ruta y relieve. Los datos van
-  // dentro del estilo, así que no hace falta volver a cargarlos después.
-  const firstStyle = useRef(true);
+  // dentro del estilo (con los valores actuales), así que siguen ahí tras el cambio.
   useEffect(() => {
     if (firstStyle.current) {
       firstStyle.current = false;
@@ -192,47 +221,41 @@ export default function AtlasMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme, extrasKey, selectedId, routeColor, relief]);
 
-  // Datos: setData sobre las fuentes existentes.
-  const useSource = (ids, data, transform) => {
-    useEffect(() => {
-      const map = mapRef.current;
-      if (!map) return;
-      const apply = () => {
-        for (const id of ids) {
-          const src = map.getSource(id);
-          if (src) src.setData(transform ? transform(id, data) : data || EMPTY);
-        }
-      };
-      if (map.isStyleLoaded()) apply();
-      else map.once('load', apply);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+  // Datos: cada cambio marca sus fuentes como pendientes y se aplica con setData
+  // en cuanto la fuente existe. Si todavía no existe (estilo cargando o recién
+  // reemplazado), el listener de 'styledata' la vacía después. No se usa
+  // isStyleLoaded(): es false mientras cualquier fuente carga teselas.
+  const markDirty = (...ids) => {
+    const map = mapRef.current;
+    if (!map) return;
+    for (const id of ids) pendingRef.current.add(id);
+    flushPending(map);
   };
-  useSource(['places', 'pins'], places, (id, d) => (id === 'pins' ? splitPins(d || EMPTY) : d || EMPTY));
-  useSource(['territories'], territories);
-  useSource(['roads'], roadsGeo);
-  useSource(['route-legs', 'route-stops'], routeGeo, (id, d) => (d && (id === 'route-legs' ? d.legs : d.stops)) || EMPTY);
-  useSource(['measure'], measureGeo);
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => markDirty('places', 'pins'), [places]);
+  useEffect(() => markDirty('territories'), [territories]);
+  useEffect(() => markDirty('roads'), [roadsGeo]);
+  useEffect(() => markDirty('route-legs', 'route-stops'), [routeGeo]);
+  useEffect(() => markDirty('measure'), [measureGeo]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
-  // Cámara.
-  const flyKey = flyTo ? `${flyTo.lon},${flyTo.lat},${flyTo.zoom ?? ''}` : '';
+  // Cámara. Los efectos dependen de la identidad del objeto, no de su valor: el
+  // padre pasa un objeto nuevo por cada pedido (p. ej. al volver a elegir el mismo
+  // lugar después de mover el mapa) y lo conserva entre renders sin pedido nuevo.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !flyTo || !Number.isFinite(flyTo.lon) || !Number.isFinite(flyTo.lat)) return;
     const zoom = Number.isFinite(flyTo.zoom) ? flyTo.zoom : Math.max(map.getZoom(), 8);
     if (reducedMotion()) map.jumpTo({ center: [flyTo.lon, flyTo.lat], zoom });
     else map.flyTo({ center: [flyTo.lon, flyTo.lat], zoom, essential: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flyKey]);
+  }, [flyTo]);
 
-  const boundsKey = JSON.stringify(fitBounds || focusBounds || null);
   useEffect(() => {
     const map = mapRef.current;
     const b = fitBounds || focusBounds;
     if (!map || !b) return;
     map.fitBounds(b, { padding: 60, maxZoom: 9, duration: reducedMotion() ? 0 : 800 });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boundsKey]);
+  }, [fitBounds, focusBounds]);
 
   return (
     <div
