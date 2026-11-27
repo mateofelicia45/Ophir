@@ -92,6 +92,13 @@ describe('caminos antiguos', () => {
     expect(txt).toMatch(/algunos peregrinos/);
     expect(txt).toMatch(/Antigüedades 20\.118/);
   });
+
+  it('la nota de Samaria concilia los tres días de Josefo con los 30 km por día del atlas', () => {
+    const n = list.find((c) => c.id === 'galilea-judea-samaria').nota;
+    expect(n).toMatch(/Vida 269/);
+    expect(n).toMatch(/30 km por día/);
+    expect(n).toMatch(/unos 4/);
+  });
 });
 
 describe('nombres modernos', () => {

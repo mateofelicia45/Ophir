@@ -1,11 +1,12 @@
-// Orientación en el mapa: límites visibles (minimapa), «¿Dónde estoy?» y su aviso.
+// Orientación en el mapa: límites visibles (almacén que lee el minimapa), «¿Dónde estoy?» y su aviso.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { locateOutcome, locateError } from '../core/locate.js';
+import { createViewStore } from './viewStore.js';
 
 const TOAST_MS = 7000;
 
 export function useOrientation({ setFlyTo }) {
-  const [view, setView] = useState(null);
+  const [viewStore] = useState(createViewStore);
   const [you, setYou] = useState(null);
   const [toast, setToast] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -46,5 +47,5 @@ export function useOrientation({ setFlyTo }) {
     : undefined), [you]);
   const center = useCallback(([lon, lat]) => setFlyTo({ lon, lat, keepZoom: true }), [setFlyTo]);
 
-  return { view, onView: setView, youGeo, locate, busy, toast, center };
+  return { viewStore, onView: viewStore.set, youGeo, locate, busy, toast, center };
 }

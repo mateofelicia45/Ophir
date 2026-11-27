@@ -10,7 +10,7 @@ export default function MapOverlays({ orient, mini }) {
       <LocateButton onLocate={orient.locate} busy={orient.busy} />
       {mini && (
         <Suspense fallback={null}>
-          <MiniMap view={orient.view} onCenter={orient.center} />
+          <MiniMap viewStore={orient.viewStore} onCenter={orient.center} />
         </Suspense>
       )}
       {orient.toast && <div className="toast" role="status">{orient.toast}</div>}

@@ -1,5 +1,6 @@
 // Minimapa de orientación: la tierra del área, Jerusalén y un rectángulo con lo que se ve.
 // Un clic centra el mapa en ese punto.
+import { useSyncExternalStore } from 'react';
 import land from '@data/atlas/basemap/land.json';
 import { MINI, landPath, viewRect, fromMini, toMini } from '../core/minimap.js';
 import { JERUSALEM } from '../core/locate.js';
@@ -7,7 +8,8 @@ import { JERUSALEM } from '../core/locate.js';
 const LAND_D = landPath(land);
 const [JX, JY] = toMini(JERUSALEM);
 
-export default function MiniMap({ view, onCenter }) {
+export default function MiniMap({ viewStore, onCenter }) {
+  const view = useSyncExternalStore(viewStore.subscribe, viewStore.get);
   const r = view ? viewRect(view) : null;
   const click = (e) => {
     const box = e.currentTarget.getBoundingClientRect();
