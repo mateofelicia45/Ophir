@@ -121,7 +121,7 @@ function labelLayers(P, labelsOn, notSel) {
       const base = {
         type: 'symbol',
         minzoom: fam.minz[i],
-        filter: ['all', ['==', get('importance'), imp], notSel, ['==', get('dim'), 0],
+        filter: ['all', ['==', get('importance'), imp], notSel, ['==', get('dim'), 0], ['!=', get('foc'), 1],
           ['in', get('type'), ['literal', fam.types]]],
       };
       if (fam.maxzoom) base.maxzoom = fam.maxzoom;
@@ -302,6 +302,7 @@ export function buildStyle({
   }
 
   // Marcadores: tamaño por importancia, color por tipo; discutida, desconocida e isla van huecos.
+  const isFoc = ['==', get('foc'), 1];
   const hollow = ['any', ['in', get('certainty'), ['literal', ['discutida', 'desconocida']]], ['==', get('type'), 'isla']];
   layers.push(
     {
@@ -314,8 +315,9 @@ export function buildStyle({
           12, byImportance(7, 6.2, 5.4, 4.6)],
         'circle-color': ['case', hollow, P.paper, typeColor(P)],
         'circle-opacity': ['case', ['==', get('dim'), 1], 0.26, ['==', get('certainty'), 'probable'], 0.75, 1],
-        'circle-stroke-color': ['case', hollow, typeColor(P), P.paper],
-        'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 5, ['case', hollow, 1.1, 0.8], 9, ['case', hollow, 1.7, 1.2]],
+        'circle-stroke-color': ['case', isFoc, P.clay, hollow, typeColor(P), P.paper],
+        'circle-stroke-width': ['interpolate', ['linear'], ['zoom'],
+          5, ['case', isFoc, 2, hollow, 1.1, 0.8], 9, ['case', isFoc, 2.4, hollow, 1.7, 1.2]],
         'circle-stroke-opacity': ['case', ['==', get('dim'), 1], 0.26, 1],
       },
     },
@@ -358,6 +360,18 @@ export function buildStyle({
       paint: { 'text-color': territoryColor(P), ...halo },
     },
     ...labelLayers(P, ex.labels, notSel),
+    {
+      // Los lugares del foco (pasaje, personaje, recorrido) siempre llevan nombre, en arcilla.
+      id: 'place-labels-foc', type: 'symbol', source: 'places', filter: ['all', ['==', get('foc'), 1], notSel],
+      layout: {
+        visibility: vis(ex.labels),
+        'text-field': get('name'), 'text-font': FONTS.serifBold,
+        'text-size': ['interpolate', ['linear'], ['zoom'], 5, 12.5, 10, 14.5],
+        'text-variable-anchor': ['left', 'right', 'top', 'bottom'], 'text-radial-offset': 0.7,
+        'text-justify': 'auto', 'text-max-width': 9, 'text-padding': 1,
+      },
+      paint: { 'text-color': P.clay, ...halo },
+    },
     {
       // La selección siempre lleva nombre, aunque las etiquetas estén apagadas.
       id: 'place-labels-sel', type: 'symbol', source: 'places', filter: isSel,

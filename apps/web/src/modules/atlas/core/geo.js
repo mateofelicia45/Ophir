@@ -1,4 +1,6 @@
 // Conversión a GeoJSON y medición. Capa pura: sin React ni MapLibre.
+import { displayName } from './text.js';
+
 const R = 6371;
 const rad = (d) => (d * Math.PI) / 180;
 
@@ -24,12 +26,13 @@ export function placesToGeoJSON(places, { selectedId, focusIds } = {}) {
   return fc(
     places.filter((p) => p.hasPos).map((p) => pt([p.lon, p.lat], {
       id: p.id,
-      name: p.name,
+      name: displayName(p.name),
       type: p.type,
       certainty: p.certainty,
       importance: p.importance,
       sel: p.id === selectedId ? 1 : 0,
       dim: focus && !focus.has(p.id) ? 1 : 0,
+      foc: focus && focus.has(p.id) ? 1 : 0,
     })),
   );
 }

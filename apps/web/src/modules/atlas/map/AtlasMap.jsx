@@ -245,6 +245,8 @@ export default function AtlasMap({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !flyTo || !Number.isFinite(flyTo.lon) || !Number.isFinite(flyTo.lat)) return;
+    // El contenedor pudo cambiar de tamaño en el mismo render (p. ej. al cerrar un panel).
+    map.resize();
     const zoom = Number.isFinite(flyTo.zoom) ? flyTo.zoom : Math.max(map.getZoom(), 8);
     if (reducedMotion()) map.jumpTo({ center: [flyTo.lon, flyTo.lat], zoom });
     else map.flyTo({ center: [flyTo.lon, flyTo.lat], zoom, essential: true });
@@ -252,9 +254,15 @@ export default function AtlasMap({
 
   useEffect(() => {
     const map = mapRef.current;
-    const b = fitBounds || focusBounds;
-    if (!map || !b) return;
-    map.fitBounds(b, { padding: 60, maxZoom: 9, duration: reducedMotion() ? 0 : 800 });
+    // fitBounds acepta [[o, s], [e, n]] o { bounds, padding } (p. ej. para dejar libre
+    // el lado que tapa un cartel).
+    const req = fitBounds || focusBounds;
+    if (!map || !req) return;
+    const b = Array.isArray(req) ? req : req.bounds;
+    if (!b) return;
+    map.resize();
+    const padding = (!Array.isArray(req) && req.padding) || 60;
+    map.fitBounds(b, { padding, maxZoom: 9, duration: reducedMotion() ? 0 : 800 });
   }, [fitBounds, focusBounds]);
 
   return (

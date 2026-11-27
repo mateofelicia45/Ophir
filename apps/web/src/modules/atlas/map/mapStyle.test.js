@@ -162,6 +162,12 @@ describe('buildStyle', () => {
     expect(JSON.stringify(f(b, 'place-labels-1'))).toContain('["!=",["get","id"],"jerusalem"]');
   });
 
+  it('los lugares del foco llevan etiqueta propia en arcilla', () => {
+    const st = buildStyle({ basemap, theme: 'light' });
+    const l = st.layers.find((x) => x.id === 'place-labels-foc');
+    expect(l.filter).toContainEqual(['==', ['get', 'foc'], 1]);
+    expect(l.paint['text-color']).toBe(PALETTES.light.clay);
+  });
   it('el color de la ruta activa se recibe por parámetro', () => {
     const st = buildStyle({ theme: 'light', basemap, relief: false, routeColor: '#123456' });
     const legs = st.layers.filter((l) => l.id.startsWith('route-legs'));

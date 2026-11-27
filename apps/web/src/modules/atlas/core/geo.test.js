@@ -36,6 +36,12 @@ describe('placesToGeoJSON', () => {
     if (f) expect(f.properties.sel).toBe(1);
     expect(fc.features.every((x) => x.properties.dim === 1)).toBe(true);
   });
+  it('marca foc en los lugares del foco', () => {
+    const fc = placesToGeoJSON(db.places, { focusIds: new Set(['jerusalem']) });
+    const j = fc.features.find((x) => x.properties.id === 'jerusalem');
+    expect(j.properties).toMatchObject({ foc: 1, dim: 0 });
+    expect(fc.features.filter((x) => x.properties.foc === 1)).toHaveLength(1);
+  });
   it('sin focusIds nada se atenúa', () => {
     const fc = placesToGeoJSON(db.places, {});
     expect(fc.features.every((x) => x.properties.dim === 0 && x.properties.sel === 0)).toBe(true);
@@ -84,5 +90,12 @@ describe('roadsToGeoJSON', () => {
     const fc = roadsToGeoJSON([{ id: 'r1', nombre: 'Vía', periodos: [], nota: '', refs: [], relacion: 'x', aprox: true, coords: [[0, 0], [1, 1]] }]);
     expect(fc.features[0].geometry.type).toBe('LineString');
     expect(fc.features[0].properties).toMatchObject({ id: 'r1', name: 'Vía', aprox: true, relacion: 'x' });
+  });
+});
+
+describe('placesToGeoJSON: nombres', () => {
+  it('quita el sufijo numérico de OpenBible en la etiqueta', () => {
+    const fc = placesToGeoJSON([{ id: 'x', name: 'Monte Seir 1', type: 'montana', certainty: 'segura', importance: 3, lon: 35, lat: 30, hasPos: true }]);
+    expect(fc.features[0].properties.name).toBe('Monte Seir');
   });
 });

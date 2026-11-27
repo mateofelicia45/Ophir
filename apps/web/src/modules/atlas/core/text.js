@@ -7,3 +7,9 @@ export function norm(s) {
     .replace(/\s+/g, ' ')
     .trim();
 }
+
+// Algunos nombres de OpenBible llevan un sufijo numérico para distinguir homónimos
+// («Monte Seir 1»). En la interfaz se muestra sin él.
+export function displayName(s) {
+  return String(s == null ? '' : s).replace(/\s+\d+$/, '');
+}
