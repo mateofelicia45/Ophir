@@ -158,7 +158,7 @@ describe('buildStyle', () => {
     const f = (st, id) => st.layers.find((l) => l.id === id).filter;
     expect(f(a, 'places-selected')).toEqual(['==', ['get', 'sel'], 1]);
     expect(f(b, 'places-selected')).toEqual(['==', ['get', 'id'], 'jerusalem']);
-    expect(f(b, 'place-labels-sel')).toEqual(['==', ['get', 'id'], 'jerusalem']);
+    expect(f(b, 'place-labels-sel')).toEqual(['all', ['==', ['get', 'id'], 'jerusalem'], ['!=', ['get', 'rs'], 1]]);
     expect(JSON.stringify(f(b, 'place-labels-1'))).toContain('["!=",["get","id"],"jerusalem"]');
   });
 
@@ -242,6 +242,16 @@ describe('buildStyle', () => {
     expect(JSON.stringify(by('route-anim-texto').filter)).not.toMatch(/aprox|hipotetico/);
     expect(st.sources['route-anim'].type).toBe('geojson');
     expect(layerGroup('route-anim-aprox')).toBe('route-legs');
+  });
+  it('las paradas del recorrido no llevan marcador ni nombre de lugar debajo del disco', () => {
+    const st = buildStyle({ theme: 'light', basemap, relief: false });
+    const under = st.layers.filter((l) => (l.source === 'places' || l.source === 'pins') && l.id !== 'places-selected');
+    expect(under.length).toBeGreaterThan(5);
+    for (const l of under) expect(JSON.stringify(l.filter), l.id).toContain('["!=",["get","rs"],1]');
+    const stops = st.layers.find((l) => l.id === 'route-stops');
+    expect(JSON.stringify(stops.paint['circle-color'])).toContain(PALETTES.light.paper);
+    expect(stops.paint['circle-opacity']).toBeUndefined();
+    expect(st.layers.find((l) => l.id === 'route-stops-name').source).toBe('route-stops');
   });
   it('el color de la ruta activa se recibe por parámetro', () => {
     const st = buildStyle({ theme: 'light', basemap, relief: false, routeColor: '#123456' });

@@ -170,6 +170,11 @@ export default function AtlasPage() {
       .filter((p) => (!filters.cert || p.certainty === filters.cert) && (!filters.onlyCurated || p.curated));
   }, [db, filters, periodId]);
 
+  const routeStopIds = useMemo(() => {
+    const r = db && routeId ? db.routes.find((x) => x.id === routeId) : null;
+    return r ? new Set(r.stops.map((x) => x.placeId).filter(Boolean)) : null;
+  }, [db, routeId]);
+
   const placesGeo = useMemo(() => {
     if (!db) return undefined;
     // Los lugares del foco y el elegido se ven aunque los filtros los excluyan.
@@ -180,8 +185,8 @@ export default function AtlasPage() {
     };
     if (focus) focus.placeIds.forEach(add);
     add(selectedId);
-    return placesToGeoJSON(filtered.concat(extra), { selectedId, focusIds: focus ? focus.placeIds : null });
-  }, [db, filtered, focus, selectedId]);
+    return placesToGeoJSON(filtered.concat(extra), { selectedId, focusIds: focus ? focus.placeIds : null, routeIds: routeStopIds });
+  }, [db, filtered, focus, selectedId, routeStopIds]);
 
   const territoriesGeo = useMemo(
     () => (db ? territoriesToGeoJSON(periodId ? db.territories.filter((t) => t.periodId === periodId) : []) : undefined),

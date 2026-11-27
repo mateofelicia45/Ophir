@@ -70,7 +70,7 @@ const GROUPS = [
   ['places-circle', ['places-circle']],
   ['places-major', ['places-major', 'places-selected']],
   ['place-labels-top', ['places-key', 'place-labels-foc', 'place-labels-sel', 'places-foc']],
-  ['route-stops', ['route-stops', 'route-stop-active', 'route-stops-num']],
+  ['route-stops', ['route-stops', 'route-stop-active', 'route-stops-name', 'route-stops-num']],
   ['measure', ['measure-line', 'measure-points']],
 ];
 const GROUP_OF = new Map(GROUPS.flatMap(([g, list]) => list.map((id) => [id, g])));
@@ -216,6 +216,7 @@ function labelLayers(P, labelsOn, notSel) {
 
 // Tramos pendientes (los que vienen después de la parada activa) se dibujan tenues.
 const AHEAD_OPACITY = ['case', ['==', get('ahead'), 1], 0.35, 1];
+const AHEAD_NAME_OPACITY = ['case', ['==', get('ahead'), 1], 0.8, 1];
 
 // Las tres capas de un origen de tramos. Aproximado e hipotético siempre punteados
 // (DESIGN.md §5); solo texto/inicio van con trazo continuo.
@@ -484,12 +485,25 @@ export function buildStyle({
     // Último de su bloque: se coloca antes que todo y los nombres lo esquivan.
     marker('places-foc', isFoc, true, true),
     {
+      // Pendientes: disco opaco del color del papel con borde del recorrido; llegadas: relleno sólido.
       id: 'route-stops', type: 'circle', source: 'route-stops',
       paint: {
         'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 7, 10, 9],
-        'circle-color': legColor, 'circle-stroke-color': P.paper, 'circle-stroke-width': 1.5,
-        'circle-opacity': AHEAD_OPACITY, 'circle-stroke-opacity': AHEAD_OPACITY,
+        'circle-color': ['case', ['==', get('ahead'), 1], P.paper, legColor],
+        'circle-stroke-color': ['case', ['==', get('ahead'), 1], legColor, P.paper],
+        'circle-stroke-width': ['case', ['==', get('ahead'), 1], 1.6, 1.5],
       },
+    },
+    {
+      id: 'route-stops-name', type: 'symbol', source: 'route-stops',
+      layout: {
+        visibility: vis(ex.labels),
+        'text-field': get('name'), 'text-font': FONTS.serifBold,
+        'text-size': ['interpolate', ['linear'], ['zoom'], 5, 12, 10, 14],
+        'text-variable-anchor': ['left', 'right', 'top', 'bottom'], 'text-radial-offset': 1.05,
+        'text-justify': 'auto', 'text-max-width': 9, 'text-padding': 2,
+      },
+      paint: { 'text-color': P.ink, ...halo, 'text-opacity': AHEAD_NAME_OPACITY },
     },
     {
       id: 'route-stop-active', type: 'circle', source: 'route-stops', filter: ['==', get('act'), 1],
@@ -505,7 +519,7 @@ export function buildStyle({
         'text-field': ['to-string', get('n')], 'text-font': FONTS.sansMedium, 'text-size': 10.5,
         'text-allow-overlap': true, 'text-ignore-placement': true,
       },
-      paint: { 'text-color': '#FFFFFF', 'text-opacity': AHEAD_OPACITY },
+      paint: { 'text-color': ['case', ['==', get('ahead'), 1], legColor, '#FFFFFF'] },
     },
     {
       id: 'measure-line', type: 'line', source: 'measure', filter: ['==', ['geometry-type'], 'LineString'],
@@ -517,6 +531,16 @@ export function buildStyle({
       paint: { 'circle-radius': 4.5, 'circle-color': P.paper, 'circle-stroke-color': P.ink, 'circle-stroke-width': 2 },
     },
   );
+
+  // Las paradas del recorrido abierto (`rs`) las dibujan sus propias capas: sin marcador
+  // ni nombre duplicado debajo del disco numerado.
+  const notStop = ['!=', get('rs'), 1];
+  for (const l of layers) {
+    if ((l.source === 'places' || l.source === 'pins') && l.id !== 'places-selected' && !l.id.startsWith('places-cluster')) {
+      if (!l.filter) l.filter = notStop;
+      else l.filter = l.filter[0] === 'all' ? [...l.filter, notStop] : ['all', l.filter, notStop];
+    }
+  }
 
   return { version: 8, name: `Ophir atlas (${theme})`, glyphs, sources, layers };
 }

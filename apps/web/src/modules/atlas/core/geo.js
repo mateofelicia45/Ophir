@@ -21,7 +21,7 @@ export function measure(points) {
   return { legs, totalKm, days: totalKm > 0 ? Math.ceil(totalKm / 30) : 0 };
 }
 
-export function placesToGeoJSON(places, { selectedId, focusIds } = {}) {
+export function placesToGeoJSON(places, { selectedId, focusIds, routeIds } = {}) {
   const focus = focusIds instanceof Set && focusIds.size > 0 ? focusIds : null;
   return fc(
     places.filter((p) => p.hasPos).map((p) => pt([p.lon, p.lat], {
@@ -33,6 +33,8 @@ export function placesToGeoJSON(places, { selectedId, focusIds } = {}) {
       sel: p.id === selectedId ? 1 : 0,
       dim: focus && !focus.has(p.id) ? 1 : 0,
       foc: focus && focus.has(p.id) ? 1 : 0,
+      // Parada del recorrido abierto: la dibujan las capas del recorrido, no los marcadores.
+      rs: routeIds && routeIds.has(p.id) ? 1 : 0,
     })),
   );
 }
@@ -48,7 +50,7 @@ export function routeToGeoJSON(route, db) {
     const p = s.placeId != null ? db.byId.get(s.placeId) : null;
     if (!p || !p.hasPos) return;
     const c = [p.lon, p.lat];
-    stops.push(pt(c, { n: i + 1, placeId: p.id }));
+    stops.push(pt(c, { n: i + 1, placeId: p.id, name: displayName(p.name) }));
     if (prev) {
       legs.push({
         type: 'Feature',

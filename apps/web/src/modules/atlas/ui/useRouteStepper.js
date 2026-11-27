@@ -1,10 +1,12 @@
 // Estado del recorrido paso a paso: parada activa, geometría repartida para el
 // mapa, avance con ← / → y vuelo de cámara a cada parada.
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { routeToGeoJSON } from '../core/geo.js';
 import { stepGeo, stopProgress } from '../core/routes.js';
 
-const typing = (el) => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+// Controles que ya usan las flechas: campos de texto, pestañas, deslizadores y radios.
+const OWN_ARROWS = 'input,textarea,select,[role=tab],[role=tablist],[role=slider],[role=radio],[role=radiogroup],[contenteditable=""],[contenteditable=true]';
+const typing = (el) => !!el && (el.isContentEditable || (el.closest && !!el.closest(OWN_ARROWS)));
 
 export function useRouteStepper({ db, route, setFlyTo }) {
   const routeId = route ? route.id : null;
@@ -24,23 +26,26 @@ export function useRouteStepper({ db, route, setFlyTo }) {
     setState({ routeId: route.id, step: k });
     const p = route.stops[k].placeId != null ? db.byId.get(route.stops[k].placeId) : null;
     // Una parada sin coordenadas se muestra en el paso, pero la cámara no se mueve.
-    if (p && p.hasPos && k > 0) setFlyTo({ lon: p.lon, lat: p.lat, zoom: 7 });
-    else if (p && p.hasPos) setFlyTo({ lon: p.lon, lat: p.lat, zoom: 6 });
+    if (p && p.hasPos) setFlyTo({ lon: p.lon, lat: p.lat, zoom: k > 0 ? 7 : 6 });
   }, [route, db, setFlyTo]);
 
-  // La captura va primero: así las flechas no mueven además el mapa.
+  // La captura va primero: así las flechas no mueven además el mapa. El paso se lee
+  // de una ref para no volver a registrar el listener en cada parada.
+  const live = useRef({ step, goTo });
+  useEffect(() => { live.current = { step, goTo }; });
+  const active = !!route;
   useEffect(() => {
-    if (!route) return undefined;
+    if (!active) return undefined;
     const onKey = (e) => {
       if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || typing(e.target)) return;
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
       e.preventDefault();
       e.stopPropagation();
-      goTo(step + (e.key === 'ArrowRight' ? 1 : -1));
+      live.current.goTo(live.current.step + (e.key === 'ArrowRight' ? 1 : -1));
     };
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
-  }, [route, step, goTo]);
+  }, [active]);
 
   return { step, last, progress, geo, goTo };
 }
