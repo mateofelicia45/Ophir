@@ -11,7 +11,7 @@ import land from '@data/atlas/basemap/land.json';
 import borders from '@data/atlas/basemap/borders.json';
 import lakes from '@data/atlas/basemap/lakes.json';
 import rivers from '@data/atlas/basemap/rivers.json';
-import { buildStyle, splitPins, INITIAL_VIEW, ATLAS_BOUNDS, CREDITS } from './mapStyle.js';
+import { buildStyle, splitPins, markerImage, MARKER_IMAGE, INITIAL_VIEW, ATLAS_BOUNDS, CREDITS } from './mapStyle.js';
 
 maplibregl.setWorkerUrl(workerUrl);
 
@@ -37,7 +37,7 @@ const reducedMotion = () => {
 
 const placeLayerIds = (map) => map.getStyle().layers
   .map((l) => l.id)
-  .filter((id) => id === 'places-circle' || id === 'places-selected' || id.startsWith('place-labels'));
+  .filter((id) => id === 'places-circle' || id === 'places-major' || id === 'places-foc' || id === 'places-selected' || id.startsWith('place-labels'));
 
 export default function AtlasMap({
   theme = 'light',
@@ -135,6 +135,11 @@ export default function AtlasMap({
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric', maxWidth: 120 }), 'bottom-left');
     map.addControl(new maplibregl.AttributionControl({ compact: false, customAttribution: CREDITS }), 'bottom-right');
+
+    // El disco de los marcadores se genera aquí y se vuelve a dar si un cambio de estilo lo pide.
+    map.on('styleimagemissing', (e) => {
+      if (e.id === MARKER_IMAGE && !map.hasImage(MARKER_IMAGE)) map.addImage(MARKER_IMAGE, markerImage(), { sdf: true, pixelRatio: 2 });
+    });
 
     // El relieve es online y opcional: si falla, se oculta sin llenar la consola.
     let warned = false;

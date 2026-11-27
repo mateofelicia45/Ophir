@@ -1,5 +1,5 @@
 // Página del atlas: mapa de estudio MapLibre con búsqueda, filtros y paneles.
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import '@fontsource/ibm-plex-sans/latin-400.css';
 import '@fontsource/ibm-plex-sans/latin-500.css';
@@ -8,6 +8,7 @@ import '@fontsource/source-serif-4/latin-400.css';
 import '@fontsource/source-serif-4/latin-600.css';
 import '../../styles/atlas.css';
 import { useAtlasDb } from './ui/useAtlasDb.js';
+import { useAtlasLayout, focusPadding } from './ui/useAtlasLayout.js';
 import TopBar from './ui/TopBar.jsx';
 import LeftPanel from './ui/LeftPanel.jsx';
 import RightPanel from './ui/RightPanel.jsx';
@@ -25,23 +26,15 @@ import { useOpenParsedRef } from '../../hooks/useOpenParsedRef.js';
 
 const AtlasMap = lazy(() => import('./map/AtlasMap.jsx'));
 
-const isNarrow = () => {
-  try {
-    return window.innerWidth < 900;
-  } catch {
-    return false;
-  }
-};
-
 export default function AtlasPage() {
   const { db, error, retry } = useAtlasDb();
   const [searchParams, setSearchParams] = useSearchParams();
   const openParsedRef = useOpenParsedRef();
 
   const [store, setStore] = useState(loadStore);
-  const [narrow] = useState(isNarrow);
-  const [leftOpen, setLeftOpen] = useState(() => !narrow);
-  const [rightOpen, setRightOpen] = useState(() => !narrow);
+  const rootRef = useRef(null);
+  const layout = useAtlasLayout(rootRef);
+  const { narrow, single, left: leftOpen, right: rightOpen, openLeft, openRight, mapWidth } = layout;
   const [tab, setTab] = useState('explorar');
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [periodId, setPeriodId] = useState('');
@@ -62,28 +55,27 @@ export default function AtlasPage() {
   const theme = store.theme;
 
   // ---- Acciones ----
-  // Encuadre de un foco: deja libre a la izquierda el ancho del cartel del foco.
-  const frame = useCallback((cam) => {
+  // Encuadre de un foco: deja libre a la izquierda el cartel del foco, según el
+  // ancho real que tendrá el mapa.
+  const frame = useCallback((cam, mapW) => {
     if (!cam) return;
-    const left = !narrow && window.innerWidth >= 1100 ? 370 : 40;
-    const pad = { top: 50, bottom: 50, right: 50, left };
+    const pad = focusPadding(mapW);
     const d = 0.25;
     const bounds = cam.center
       ? [[cam.center[0] - d, cam.center[1] - d], [cam.center[0] + d, cam.center[1] + d]]
       : cam.bounds;
     setFitBounds({ bounds, padding: pad });
-  }, [narrow]);
+  }, []);
 
   const selectPlace = useCallback((id, { fly = true } = {}) => {
     const p = db && db.byId.get(id);
     if (!p) return;
     setSelectedId(id);
-    setRightOpen(true);
-    if (narrow) setLeftOpen(false);
+    openRight(true);
     updateStore((s) => pushHistory(s, id));
     // Un lugar sin coordenadas se elige igual, pero no se vuela a 0,0.
     if (fly && p.hasPos) setFlyTo({ lon: p.lon, lat: p.lat });
-  }, [db, narrow, updateStore]);
+  }, [db, openRight, updateStore]);
 
   const choosePeriod = useCallback((id, fit = true) => {
     setPeriodId(id || '');
@@ -97,11 +89,13 @@ export default function AtlasPage() {
     if (!f) return;
     setFocus(f);
     if (f.kind !== 'Recorrido') setRouteId(null);
-    if (narrow) setLeftOpen(false);
     // Sin lugar elegido, el panel derecho solo muestra la bienvenida: se cierra para dar lugar al mapa.
-    if (!selectedId) setRightOpen(false);
-    frame(cameraFor(db, [...f.placeIds]));
-  }, [db, frame, narrow, selectedId]);
+    const nextLeft = narrow ? false : leftOpen;
+    const nextRight = selectedId ? rightOpen : false;
+    if (narrow) openLeft(false);
+    if (!selectedId) openRight(false);
+    frame(cameraFor(db, [...f.placeIds]), mapWidth(nextLeft, nextRight));
+  }, [db, frame, narrow, selectedId, leftOpen, rightOpen, openLeft, openRight, mapWidth]);
 
   const focusPassage = useCallback((ref) => {
     if (db && ref) applyFocus(passageFocus(db, ref));
@@ -137,7 +131,7 @@ export default function AtlasPage() {
   // Se lee una vez, en cuanto está la base (durante el render, patrón de React para
   // derivar estado); desde entonces el estado manda y la URL lo refleja.
   const [urlReady, setUrlReady] = useState(false);
-  if (db && !urlReady) {
+  if (db && layout.width && !urlReady) {
     setUrlReady(true);
     const st = parseAtlasParams(searchParams.toString(), db);
     if (st.periodId) choosePeriod(st.periodId, !st.placeId && !st.routeId && !st.chapter);
@@ -146,7 +140,7 @@ export default function AtlasPage() {
     if (st.placeId) {
       const p = db.byId.get(st.placeId);
       setSelectedId(st.placeId);
-      setRightOpen(true);
+      openRight(true);
       if (p.hasPos) setFlyTo({ lon: p.lon, lat: p.lat, zoom: 8 });
     }
   }
@@ -191,7 +185,7 @@ export default function AtlasPage() {
   const route = db && routeId ? db.routes.find((r) => r.id === routeId) : null;
   const routeGeo = useMemo(() => (route ? routeToGeoJSON(route, db) : undefined), [route, db]);
   const routeColor = route ? (PALETTES[theme] || PALETTES.light)['r' + route.colorIndex] : undefined;
-  const extras = useMemo(() => ({ ...store.extras }), [store.extras]);
+  const extras = store.extras;
 
   const onMapSelect = useCallback((id) => selectPlace(id, { fly: false }), [selectPlace]);
 
@@ -199,7 +193,7 @@ export default function AtlasPage() {
   const cls = ['atlas-app', theme === 'dark' ? 'dark' : '', leftOpen ? 'lo' : '', rightOpen ? 'ro' : ''].filter(Boolean).join(' ');
 
   return (
-    <div className={cls}>
+    <div className={cls} ref={rootRef}>
       <TopBar
         db={db}
         theme={theme}
@@ -208,13 +202,13 @@ export default function AtlasPage() {
         onPeriod={(v) => choosePeriod(v)}
         leftOpen={leftOpen}
         rightOpen={rightOpen}
-        onToggleLeft={() => setLeftOpen((v) => !v)}
-        onToggleRight={() => setRightOpen((v) => !v)}
+        onToggleLeft={() => openLeft(!leftOpen)}
+        onToggleRight={() => openRight(!rightOpen)}
         onAction={runAction}
       />
       <div className="body">
         {narrow && leftOpen && (
-          <button type="button" className="scrim" onClick={() => setLeftOpen(false)} aria-label="Cerrar el panel" />
+          <button type="button" className="scrim" onClick={() => openLeft(false)} aria-label="Cerrar el panel" />
         )}
         {db && (
           <LeftPanel
@@ -278,7 +272,12 @@ export default function AtlasPage() {
           <RightPanel
             db={db}
             place={selected}
-            onClose={() => { setSelectedId(null); if (narrow) setRightOpen(false); }}
+            onClose={() => {
+              setSelectedId(null);
+              // En celular o con un solo panel, cerrar la ficha devuelve el lugar al mapa o a Explorar.
+              if (narrow) openRight(false);
+              else if (single) { openRight(false); openLeft(true); }
+            }}
             onAction={runAction}
           />
         )}

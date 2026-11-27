@@ -67,13 +67,16 @@ const GROUPS = [
   ['roads', ['roads']],
   ['route-legs', ['route-legs-texto', 'route-legs-aprox', 'route-legs-hipotetico']],
   ['places-cluster', ['places-cluster', 'places-cluster-count']],
-  ['places-circle', ['places-circle', 'places-selected']],
+  ['places-circle', ['places-circle']],
+  ['places-major', ['places-major', 'places-selected']],
+  ['place-labels-top', ['place-labels-foc', 'place-labels-sel', 'places-foc']],
   ['route-stops', ['route-stops', 'route-stops-num']],
   ['measure', ['measure-line', 'measure-points']],
 ];
 const GROUP_OF = new Map(GROUPS.flatMap(([g, list]) => list.map((id) => [id, g])));
 export function layerGroup(id) {
   if (GROUP_OF.has(id)) return GROUP_OF.get(id);
+  if (/^place-labels(-[a-z]+)?-1$/.test(id)) return 'place-labels-top';
   if (id.startsWith('place-labels') || id === 'river-labels' || id === 'roads-label' || id === 'territories-label') return 'place-labels';
   return null;
 }
@@ -111,9 +114,42 @@ const territoryColor = (P) => ['match', get('colorIndex'), 1, P.c1, 2, P.c2, 3, 
 const byImportance = (a, b, c, d) => ['match', get('importance'), 1, a, 2, b, 3, c, d];
 const vis = (on) => (on ? 'visible' : 'none');
 
+// Halo opaco y sin desenfoque: lo que quede debajo de un nombre (marcadores, ríos)
+// no se transparenta entre las letras.
+function labelHalo(P) {
+  return { 'text-halo-color': P.paper, 'text-halo-width': 2.4, 'text-halo-blur': 0 };
+}
+
+// Marcador de lugar: un disco SDF que se tiñe con icon-color; el borde es el halo.
+// Va como capa symbol para que los marcadores entren en el cálculo de colisiones
+// y las etiquetas no se dibujen encima de ellos.
+export const MARKER_IMAGE = 'atlas-disc';
+const MARKER_PX = 10; // radio en px de pantalla con icon-size 1
+// Margen chico frente al radio: la caja de colisión es la imagen entera y no debe
+// ser mucho mayor que el disco visible (si no, el propio nombre oculta su marcador).
+const SDF_PAD = 6;
+// Halo máximo (en px SDF de MapLibre, 32 niveles) que cabe en SDF_PAD con 28 niveles por px.
+export const HALO_MAX = 4.2;
+// Imagen SDF del disco (pixelRatio 2): borde en 192, 28 niveles por píxel de imagen.
+export function markerImage() {
+  const r = MARKER_PX * 2;
+  const size = 2 * (r + SDF_PAD);
+  const data = new Uint8Array(size * size * 4);
+  const c = size / 2;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const d = Math.hypot(x + 0.5 - c, y + 0.5 - c);
+      const a = Math.max(0, Math.min(255, Math.round(192 - (d - r) * 28)));
+      const i = (y * size + x) * 4;
+      data[i] = 255; data[i + 1] = 255; data[i + 2] = 255; data[i + 3] = a;
+    }
+  }
+  return { width: size, height: size, data };
+}
+
 function labelLayers(P, labelsOn, notSel) {
   const out = [];
-  const halo = { 'text-halo-color': P.halo, 'text-halo-width': 1.6, 'text-halo-blur': 0.4 };
+  const halo = labelHalo(P);
   // Más importante = más arriba en la pila = se coloca primero ante una colisión.
   for (let imp = 4; imp >= 1; imp--) {
     for (const fam of LABEL_FAMILIES) {
@@ -138,7 +174,7 @@ function labelLayers(P, labelsOn, notSel) {
             'text-font': imp === 1 ? FONTS.serifBold : FONTS.serif,
             'text-size': ['interpolate', ['linear'], ['zoom'], 5, size * 0.95, 10, size * 1.2],
             'text-variable-anchor': ['left', 'right', 'top', 'bottom'],
-            'text-radial-offset': 0.55,
+            'text-radial-offset': 0.75,
             'text-justify': 'auto',
             'text-max-width': 9,
             'text-padding': 2,
@@ -159,7 +195,7 @@ function labelLayers(P, labelsOn, notSel) {
           'text-font': upper ? FONTS.serifBold : imp === 1 ? FONTS.serifBoldItalic : FONTS.serifItalic,
           'text-size': ['interpolate', ['linear'], ['zoom'], 4, size * 0.92, 10, size * 1.25],
           'text-transform': upper ? 'uppercase' : 'none',
-          'text-letter-spacing': upper ? (fam.key === 'reino' ? 0.2 : 0.16) : fam.key === 'mar' ? 0.06 : 0.02,
+          'text-letter-spacing': upper ? (fam.key === 'reino' ? 0.1 : 0.08) : fam.key === 'mar' ? 0.03 : 0.02,
           'text-max-width': upper ? 12 : 8,
           'text-padding': 4,
         },
@@ -304,23 +340,48 @@ export function buildStyle({
   // Marcadores: tamaño por importancia, color por tipo; discutida, desconocida e isla van huecos.
   const isFoc = ['==', get('foc'), 1];
   const hollow = ['any', ['in', get('certainty'), ['literal', ['discutida', 'desconocida']]], ['==', get('type'), 'isla']];
-  layers.push(
-    {
-      id: 'places-circle', type: 'circle', source: 'pins', filter: ['!', ['has', 'point_count']],
-      paint: {
-        'circle-radius': ['interpolate', ['linear'], ['zoom'],
-          4, byImportance(3.6, 2.8, 1.8, 1.1),
-          7, byImportance(4.8, 3.9, 3, 2.2),
-          9, byImportance(5.8, 5, 4.2, 3.4),
-          12, byImportance(7, 6.2, 5.4, 4.6)],
-        'circle-color': ['case', hollow, P.paper, typeColor(P)],
-        'circle-opacity': ['case', ['==', get('dim'), 1], 0.26, ['==', get('certainty'), 'probable'], 0.75, 1],
-        'circle-stroke-color': ['case', isFoc, P.clay, hollow, typeColor(P), P.paper],
-        'circle-stroke-width': ['interpolate', ['linear'], ['zoom'],
-          5, ['case', isFoc, 2, hollow, 1.1, 0.8], 9, ['case', isFoc, 2.4, hollow, 1.7, 1.2]],
-        'circle-stroke-opacity': ['case', ['==', get('dim'), 1], 0.26, 1],
-      },
+  // Radio del marcador por zoom e importancia, como factor de icon-size.
+  const k = (...r) => byImportance(...r.map((v) => +(v / MARKER_PX).toFixed(3)));
+  // Los del foco, un poco más grandes (en el prototipo llevan un borde arcilla más grueso).
+  const focScale = ['case', isFoc, 1.3, 1];
+  // Radio (px) por importancia 1..4 en cada zoom de referencia.
+  const RADII = [[4, [3.6, 2.8, 1.8, 1.1]], [7, [4.8, 3.9, 3, 2.2]], [9, [5.8, 5, 4.2, 3.4]], [12, [7, 6.2, 5.4, 4.6]]];
+  const markerSize = ['interpolate', ['linear'], ['zoom'],
+    ...RADII.flatMap(([z, r]) => [z, ['*', k(...r), focScale]])];
+  // El halo del SDF se mide en unidades de la imagen (ancho / icon-size): si pasa de
+  // HALO_MAX llega al borde de la imagen y el marcador se ve cuadrado. Se acota por tamaño.
+  const haloWant = (z) => (z <= 5 ? ['case', isFoc, 1.3, hollow, 1.1, 0.8]
+    : z <= 7 ? ['case', isFoc, 1.5, hollow, 1.4, 1] : ['case', isFoc, 1.7, hollow, 1.7, 1.2]);
+  const markerHalo = ['interpolate', ['linear'], ['zoom'],
+    ...RADII.flatMap(([z, r]) => [z, ['min', haloWant(z),
+      ['*', byImportance(...r.map((v) => +(v / MARKER_PX * HALO_MAX).toFixed(3))), focScale]]])];
+  const marker = (id, filter, block, always = false) => ({
+    id, type: 'symbol', source: 'pins',
+    filter: ['all', ['!', ['has', 'point_count']], filter],
+    layout: {
+      'icon-image': MARKER_IMAGE,
+      'icon-size': markerSize,
+      // Un marcador se oculta donde ya hay un nombre u otro marcador (al acercar el mapa
+      // vuelve a aparecer), así nunca se dibuja a través de un nombre. Los importantes
+      // reservan su lugar y los nombres menores los esquivan; los del foco se ven siempre.
+      'icon-allow-overlap': always,
+      'icon-ignore-placement': !block,
+      'icon-padding': 0,
+      'symbol-sort-key': get('importance'),
     },
+    paint: {
+      'icon-color': ['case', hollow, P.paper, typeColor(P)],
+      'icon-halo-color': ['case', isFoc, P.clay, hollow, typeColor(P), P.paper],
+      'icon-halo-width': markerHalo,
+      'icon-opacity': ['case', ['==', get('dim'), 1], 0.26, ['==', get('certainty'), 'probable'], 0.75, 1],
+    },
+  });
+  // Importancia 4: debajo de los nombres (se colocan después y ceden su lugar).
+  // Importancia 1 a 3: encima, colocados primero.
+  const notFoc = ['!=', get('foc'), 1];
+  layers.push(marker('places-circle', ['all', ['==', get('importance'), 4], notFoc], false));
+  const majorLayers = [
+    marker('places-major', ['all', ['<=', get('importance'), 3], notFoc], true),
     {
       id: 'places-selected', type: 'circle', source: 'places', filter: isSel,
       paint: {
@@ -329,9 +390,10 @@ export function buildStyle({
         'circle-stroke-color': P.clay, 'circle-stroke-width': 2.4,
       },
     },
-  );
+  ];
 
-  const halo = { 'text-halo-color': P.halo, 'text-halo-width': 1.6, 'text-halo-blur': 0.4 };
+  const halo = labelHalo(P);
+  const placeLabels = labelLayers(P, ex.labels, notSel);
   layers.push(
     {
       id: 'river-labels', type: 'symbol', source: 'rivers', minzoom: 7,
@@ -359,7 +421,11 @@ export function buildStyle({
       },
       paint: { 'text-color': territoryColor(P), ...halo },
     },
-    ...labelLayers(P, ex.labels, notSel),
+    ...placeLabels.filter((l) => layerGroup(l.id) === 'place-labels'),
+    ...majorLayers,
+    // Encima de los marcadores y colocados antes que ellos: los nombres principales,
+    // los del foco y el elegido nunca ceden su lugar.
+    ...placeLabels.filter((l) => layerGroup(l.id) === 'place-labels-top'),
     {
       // Los lugares del foco (pasaje, personaje, recorrido) siempre llevan nombre, en arcilla.
       id: 'place-labels-foc', type: 'symbol', source: 'places', filter: ['all', ['==', get('foc'), 1], notSel],
@@ -380,8 +446,10 @@ export function buildStyle({
         'text-variable-anchor': ['left', 'right', 'top', 'bottom'], 'text-radial-offset': 1.1,
         'text-allow-overlap': true, 'text-max-width': 12,
       },
-      paint: { 'text-color': P.ink, 'text-halo-color': P.halo, 'text-halo-width': 2, 'text-halo-blur': 0.4 },
+      paint: { 'text-color': P.ink, ...halo, 'text-halo-width': 2.8 },
     },
+    // Último de su bloque: se coloca antes que todo y los nombres lo esquivan.
+    marker('places-foc', isFoc, true, true),
     {
       id: 'route-stops', type: 'circle', source: 'route-stops',
       paint: {

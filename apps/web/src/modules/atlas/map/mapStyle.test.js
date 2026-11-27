@@ -4,12 +4,12 @@ import borders from '@data/atlas/basemap/borders.json';
 import lakes from '@data/atlas/basemap/lakes.json';
 import rivers from '@data/atlas/basemap/rivers.json';
 import { validateStyleMin } from '@maplibre/maplibre-gl-style-spec';
-import { buildStyle, PALETTES, ATLAS_BOUNDS, INITIAL_VIEW, CREDITS, layerGroup, splitPins } from './mapStyle.js';
+import { buildStyle, PALETTES, ATLAS_BOUNDS, INITIAL_VIEW, CREDITS, layerGroup, splitPins, markerImage, MARKER_IMAGE, HALO_MAX } from './mapStyle.js';
 
 const basemap = { land, borders, lakes, rivers };
 const ORDER = [
   'sea', 'hillshade', 'land', 'lakes', 'rivers', 'borders', 'territories-fill', 'territories-line',
-  'roads', 'route-legs', 'places-cluster', 'places-circle', 'place-labels', 'route-stops', 'measure',
+  'roads', 'route-legs', 'places-cluster', 'places-circle', 'place-labels', 'places-major', 'place-labels-top', 'route-stops', 'measure',
 ];
 const ids = (st) => st.layers.map((l) => l.id);
 const groupsInOrder = (st) => {
@@ -129,7 +129,7 @@ describe('buildStyle', () => {
 
   it('con extras.labels:false las etiquetas de lugar quedan ocultas', () => {
     const st = buildStyle({ theme: 'light', basemap, relief: false, extras: { labels: false } });
-    const labels = st.layers.filter((l) => layerGroup(l.id) === 'place-labels' && l.id !== 'place-labels-sel');
+    const labels = st.layers.filter((l) => l.id.startsWith('place-labels') && l.id !== 'place-labels-sel');
     expect(labels.length).toBeGreaterThan(0);
     for (const l of labels) expect(l.layout.visibility, l.id).toBe('none');
   });
@@ -160,6 +160,59 @@ describe('buildStyle', () => {
     expect(f(b, 'places-selected')).toEqual(['==', ['get', 'id'], 'jerusalem']);
     expect(f(b, 'place-labels-sel')).toEqual(['==', ['get', 'id'], 'jerusalem']);
     expect(JSON.stringify(f(b, 'place-labels-1'))).toContain('["!=",["get","id"],"jerusalem"]');
+  });
+
+  it('los marcadores son símbolos SDF: entran en las colisiones con los nombres', () => {
+    const st = buildStyle({ basemap, theme: 'light' });
+    const marks = st.layers.filter((l) => ['places-circle', 'places-major', 'places-foc'].includes(l.id));
+    expect(marks).toHaveLength(3);
+    for (const l of marks) {
+      expect(l.type).toBe('symbol');
+      expect(l.layout['icon-image']).toBe(MARKER_IMAGE);
+    }
+    const by = Object.fromEntries(marks.map((l) => [l.id, l.layout]));
+    // nunca se dibujan a través de un nombre, salvo los del foco
+    expect(by['places-circle']['icon-allow-overlap']).toBe(false);
+    expect(by['places-major']['icon-allow-overlap']).toBe(false);
+    expect(by['places-major']['icon-ignore-placement']).toBe(false);
+    expect(by['places-foc']['icon-allow-overlap']).toBe(true);
+    // los nombres principales y los del foco se colocan antes que los marcadores
+    const order = ids(st);
+    expect(order.indexOf('place-labels-1')).toBeGreaterThan(order.indexOf('places-major'));
+    expect(order.indexOf('place-labels-4')).toBeLessThan(order.indexOf('places-major'));
+  });
+
+  it('los nombres llevan halo opaco y sin desenfoque, y poco espaciado', () => {
+    const st = buildStyle({ basemap, theme: 'dark' });
+    for (const l of st.layers.filter((x) => x.type === 'symbol' && x.paint && x.paint['text-halo-color'])) {
+      expect(l.paint['text-halo-color'], l.id).toBe(PALETTES.dark.paper);
+      expect(l.paint['text-halo-blur'], l.id).toBe(0);
+      expect(l.paint['text-halo-width'], l.id).toBeGreaterThanOrEqual(2.4);
+      const ls = l.layout['text-letter-spacing'];
+      if (typeof ls === 'number') expect(ls, l.id).toBeLessThanOrEqual(0.1);
+    }
+  });
+
+  it('markerImage es un disco SDF: opaco en el centro, transparente en las esquinas', () => {
+    const img = markerImage();
+    expect(img.data.length).toBe(img.width * img.height * 4);
+    const alpha = (x, y) => img.data[(y * img.width + x) * 4 + 3];
+    const c = img.width / 2;
+    expect(alpha(c, c)).toBe(255);
+    expect(alpha(0, 0)).toBe(0);
+  });
+
+  it('el halo del marcador nunca llega al borde de la imagen (no se ve cuadrado)', () => {
+    const img = markerImage();
+    const c = img.width / 2;
+    // Umbral del halo en el shader SDF de MapLibre: (6 - ancho/icon-size) / 8.
+    const threshold = ((6 - HALO_MAX) / 8) * 255;
+    expect(img.data[(c * img.width) * 4 + 3]).toBeLessThan(threshold);
+    const st = buildStyle({ basemap, theme: 'light' });
+    for (const id of ['places-circle', 'places-major', 'places-foc']) {
+      const w = st.layers.find((l) => l.id === id).paint['icon-halo-width'];
+      for (let i = 4; i < w.length; i += 2) expect(w[i][0], id).toBe('min');
+    }
   });
 
   it('los lugares del foco llevan etiqueta propia en arcilla', () => {
@@ -193,7 +246,7 @@ describe('buildStyle', () => {
     const dir = fileURLToPath(new URL('../../../../public/glyphs/', import.meta.url));
     const st = buildStyle({ theme: 'dark', basemap, relief: true, extras: { cluster: true } });
     const fonts = new Set();
-    for (const l of st.layers) if (l.type === 'symbol') for (const f of l.layout['text-font']) fonts.add(f);
+    for (const l of st.layers) if (l.type === 'symbol' && l.layout['text-font']) for (const f of l.layout['text-font']) fonts.add(f);
     expect(fonts.size).toBeGreaterThan(0);
     for (const f of fonts) {
       expect(existsSync(`${dir}${f}/0-255.pbf`), f).toBe(true);
