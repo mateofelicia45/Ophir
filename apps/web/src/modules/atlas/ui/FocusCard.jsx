@@ -4,12 +4,14 @@ import { IconClose } from './icons.jsx';
 export default function FocusCard({ focus, db, periodId, onClose, onSelect, onPeriod, onRoute, onReadPassage }) {
   const period = focus.period && db.periodById[focus.period];
   const routes = (focus.routeIds || []).map((id) => db.routes.find((r) => r.id === id)).filter(Boolean);
+  // Un pasaje se titula «Lugares de Juan 4 (n)».
+  const title = focus.kind === 'Pasaje' ? `Lugares de ${focus.title} (${focus.items.length})` : focus.title;
   return (
     <section className="focus mui" aria-label="Foco actual del mapa">
       <div className="fhd">
         <div>
           <div className="k">{focus.kind}</div>
-          <div className="ft">{focus.title}</div>
+          <div className="ft">{title}</div>
           <div className="fsub">{focus.sub}</div>
         </div>
         <button type="button" className="ib sm" onClick={onClose} aria-label="Quitar el foco"><IconClose /></button>

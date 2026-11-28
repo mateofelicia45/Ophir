@@ -2,6 +2,8 @@ import { useState, lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar.jsx';
 import PageLayout from './components/PageLayout.jsx';
+import { usePassage } from './context/PassageContext.jsx';
+import { readerPath } from './modules/reader/useReaderUrl.js';
 
 // Lazy loaded modules
 const HomePage = lazy(() => import('./modules/home/HomePage.jsx'));
@@ -22,6 +24,12 @@ const TimelinePage = lazy(() => import('./modules/timeline/TimelinePage.jsx'));
 const NotesPage = lazy(() => import('./modules/notes/NotesPage.jsx'));
 const AtlasPage = lazy(() => import('./modules/atlas/AtlasPage.jsx'));
 const AssistantPage = lazy(() => import('./modules/ai/AssistantPage.jsx'));
+
+// /lector sin capítulo: lleva al pasaje actual (o a Génesis 1).
+function ReaderRedirect() {
+  const { passage } = usePassage();
+  return <Navigate to={readerPath(passage)} replace />;
+}
 
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -51,8 +59,8 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/evangelio" element={<PageLayout title="El Evangelio"><GospelPage /></PageLayout>} />
-              {/* Redirect base /lector to a default passage */}
-              <Route path="/lector" element={<Navigate to="/lector/gen/1" replace />} />
+              {/* /lector lleva al pasaje actual */}
+              <Route path="/lector" element={<ReaderRedirect />} />
               <Route path="/lector/:bookId/:chapter" element={<ReaderPage />} />
               <Route path="/atlas" element={<AtlasPage />} />
               <Route path="/referencias" element={<PageLayout title="Referencias Cruzadas"><CrossRefsPage /></PageLayout>} />

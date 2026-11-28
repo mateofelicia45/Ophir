@@ -45,6 +45,8 @@ function Welcome({ db, onAction }) {
 export default function RightPanel({ db, place, road, onClose, onAction, ...sheet }) {
   return (
     <aside className="right" aria-label={road ? 'Ficha del camino' : 'Ficha del lugar'}>
+      {/* Asa de la hoja inferior (solo se ve en celular): tocarla cierra el panel. */}
+      <button type="button" className="grab" onClick={onClose} aria-label="Cerrar el panel"><span /></button>
       {road
         ? <RoadSheet db={db} onClose={onClose} onReadRef={sheet.onReadRef} {...road} />
         : place

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useReducer, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BOOKS } from '../../lib/references.js';
 import {
   subscribe,
@@ -14,10 +14,12 @@ import {
 import { COMMENTARIES, loadCommentaryBook } from '../../lib/commentaries.js';
 import { useSpeech, available as ttsAvailable } from '../../hooks/useSpeech.js';
 import BookPicker from '../../components/BookPicker.jsx';
+import { useReaderUrl } from './useReaderUrl.js';
 
 export default function ReaderPage() {
   const { passage, setPassage } = usePassage();
   const navigate = useNavigate();
+  useReaderUrl(passage, setPassage);
   const [versions, setVersions] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('ophir.readerVersions'));
@@ -286,6 +288,13 @@ export default function ReaderPage() {
               onClick={addColumn}
             >
               ＋ Paralelo
+            </button>
+            <button
+              className="tool-link"
+              title="Ver los lugares de este capítulo en el mapa"
+              onClick={() => navigate(`/atlas?cap=${bookId}.${chapter}`)}
+            >
+              🗺 Mapa
             </button>
             <button
               className="tool-link"

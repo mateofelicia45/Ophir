@@ -31,7 +31,7 @@ const NAV_GROUPS = [
   {
     label: 'CONTEXTO HISTÓRICO',
     items: [
-      { to: '/atlas', icon: '◉', label: 'Atlas 3D' },
+      { to: '/atlas', icon: '◉', label: 'Atlas bíblico' },
       { to: '/linea-tiempo', icon: '⟷', label: 'Línea de tiempo' },
     ],
   },

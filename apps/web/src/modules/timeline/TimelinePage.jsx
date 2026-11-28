@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePassage } from '../../context/PassageContext.jsx';
 import { parseReference } from '../../lib/references.js';
 import TIMELINE from '@data/timeline.json';
+import { mapLinkFor } from './mapLink.js';
 
 const LANE_META = {
   biblia: { label: 'Historia bíblica', color: '#e0be62' },
@@ -232,6 +233,11 @@ export default function TimelinePage() {
           {sel.ref && (
             <button className="tld-ref" onClick={() => openRef(sel.ref)}>
               Abrir pasaje →
+            </button>
+          )}
+          {mapLinkFor(sel, eras) && (
+            <button className="tld-ref" onClick={() => navigate(mapLinkFor(sel, eras))}>
+              Ver en el mapa →
             </button>
           )}
         </section>

@@ -62,8 +62,8 @@ const MODULES = [
     to: '/atlas',
     phase: 'Fase 2 · integrado',
     ready: true,
-    title: 'Atlas dinámico',
-    desc: 'Globo 3D interactivo con los lugares bíblicos, búsqueda, filtros y fichas detalladas.',
+    title: 'Atlas bíblico',
+    desc: 'Mapa plano de estudio con más de 1.000 lugares bíblicos, recorridos bíblicos, territorios por período, caminos antiguos, búsqueda por pasaje y fichas con tus notas. La geografía base funciona sin conexión.',
   },
   {
     to: '/referencias',

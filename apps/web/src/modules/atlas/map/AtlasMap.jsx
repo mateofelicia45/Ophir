@@ -24,6 +24,8 @@ const MODERN = modernToGeoJSON(modernos);
 const HIT_PAD = 6;
 const ANIM_MS = 600;
 const ROAD_LAYERS = ['roads', 'roads-label'];
+// Asa de depuración (y de los smokes): solo en desarrollo o en localhost (vite preview sirve el build de producción).
+const DEBUG_HANDLE = import.meta.env.DEV || ['localhost', '127.0.0.1'].includes(location.hostname);
 
 // MapLibre necesita una URL absoluta con los marcadores {fontstack}/{range} sin codificar.
 function glyphsUrl() {
@@ -232,12 +234,12 @@ export default function AtlasMap({
     map.on('load', emitView);
 
     mapRef.current = map;
-    window.__atlasMap = map;
+    if (DEBUG_HANDLE) window.__atlasMap = map;
     return () => {
       cancelAnimationFrame(viewRaf);
       mapRef.current = null;
       firstStyle.current = true;
-      if (window.__atlasMap === map) delete window.__atlasMap;
+      if (DEBUG_HANDLE && window.__atlasMap === map) delete window.__atlasMap;
       map.remove();
     };
     // El mapa se crea una vez; los cambios de props los aplican los efectos de abajo.
