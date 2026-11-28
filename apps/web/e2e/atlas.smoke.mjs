@@ -122,13 +122,33 @@ try {
     const sheet = page.locator('.atlas-app .right');
     await sheet.waitFor({ state: 'visible', timeout: 15000 });
     check(`3. ficha abierta en celular (${theme})`, await sheet.isVisible());
-    await page.waitForTimeout(1200);
+    // El lugar elegido queda visible sobre el borde superior de la hoja.
+    await page.waitForFunction(() => !window.__atlasMap.isMoving(), null, { timeout: 10000 });
+    await page.waitForTimeout(300);
+    const vis = await page.evaluate(() => {
+      const c = window.__atlasMap.getContainer().getBoundingClientRect();
+      const sheetTop = document.querySelector('.atlas-app .right').getBoundingClientRect().top;
+      const p = window.__atlasMap.project([35.2342, 31.7767]);
+      return { y: c.top + p.y, sheetTop, mapTop: c.top };
+    });
+    check(`3. el lugar queda sobre la hoja (${theme})`, vis.y < vis.sheetTop - 10 && vis.y > vis.mapTop,
+      `y=${Math.round(vis.y)} hoja=${Math.round(vis.sheetTop)}`);
     await shot(page, `task-13-${theme}-mobile`);
     await zoomClickable(page, `con la ficha abierta (${theme})`);
     await page.getByRole('button', { name: 'Cerrar la ficha' }).click();
     await sheet.waitFor({ state: 'hidden', timeout: 5000 });
     check(`3. la ficha se cierra (${theme})`, true);
     await zoomClickable(page, `con la ficha cerrada (${theme})`);
+    // Panel izquierdo: cajón modal que se abre y se cierra con el fondo.
+    await page.getByRole('button', { name: 'Mostrar u ocultar el panel de exploración' }).click();
+    const left = page.locator('.atlas-app .left');
+    await left.waitFor({ state: 'visible', timeout: 5000 });
+    await page.locator('.atlas-app .scrim').click({ position: { x: 380, y: 400 } });
+    await left.waitFor({ state: 'hidden', timeout: 5000 }).then(
+      () => check(`3. el cajón izquierdo se cierra con el fondo (${theme})`, true),
+      () => check(`3. el cajón izquierdo se cierra con el fondo (${theme})`, false),
+    );
+    await zoomClickable(page, `con el cajón cerrado (${theme})`);
     check(`3. sin pageerror en celular (${theme})`, errors.pageerrors.length === 0, errors.pageerrors.join(' | '));
     await ctx.close();
   }

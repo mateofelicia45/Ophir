@@ -27,6 +27,17 @@ const ROAD_LAYERS = ['roads', 'roads-label'];
 // Asa de depuración (y de los smokes): solo en desarrollo o en localhost (vite preview sirve el build de producción).
 const DEBUG_HANDLE = import.meta.env.DEV || ['localhost', '127.0.0.1'].includes(location.hostname);
 
+// En celular el panel derecho es una hoja inferior que tapa el mapa: la cámara deja libre ese alto
+// (el real, que cambia con la variante de la hoja). En escritorio el panel es una columna y vale 0.
+function sheetInset(map) {
+  const c = map.getContainer();
+  const sheet = c.closest('.atlas-app')?.querySelector('.right');
+  if (!sheet) return 0;
+  const cs = getComputedStyle(sheet);
+  if (cs.display === 'none' || cs.position !== 'absolute') return 0;
+  return Math.max(0, Math.round(c.getBoundingClientRect().bottom - sheet.getBoundingClientRect().top));
+}
+
 // MapLibre necesita una URL absoluta con los marcadores {fontstack}/{range} sin codificar.
 function glyphsUrl() {
   const base = import.meta.env.BASE_URL || '/';
@@ -66,6 +77,7 @@ export default function AtlasMap({
   onView,
   flyTo = null,
   fitBounds = null,
+  sheetOpen = false,
   className,
   style,
 }) {
@@ -313,14 +325,26 @@ export default function AtlasMap({
   // Cámara. Los efectos dependen de la identidad del objeto, no de su valor: el
   // padre pasa un objeto nuevo por cada pedido (p. ej. al volver a elegir el mismo
   // lugar después de mover el mapa) y lo conserva entre renders sin pedido nuevo.
+  // Al abrir o cerrar la hoja inferior sin otro pedido de cámara, el mapa se recentra en lo que queda libre.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    map.resize();
+    const bottom = sheetInset(map);
+    if (Math.abs(map.getPadding().bottom - bottom) > 1) {
+      map.easeTo({ padding: { top: 0, left: 0, right: 0, bottom }, duration: reducedMotion() ? 0 : 300 });
+    }
+  }, [sheetOpen]);
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !flyTo || !Number.isFinite(flyTo.lon) || !Number.isFinite(flyTo.lat)) return;
     // El contenedor pudo cambiar de tamaño en el mismo render (p. ej. al cerrar un panel).
     map.resize();
     const zoom = Number.isFinite(flyTo.zoom) ? flyTo.zoom : flyTo.keepZoom ? map.getZoom() : Math.max(map.getZoom(), 8);
-    if (reducedMotion()) map.jumpTo({ center: [flyTo.lon, flyTo.lat], zoom });
-    else map.flyTo({ center: [flyTo.lon, flyTo.lat], zoom, essential: true });
+    const padding = { top: 0, left: 0, right: 0, bottom: sheetInset(map) };
+    if (reducedMotion()) map.jumpTo({ center: [flyTo.lon, flyTo.lat], zoom, padding });
+    else map.flyTo({ center: [flyTo.lon, flyTo.lat], zoom, padding, essential: true });
   }, [flyTo]);
 
   useEffect(() => {
@@ -332,7 +356,9 @@ export default function AtlasMap({
     const b = Array.isArray(req) ? req : req.bounds;
     if (!b) return;
     map.resize();
-    const padding = (!Array.isArray(req) && req.padding) || 60;
+    const base = (!Array.isArray(req) && req.padding) || 60;
+    const pad = typeof base === 'number' ? { top: base, bottom: base, left: base, right: base } : base;
+    const padding = { ...pad, bottom: (pad.bottom || 0) + sheetInset(map) };
     map.fitBounds(b, { padding, maxZoom: 9, duration: reducedMotion() ? 0 : 800 });
   }, [fitBounds, focusBounds]);
 

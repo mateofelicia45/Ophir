@@ -217,8 +217,8 @@ export default function AtlasPage() {
   const { on: measuring, addPlace, addPoint } = measure;
   const onMapSelect = useCallback((id) => {
     if (measuring) addPlace(db && db.byId.get(id));
-    else selectPlace(id, { fly: false });
-  }, [measuring, addPlace, db, selectPlace]);
+    else selectPlace(id, { fly: narrow }); // en celular el lugar sube sobre la hoja
+  }, [measuring, addPlace, db, selectPlace, narrow]);
 
   const selected = db && selectedId ? db.byId.get(selectedId) : null;
   const cls = ['atlas-app', theme === 'dark' ? 'dark' : '', leftOpen ? 'lo' : '', rightOpen ? 'ro' : ''].filter(Boolean).join(' ');
@@ -300,6 +300,7 @@ export default function AtlasPage() {
               onMapClick={measuring ? addPoint : undefined}
               flyTo={flyTo}
               fitBounds={fitBounds}
+              sheetOpen={narrow && rightOpen}
             />
           </Suspense>
           <Legend open={legendOpen} onToggle={() => setLegendOpen((v) => !v)} />
